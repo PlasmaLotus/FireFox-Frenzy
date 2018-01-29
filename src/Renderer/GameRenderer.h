@@ -1,0 +1,50 @@
+/*
+Created by PlasmaLotus
+Updated Dec 25, 2016
+*/
+
+#ifndef __GAME_Renderer__
+#define __GAME_Renderer__
+
+//#include <SFML\Window.hpp>
+#include <SFML\Graphics.hpp>
+#include <SFML\Window.hpp>
+#include <string.h>
+#include <string>
+#include <iostream>
+#include "../Game/Game.h"
+#include "Renderer.h"
+
+class GameRenderer : public Renderer{
+public:
+
+	void render();
+	//sf::Image render();
+	void clear();
+	void draw();
+
+	void display();
+	void addGame(Game * g);
+	void addWindow(sf::RenderWindow * g);
+	sf::Texture getLastFrame();
+
+	GameRenderer();
+	GameRenderer(sf::RenderWindow* window, Game* game);
+	~GameRenderer();
+	//void setBoards(Board b1, Board b2);
+	
+	bool initRenderer();
+
+	sf::RenderWindow* window;
+	Game* game;
+
+	sf::Texture lastFrame;//not implemented
+	bool texturesLoaded = false;
+	const float size = 100.f;
+	//sf::CircleShape shape(size);
+	sf::CircleShape shape;
+	
+
+};
+
+#endif // !__Game_Renderer__
