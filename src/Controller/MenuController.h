@@ -22,6 +22,8 @@ public:
 	void setMenu(Menu* b);
 
 	//void viewDebugJoystick();
+	void handleJoystickAxis(sf::Joystick::Axis axis);
+	void handleMouseAxis();
 
 private:
 	Menu* menu;
@@ -33,6 +35,7 @@ private:
 	int buttonHeldTime[ControllerCommand::CommandMax];
 	bool buttonCanBeHeld[ControllerCommand::CommandMax] = {false};
 	const int buttonHeldTimeLimit = 35;
+
 };
 
 #endif // _Controller_H_

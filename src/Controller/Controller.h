@@ -21,13 +21,15 @@ public:
 	void __handleInput();
 	void handleInputKeyboard();
 	void handleInputJoystick();
-
 	void viewDebugJoystick();
-	void handleCommand(ControllerCommand command, sf::Joystick::Axis, int position);// virtual
+	void handleInputMouse();
 	ControllerConfig * getConfig();
 	ControlMode mode;
 	ControllerConfig* config;
 	virtual void handleCommand(ControllerCommand command);
+	//virtual void handleCommand(ControllerCommand command, sf::Joystick::Axis axis, int position);// virtual
+	virtual void handleJoystickAxis(sf::Joystick::Axis);
+	virtual void handleMouseAxis();
 
 	const int buttonHeldTimeLimit = 20;
 	const int buttonHeldTimeMinimum = 0;

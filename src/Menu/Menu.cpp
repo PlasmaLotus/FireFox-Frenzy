@@ -32,7 +32,7 @@ void Menu::handleInput()
 void Menu::inputLeft()
 {
 	printf("Input left\n");
-	if (items.at(selection).menuItemType == MenuItem::MenuItemType::RANGE) {
+	if (items.at(selection).menuItemType == MenuItemType::RANGE) {
 		items.at(selection).decrease();
 	}
 	onItemDecrease();
@@ -41,7 +41,7 @@ void Menu::inputLeft()
 void Menu::inputRight()
 {
 	printf("Input right\n");
-	if (items.at(selection).menuItemType == MenuItem::MenuItemType::RANGE) {
+	if (items.at(selection).menuItemType == MenuItemType::RANGE) {
 		items.at(selection).increase();
 	}
 	onItemIncrease();

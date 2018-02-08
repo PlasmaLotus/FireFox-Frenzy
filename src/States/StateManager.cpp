@@ -1,15 +1,22 @@
 #include "StateManager.h"
 
+
+
 StateManager::StateManager():
 	_currentState(NULL),
 	_newState(NULL),
 	_switchState(false),
 	_running(true)
 {
+	_id = 0;
+	//p1Config = new ControllerConfig();
+	//p2Config = new ControllerConfig();
+	//p2Config->loadConfig("p2.config");
 	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "TACD");
 	//window.create(sf::VideoMode(240, 160), "PlasmaFlux");
 	_currentState = new TitleScreen(&window);
 	//renderer = new GameRenderer(w, currentState->getGame());
+
 }
 
 StateManager::~StateManager()
@@ -66,7 +73,6 @@ void StateManager::run()
 				{
 					second++;
 					milisecond = 0;
-					system("cls");
 				}
 
 				if (second >= 60)
@@ -74,6 +80,10 @@ void StateManager::run()
 					minute++;
 					second = 0;
 				}
+				
+			}
+			if (frame % 10000) {
+				//system("cls");
 			}
 			/*~Manage Time Beta*/
 			//current = clock();
@@ -117,3 +127,17 @@ int32_t StateManager::getElapsedTime() {
 	return elapsedTime.asMilliseconds();
 }
 
+int StateManager::getUniqueID() {
+	return _id++;
+}
+
+ControllerConfig *StateManager::getControllerConfig(int playerNumber)
+{
+	if (playerNumber == 1) {
+		return &p1Config;
+	}
+	else {
+		return &p2Config;
+	}
+
+}

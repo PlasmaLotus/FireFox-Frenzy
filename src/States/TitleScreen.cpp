@@ -4,7 +4,7 @@
 TitleScreen::TitleScreen(sf::RenderWindow * w):
 	MenuState(w, new MainMenu())
 {
-	p1KeyConfig->saveConfig();
+	p1Controller->getConfig()->saveConfig();
 }
 
 void TitleScreen::tick() {

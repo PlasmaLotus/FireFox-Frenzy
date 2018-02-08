@@ -9,6 +9,7 @@ Updated May 17, 2017
 #include "State.h"
 #include "../Game/Game.h"
 #include "../Renderer/GameRenderer.h"
+#include "../Controller/GameController.h"
 class GameState : public State {
 public:
 	GameState(sf::RenderWindow *w);
@@ -23,7 +24,10 @@ private:
 	Game *game;
 	GameRenderer *renderer;
 	sf::RenderWindow *window;
-	//ControllerConfig* p1KeyConfig;
+	GameController *p1Controller;
+	GameController *p2Controller;
+	ControllerConfig* p1KeyConfig;
+	ControllerConfig* p2KeyConfig;
 	//Controller *p1Controller;
 
 };

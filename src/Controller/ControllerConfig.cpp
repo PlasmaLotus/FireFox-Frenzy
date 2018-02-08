@@ -11,24 +11,35 @@ Updated May 13, 2017
 ControllerConfig::ControllerConfig() :
 	joystickNumber(0),
 	joystickDeadZone(15.f),
-	joystickMaxZone(60.f)
+	joystickMaxZone(60.f),
+	controlMode(ControlMode::Keyboard)
 {
+
+	/*
+	Pov XY = DPAD
+	X Y = Left Analog
+	R U = Right Analog
+	Z: - = Right bumper, += Left bumper
+	*/
+
+
 	/*Defaultkeys*/
 	keyMap[sf::Keyboard::Key::Up] = ControllerCommand::Up;
 	keyMap[sf::Keyboard::Key::Down] = ControllerCommand::Down;
 	keyMap[sf::Keyboard::Key::Left] = ControllerCommand::Left;
 	keyMap[sf::Keyboard::Key::Right] = ControllerCommand::Right;
 	keyMap[sf::Keyboard::Key::Return] = ControllerCommand::Pause;
-	keyMap[sf::Keyboard::Key::X] = ControllerCommand::Swap;
-	keyMap[sf::Keyboard::Key::Z] = ControllerCommand::SwapAlt;
+	keyMap[sf::Keyboard::Key::X] = ControllerCommand::Shoot;
+	keyMap[sf::Keyboard::Key::Z] = ControllerCommand::ShootAlt;
 	keyMap[sf::Keyboard::Key::F4] = ControllerCommand::Cheat;
-	keyMap[sf::Keyboard::Key::A] = ControllerCommand::ForceRaise;
+	keyMap[sf::Keyboard::Key::A] = ControllerCommand::Shield;
+	keyMap[sf::Keyboard::Key::BackSpace] = ControllerCommand::SwitchControlMode;
 
-	buttonMap[0] = ControllerCommand::Swap;
-	buttonMap[1] = ControllerCommand::SwapAlt;
-	buttonMap[2] = ControllerCommand::Swap;
-	buttonMap[4] = ControllerCommand::ForceRaise;
-	buttonMap[5] = ControllerCommand::ForceRaise;
+	buttonMap[0] = ControllerCommand::Shoot;
+	buttonMap[1] = ControllerCommand::ShootAlt;
+	buttonMap[2] = ControllerCommand::Shoot;
+	buttonMap[4] = ControllerCommand::Shield;//bumper //ForceRaise 
+	buttonMap[5] = ControllerCommand::Shield;//bumper
 	buttonMap[6] = ControllerCommand::Cheat;
 	buttonMap[7] = ControllerCommand::Pause;
 
@@ -60,9 +71,15 @@ bool ControllerConfig::saveConfig()
 {
 
 	std::ofstream file;
-	file.open("test.ctrl");
+	file.open("esketit.test");
 	//file << "Writing this to a file.\n";
-
+	if (controlMode == ControlMode::Joystick) {
+		file << "Joystick Mode " << "\n";
+	}
+	else if (controlMode == ControlMode::Keyboard) {
+		file << "Keyboard Mode " << "\n";
+	}
+	file << "Joystick Number: " << joystickNumber << "\n";
 	for (std::map<int, ControllerCommand>::iterator it = buttonMap.begin(); it != buttonMap.end(); ++it) {
 		//Enum ^ ControllerCommand c = ;
 		file << "Command" << it->second << " : " << "Button" << it->first << "\n";

@@ -15,11 +15,12 @@ class Menu;
 
 typedef std::function<void() > command;
 
+enum MenuItemType{
+	NONE, TOGGLE, PLAYER, RANGE, LIST};
+
 class MenuItem {
 public:
 
-	enum MenuItemType{
-		NONE, TOGGLE, PLAYER, RANGE, LIST};
 
 	MenuItem(std::string, command c);
 	MenuItem(std::string name, int value, int max, MenuItemType type);
@@ -31,6 +32,7 @@ public:
 	void select();
 	void handleInput();
 	void setMenuType(MenuItemType t);
+	MenuItemType getMenuType();
 	std::string getName();
 	const std::string getOptionString() const;
 

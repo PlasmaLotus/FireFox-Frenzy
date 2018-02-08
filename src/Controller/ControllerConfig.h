@@ -13,7 +13,8 @@ Updated May 13, 2017
 
 enum ControlMode { Keyboard, Joystick };
 //#include "Controller.h"
-enum ControllerCommand { NoInput2, Up, Down, Left, Right, Swap, SwapAlt, ForceRaise, Pause, Cheat, Shoot, Shield, Dash, SwapWeapon, NoInput, CommandMax = NoInput};
+enum ControllerCommand { NoInput2, Up, Down, Left, Right, Pause, Cheat, Shoot, ShootAlt, Shield, Dash, SwapWeapon, SwitchControlMode, NoInput, CommandMax = NoInput};
+enum ControllerInputType{KeyboardKey, MouseButton, MouseAxis, JoystickButton, JoystickAxis};
 
 class ControllerConfig{
 public:
@@ -48,7 +49,9 @@ private:
 	std::map<sf::Keyboard::Key, ControllerCommand> keyMap;
 	std::map<int, ControllerCommand> buttonMap;
 	std::map<sf::Joystick::Axis, AxisHandler> axisMap;
+	std::map<int, ControllerCommand> mouseButtonMap;
 
+	ControlMode controlMode;
     unsigned int joystickNumber;//the joystick in question 
     float joystickDeadZone;//Zone in witch no input should result;
     float joystickMaxZone;//Difference between slighlty held and Max held, if necessary

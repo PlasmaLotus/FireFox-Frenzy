@@ -5,6 +5,7 @@ Updated May 13, 2017
 
 #include "Game.h"
 #include "../Main.h"
+#include "../States/StateManager.h"
 Game::Game():
 gameState(GameCurrentState::RUNNING){
 	//window.create(sf::VideoMode(800, 600), "SFML! Y U NO DRAW BLOCK!!");
@@ -19,9 +20,15 @@ void Game::reset() {
 
 void Game::tick() {
 	frame++;
+	dt = StateManager::getInstance().getElapsedTime();
 	printf("GameTick\n");
 }
 
 void Game::pause() {
 
+}
+
+Player * Game::getPlayer(int playerNumber)
+{
+	return &p1;
 }

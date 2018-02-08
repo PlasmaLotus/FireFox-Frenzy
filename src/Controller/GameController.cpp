@@ -3,62 +3,63 @@ Created by PlasmaLotus
 Updated May 13, 2017
 */
 
-#include "MenuController.h"
+#include "GameController.h"
 
 /*The controller recieves input from a Keyboard or Joystick and outputs Commands to execute on the Board and Game*/
 
 
-MenuController::MenuController(ControllerConfig* c, Menu* m) :
+GameController::GameController(ControllerConfig* c, Player* e) :
 Controller(c),
-menu(m)
+player(e),
+mode(ControlMode::Joystick)
 {
 	//config.loadConfig("controllerConfig.ini");
 	buttonCanBeHeld[ControllerCommand::Left] = true;
 	buttonCanBeHeld[ControllerCommand::Right] = true;
 	buttonCanBeHeld[ControllerCommand::Up] = true;
 	buttonCanBeHeld[ControllerCommand::Down] = true;
-	buttonCanBeHeld[ControllerCommand::Shoot] = true;
+	buttonCanBeHeld[ControllerCommand::Shield] = true;
 	buttonCanBeHeld[ControllerCommand::Pause] = true;
 }
 
-MenuController::~MenuController()
+GameController::~GameController()
 {
 }
 
-/*Act accordingly to the needed commands*/
-void MenuController::handleCommand(ControllerCommand command){
+/*When an input is detected, a command is raised to this function*/
+void GameController::handleCommand(ControllerCommand command){
     /*Apply action on the menu dependant on the command*/
-	if (menu != NULL) {
+	if (player != NULL) {
 		switch (command)
 		{
 		case ControllerCommand::Up:
 		{
-			menu->inputUp();
+			//menu->inputUp();
 			break;
 		}
 		case ControllerCommand::Down:
 		{
-			menu->inputDown();
+			//menu->inputDown();
 			break;
 		}
 		case ControllerCommand::Left:
 		{
-			menu->inputLeft();
+			//menu->inputLeft();
 			break;
 		}
 		case ControllerCommand::Right:
 		{
-			menu->inputRight();
+			//menu->inputRight();
 			break;
 		}
 		case ControllerCommand::Shoot:
 		{
-			menu->inputSelect();
+			//menu->inputSelect();
 			break;
 		}
 		case ControllerCommand::ShootAlt:
 		{
-			menu->inputBack();
+			//menu->inputBack();
 			break;
 		}
 		case ControllerCommand::Shield:
@@ -67,7 +68,7 @@ void MenuController::handleCommand(ControllerCommand command){
 		}
 		case ControllerCommand::Pause:
 		{
-			menu->inputSelect();
+			//menu->inputSelect();
 			break;
 		}
 		case ControllerCommand::Cheat:
@@ -81,18 +82,17 @@ void MenuController::handleCommand(ControllerCommand command){
 	}
 	
 }
-
-void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
+  
+void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	//config->get
 }
 
-void MenuController::handleMouseAxis() {
+void GameController::handleMouseAxis() {
 	sf::Vector2i mousePos = sf::Mouse::getPosition();
 	if (mode == ControlMode::Keyboard) {
-		//player->setCursorOrientation(mousePos.x, mousePos.y);
+		player->setCursorOrientation(mousePos.x, mousePos.y);
 	}
 }
-
-void MenuController::setMenu(Menu* b){
-        menu = b;
+void GameController::setPlayer(Player* e){
+        player = e;
 }

@@ -55,9 +55,15 @@ void MenuItem::setMenuType(MenuItemType t)
 	menuItemType = t;
 }
 
+MenuItemType MenuItem::getMenuType()
+{
+	return menuItemType;
+}
+
 std::string MenuItem::getName()
 {
-	return _name;
+	std::string s = _name;
+	return s;
 }
 
 const std::string MenuItem::getOptionString() const {

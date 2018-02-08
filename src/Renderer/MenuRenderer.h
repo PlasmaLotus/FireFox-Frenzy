@@ -23,6 +23,7 @@ public:
 
 	void render();
 	void clear();
+	void update();
 	void draw();
 
 	void display();
@@ -47,8 +48,10 @@ public:
 	//sf::CircleShape shape(ok);
 	sf::CircleShape shape;
 	sf::RectangleShape menuItems[10];
+	MenuItemDrawable _menuItems[10];
 	int nbMenuItems;
-
+	sf::Font font;
+	bool fontLoaded{ true };
 	//MenuItemDrawable test;
 };
 

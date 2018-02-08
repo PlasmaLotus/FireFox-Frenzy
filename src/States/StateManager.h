@@ -12,7 +12,7 @@ Updated May 17, 2017
 //#include "GameState.h"
 #include "MenuState.h"
 #include "TitleScreen.h"
-//#include "OptionMenuState.h"
+#include "../Controller/ControllerConfig.h"
 //#include "../Renderer/GameRenderer.h"
 #include "../Main.h"
 
@@ -26,12 +26,15 @@ public:
 	sf::RenderWindow * getWindow();
 	void run();
 	int32_t getElapsedTime();
+	int getUniqueID();
 	//void play();
 	static const int FPS = 60;
 	int SCREEN_WIDTH = 640;
 	int SCREEN_HEIGHT = 480;
+	ControllerConfig *getControllerConfig(int playerNumber);
 private:
 	StateManager();
+	int _id{ 0 };
 	bool _running;
 	sf::RenderWindow window;
 	State *_currentState;
@@ -39,6 +42,8 @@ private:
 	sf::Clock currentTime;
 	sf::Time elapsedTime;
 	bool _switchState;
+	ControllerConfig p1Config;
+	ControllerConfig p2Config;
 	//GameRenderer *renderer;
 	
 };
