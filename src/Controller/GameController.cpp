@@ -2,18 +2,17 @@
 Created by PlasmaLotus
 Updated May 13, 2017
 */
-
 #include "GameController.h"
+#include "../States/StateManager.h"
 
 /*The controller recieves input from a Keyboard or Joystick and outputs Commands to execute on the Board and Game*/
-
-
 GameController::GameController(ControllerConfig* c, Player* e) :
 Controller(c),
-player(e),
-mode(ControlMode::Joystick)
+player(e)
+//mode(ControlMode::Joystick)
 {
 	//config.loadConfig("controllerConfig.ini");
+	mode = ControlMode::Joystick;
 	buttonCanBeHeld[ControllerCommand::Left] = true;
 	buttonCanBeHeld[ControllerCommand::Right] = true;
 	buttonCanBeHeld[ControllerCommand::Up] = true;
@@ -26,6 +25,31 @@ GameController::~GameController()
 {
 }
 
+/*Main input check call -- Checks if any input is pressed and acts accordingly*/
+void GameController::handleInput() {
+	pAngleX = 0.f;
+	pAngleY = 0.f;
+	cAngleX = 0.f;
+	cAngleY = 0.f;
+	//printf("REDEFINED HANDLEINPUT\n\n\n");
+	if (config != NULL) {
+		if (_swapConfig) {
+			mode = _nextMode;
+			_swapConfig = false;
+		}
+		handleInputKeyboard();
+		handleInputMouse();
+		handleMouseAxis();
+		if (sf::Joystick::isConnected(config->getJoystickNumber())) {
+			mode = ControlMode::Joystick;
+			handleInputJoystick();
+		}
+	}
+	player->setPlayerOrienation(pAngleX, pAngleY);
+	player->setCursorOrientation(cAngleX, cAngleY);
+	return;
+}
+
 /*When an input is detected, a command is raised to this function*/
 void GameController::handleCommand(ControllerCommand command){
     /*Apply action on the menu dependant on the command*/
@@ -35,21 +59,25 @@ void GameController::handleCommand(ControllerCommand command){
 		case ControllerCommand::Up:
 		{
 			//menu->inputUp();
+			pAngleY = -70.f;
 			break;
 		}
 		case ControllerCommand::Down:
 		{
 			//menu->inputDown();
+			pAngleY = 70.f;
 			break;
 		}
 		case ControllerCommand::Left:
 		{
 			//menu->inputLeft();
+			pAngleX = -70.f;
 			break;
 		}
 		case ControllerCommand::Right:
 		{
 			//menu->inputRight();
+			pAngleX = 70.f;
 			break;
 		}
 		case ControllerCommand::Shoot:
@@ -82,17 +110,64 @@ void GameController::handleCommand(ControllerCommand command){
 	}
 	
 }
-  
+
 void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
-	//config->get
+	//ControllerCommand command;
+	AxisHandler handler = config->getAxisHandlerFromAxis(axis);
+	float value = sf::Joystick::getAxisPosition(config->getJoystickNumber(), axis);
+	//printf("Joystick%d\n", axis);
+	//arbitrary dead zone of 7
+	
+	if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		//printf("Joystick%d - in switch\n", axis);
+		switch (handler.positifMax) {
+			case ControllerCommand::Up:
+			case ControllerCommand::Down:
+			case ControllerCommand::PVertical:
+			{
+				pAngleY = value;
+				break;
+			}
+			case ControllerCommand::Left:
+			case ControllerCommand::Right:
+			case ControllerCommand::PHorizontal:
+			{
+				pAngleX = value;
+				break;
+			}
+
+			case ControllerCommand::CursorUp:
+			case ControllerCommand::CursorDown:
+			case ControllerCommand::CVertical:
+			{
+				cAngleY = value;
+				break;
+			}
+
+			case ControllerCommand::CursorLeft:
+			case ControllerCommand::CursorRight:
+			case ControllerCommand::CHorizontal:
+			{
+				cAngleX = value;
+				break;
+			}
+			default:
+				break;
+		}
+	}
 }
 
 void GameController::handleMouseAxis() {
-	sf::Vector2i mousePos = sf::Mouse::getPosition();
+	sf::Vector2i mousePos = sf::Mouse::getPosition(*StateManager::getInstance().getWindow());
+	printf("HandleMouseAxis - MousePos: %d, %d\n", mousePos.x, mousePos.y);
 	if (mode == ControlMode::Keyboard) {
-		player->setCursorOrientation(mousePos.x, mousePos.y);
+		printf("ControllerModeKeyboardMouse\n");
+		player->setCursorOrientationFromMouse(mousePos.x, mousePos.y);
+		//sf::Mouse::setPosition(sf::Vector2i(100, 100));
 	}
+	
 }
 void GameController::setPlayer(Player* e){
         player = e;
 }
+

@@ -30,6 +30,7 @@ void GameState::tick()
 	switch (game->gameState)
 	{
 	case GameCurrentState::RUNNING:
+		printf("GAME STATE RUNNING \n");
 		p1Controller->handleInput();
 		//p1Controller->updateConfig();
 		game->tick();

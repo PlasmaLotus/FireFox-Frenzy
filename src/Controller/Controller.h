@@ -17,7 +17,7 @@ public:
 	void updateConfig();
 	void __updateConfig();
 	void setControlMode(ControlMode mode);
-	void handleInput();
+	virtual void handleInput();
 	void __handleInput();
 	void handleInputKeyboard();
 	void handleInputJoystick();
@@ -30,7 +30,9 @@ public:
 	//virtual void handleCommand(ControllerCommand command, sf::Joystick::Axis axis, int position);// virtual
 	virtual void handleJoystickAxis(sf::Joystick::Axis);
 	virtual void handleMouseAxis();
-
+	void swapToControlMode(ControlMode m);
+	bool _swapConfig;
+	ControlMode _nextMode;
 	const int buttonHeldTimeLimit = 20;
 	const int buttonHeldTimeMinimum = 0;
 	bool buttonHeld[ControllerCommand::CommandMax] = { true };

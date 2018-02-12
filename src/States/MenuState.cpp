@@ -37,6 +37,7 @@ void MenuState::tick()
 	printf("Menu State Tick \n");
 	p1Controller->handleInput();
 	p1Controller->updateConfig();
+	p1Controller->viewDebugJoystick();
 	renderer->render();
 	menu->tick();
 }

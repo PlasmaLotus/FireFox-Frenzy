@@ -1,29 +1,31 @@
 #pragma once
+
+
 /*
 Created by PlasmaLotus
-Updated Dec 29, 2019
+Updated Feb 11, 2018
 */
 
 #include <SFML\Graphics.hpp>
 
 //#include "Renderer.h"
 
-#ifndef __Menu_Item_Drawable__
-#define __Menu_Item_Drawable__
+#ifndef __Player_Drawable__
+#define __Player_Drawable__
 
 #include <SFML\Window.hpp>
 #include <string.h>
 #include <string>
-#include "../Menu/MenuItem.h"
+#include "../Game/Player.h"
 
-class MenuItemDrawable : public sf::Drawable {
+class PlayerDrawable : public sf::Drawable {
 public:
 
-	
-	MenuItemDrawable();
-	MenuItemDrawable(MenuItem *menuItem, int px, int py);
-	~MenuItemDrawable();
-	
+
+	PlayerDrawable();
+	PlayerDrawable(Player *player);
+	~PlayerDrawable();
+
 
 	// Hérité via Drawable
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
@@ -32,21 +34,14 @@ public:
 	//void onUpdate(float time) ;
 	void update();
 	//void onDraw(sf::RenderTarget& target, sf::RenderStates states) const;
-	MenuItem *item;
+	Player *player;
 	int posX;
 	int posY;
 	int width;
 	int height;
-	sf::RectangleShape shape;
-	//std::string str1;
-	//std::string str2;
-	bool _isSelected;
-	void isSelected(bool value);
-	sf::Font* _font;
-	sf::Font font;
-	void setFont(sf::Font & f);
-	sf::Text s1;
-	sf::Text s2;
+	sf::RectangleShape playerShape;
+	sf::CircleShape cursorShape;
+
 };
 
-#endif // !__Game_Renderer__
+#endif // !__Player_Renderer__

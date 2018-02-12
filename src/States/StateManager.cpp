@@ -124,6 +124,9 @@ void StateManager::run()
 }
 
 int32_t StateManager::getElapsedTime() {
+	printf("DT -- %3.9f\n", elapsedTime.asSeconds());
+	//long
+	//elapsedTime.as
 	return elapsedTime.asMilliseconds();
 }
 

@@ -9,6 +9,7 @@ posY(0){
 
 
 MenuItemDrawable::MenuItemDrawable(MenuItem *menuItem, int px, int py):
+	sf::Drawable(),
 	item(menuItem),
 	posX(px),
 	posY(py)

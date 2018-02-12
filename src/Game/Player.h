@@ -2,7 +2,7 @@
 
 #ifndef __PLAYER__
 #define __PLAYER__
-
+#include <math.h>
 #include "MovingEntity.h"
 class Player: public MovingEntity {
 public:
@@ -17,7 +17,11 @@ public:
 	//float velocityX;
 	//float velocityY;
 	//float velocityZ;
+	float orientationX;
+	float orientationY;
 	float cursorOrientation;
+	float cursorOrientationX;
+	float cursorOrientationY;
 	//Game * _game;
 	Player();
 	~Player();
@@ -25,6 +29,10 @@ public:
 	//void update();
 	void setPlayerOrienation(float x, float y);
 	void setCursorOrientation(float x, float y);
+
+	void setCursorOrientationFromMouse(int x, int y);
+
+	//void setCursorOrientationFromMouse(float x, float y);
 
 
 	//protected:

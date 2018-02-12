@@ -7,6 +7,7 @@ Updated May 17, 2017
 #ifndef __StateManager__
 #define __StateManager__
 
+#include <stdint.h>
 //#include "SFML\Graphics.hpp"
 #include "State.h"
 //#include "GameState.h"
@@ -28,9 +29,9 @@ public:
 	int32_t getElapsedTime();
 	int getUniqueID();
 	//void play();
-	static const int FPS = 60;
-	int SCREEN_WIDTH = 640;
-	int SCREEN_HEIGHT = 480;
+	static const int FPS = 120;
+	int SCREEN_WIDTH = 1080;
+	int SCREEN_HEIGHT = 720;
 	ControllerConfig *getControllerConfig(int playerNumber);
 private:
 	StateManager();

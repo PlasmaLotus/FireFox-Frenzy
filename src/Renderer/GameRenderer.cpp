@@ -30,6 +30,10 @@ void GameRenderer::render()
 
 bool GameRenderer::initRenderer() {
 	shape.setFillColor(sf::Color::Blue);
+	shape.setPosition(100, 100);
+	shape.setRadius(size);
+
+	playerDrawable1 = new PlayerDrawable(game->getPlayer(1));
 	bool success = false;
 	
 	return success;
@@ -41,12 +45,19 @@ void GameRenderer::clear() {
 
 void GameRenderer::draw()
 {
-	window->draw(shape);
+	drawPlayers();
+	//window->draw(shape);
 }
 
 void GameRenderer::display() {
 	window->display();
 	//lastFrame.update(*(window));
+}
+
+void GameRenderer::drawPlayers()
+{
+	playerDrawable1->update();
+	window->draw(*playerDrawable1);
 }
 
 void GameRenderer::addGame(Game* g) {

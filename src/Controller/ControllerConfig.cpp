@@ -11,7 +11,7 @@ Updated May 13, 2017
 ControllerConfig::ControllerConfig() :
 	joystickNumber(0),
 	joystickDeadZone(15.f),
-	joystickMaxZone(60.f),
+	joystickMaxZone(70.f),
 	controlMode(ControlMode::Keyboard)
 {
 
@@ -28,11 +28,15 @@ ControllerConfig::ControllerConfig() :
 	keyMap[sf::Keyboard::Key::Down] = ControllerCommand::Down;
 	keyMap[sf::Keyboard::Key::Left] = ControllerCommand::Left;
 	keyMap[sf::Keyboard::Key::Right] = ControllerCommand::Right;
+	keyMap[sf::Keyboard::Key::W] = ControllerCommand::Up;
+	keyMap[sf::Keyboard::Key::S] = ControllerCommand::Down;
+	keyMap[sf::Keyboard::Key::A] = ControllerCommand::Left;
+	keyMap[sf::Keyboard::Key::D] = ControllerCommand::Right;
 	keyMap[sf::Keyboard::Key::Return] = ControllerCommand::Pause;
-	keyMap[sf::Keyboard::Key::X] = ControllerCommand::Shoot;
-	keyMap[sf::Keyboard::Key::Z] = ControllerCommand::ShootAlt;
+	keyMap[sf::Keyboard::Key::F] = ControllerCommand::Shoot;
+	keyMap[sf::Keyboard::Key::R] = ControllerCommand::ShootAlt;
 	keyMap[sf::Keyboard::Key::F4] = ControllerCommand::Cheat;
-	keyMap[sf::Keyboard::Key::A] = ControllerCommand::Shield;
+	keyMap[sf::Keyboard::Key::E] = ControllerCommand::Shield;
 	keyMap[sf::Keyboard::Key::BackSpace] = ControllerCommand::SwitchControlMode;
 
 	buttonMap[0] = ControllerCommand::Shoot;
@@ -44,11 +48,14 @@ ControllerConfig::ControllerConfig() :
 	buttonMap[7] = ControllerCommand::Pause;
 
 	//axisMap.insert(std::pair<sf::Joystick::Axis, AxisHandler>(sf::Joystick::Axis::PovY, { ControllerCommand::Up, ControllerCommand::Down}));
-	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Up, ControllerCommand::Up, ControllerCommand::Down , ControllerCommand::Down };
+	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Down, ControllerCommand::Down, ControllerCommand::Up , ControllerCommand::Up };
 	axisMap[sf::Joystick::Axis::PovX] = { ControllerCommand::Right, ControllerCommand::Right, ControllerCommand::Left, ControllerCommand::Left };
-	axisMap[sf::Joystick::Axis::Y] = { ControllerCommand::NoInput, ControllerCommand::Down, ControllerCommand::NoInput, ControllerCommand::Up };
+	axisMap[sf::Joystick::Axis::R] = { ControllerCommand::CursorUp, ControllerCommand::CursorUp, ControllerCommand::CursorDown , ControllerCommand::CursorDown };
+	axisMap[sf::Joystick::Axis::U] = { ControllerCommand::CursorRight, ControllerCommand::CursorRight, ControllerCommand::CursorLeft, ControllerCommand::CursorLeft };
+	axisMap[sf::Joystick::Axis::Y] = { ControllerCommand::NoInput, ControllerCommand::Up, ControllerCommand::NoInput, ControllerCommand::Down };
 	axisMap[sf::Joystick::Axis::X] = { ControllerCommand::NoInput, ControllerCommand::Right, ControllerCommand::NoInput, ControllerCommand::Left };
 	//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
+
 }
 
 ControllerConfig::~ControllerConfig()
@@ -146,7 +153,6 @@ ControllerCommand ControllerConfig::getCommand(sf::Joystick::Axis axis, float va
 		}
 	}
 	return command;
-
 }
 
 ControllerCommand ControllerConfig::getCommand(int button)
@@ -204,11 +210,36 @@ std::vector<int> ControllerConfig::getButtonKeys(ControllerCommand c) {
 std::vector<sf::Joystick::Axis> ControllerConfig::getAxisKeys(ControllerCommand c) {
 	std::vector<sf::Joystick::Axis> vec;
 	for (std::map<sf::Joystick::Axis, AxisHandler>::iterator it = axisMap.begin(); it != axisMap.end(); ++it) {
-		/*
-		if (it->second == c) {
+		//if (it->second)
+		if (it->second.negatifMax == c || it->second.positifMax == c) {
 			vec.push_back(it->first);
 		}
-		*/
 	}
 	return vec;
+}
+
+AxisHandler ControllerConfig::getAxisHandlerFromAxis(sf::Joystick::Axis axis) {
+	//////////
+	try {
+		AxisHandler ah = axisMap.at(axis);
+		return AxisHandler(ah);
+	}
+	catch (const std::out_of_range& oor) {
+		return AxisHandler{ NoInput, NoInput, NoInput, NoInput };
+	}
+	
+}
+
+ControllerCommand ControllerConfig::getAxisCommand(sf::Joystick::Axis axis) {
+	//////////
+	return ControllerCommand::NoInput;
+	/*
+	try {
+		AxisHandler ah = axisMap.at(axis);
+		return AxisHandler(ah);
+	}
+	catch (const std::out_of_range& oor) {
+		return AxisHandler{ NoInput, NoInput, NoInput, NoInput };
+	}
+	*/
 }

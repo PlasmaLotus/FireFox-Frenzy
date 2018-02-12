@@ -17,6 +17,7 @@ public:
 	
 	GameController(ControllerConfig* config, Player* entity);
 	~GameController();
+	void handleInput();
 	void handleJoystickAxis(sf::Joystick::Axis axis);
 	void handleMouseAxis();
 	//void updateConfig();
@@ -28,14 +29,12 @@ public:
 
 private:
 	Player *player;
-	ControlMode mode;
-	//ControllerConfig config;
-	//ControllerConfig* config_;
+	//ControlMode mode;
 	void handleCommand(ControllerCommand command);
-	//bool buttonHeld[ControllerCommand::CommandMax];
-	//int buttonHeldTime[ControllerCommand::CommandMax];
-	//bool buttonCanBeHeld[ControllerCommand::CommandMax] = {false};
-	//const int buttonHeldTimeLimit = 35;
+	float pAngleX;
+	float pAngleY;
+	float cAngleX;
+	float cAngleY;
 };
 
 #endif // _Controller_H_

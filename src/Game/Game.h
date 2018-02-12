@@ -7,6 +7,7 @@ Updated May 13, 2017
 #define _Game_
 
 #include "Player.h"
+#include <stdint.h>
 
 enum GameCurrentState{RUNNING, PAUSED, ENDED};
 
@@ -14,7 +15,7 @@ class Game{
 	
 public:
 	int frame = 0;
-	int dt;
+	int32_t dt;
 	GameCurrentState gameState;
 
 	Game();
@@ -24,6 +25,7 @@ public:
 	void tick();
 	void pause();
 	Player *getPlayer(int playerNumber);
+	Player getPlayerCopy(int playerNumber);
 	Player p1;
 private:
 

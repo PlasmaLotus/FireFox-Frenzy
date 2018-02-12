@@ -11,10 +11,20 @@ Updated May 13, 2017
 #include <vector>
 #include <SFML/Window.hpp>
 
+
 enum ControlMode { Keyboard, Joystick };
 //#include "Controller.h"
-enum ControllerCommand { NoInput2, Up, Down, Left, Right, Pause, Cheat, Shoot, ShootAlt, Shield, Dash, SwapWeapon, SwitchControlMode, NoInput, CommandMax = NoInput};
+//Down -, Left -
+enum ControllerCommand { NoInput2, Up, Down, Left, Right, CursorUp, CursorDown, CursorLeft, CursorRight, PVertical, PHorizontal, CVertical, CHorizontal, Pause, Cheat, Shoot, ShootAlt, Shield, Dash, SwapWeapon, SwitchControlMode, NoInput, CommandMax = NoInput};
 enum ControllerInputType{KeyboardKey, MouseButton, MouseAxis, JoystickButton, JoystickAxis};
+
+struct AxisHandler {
+	//sf::Joystick::Axis axis;
+	ControllerCommand positif;
+	ControllerCommand positifMax;
+	ControllerCommand negatif;
+	ControllerCommand negatifMax;
+};
 
 class ControllerConfig{
 public:
@@ -35,15 +45,11 @@ public:
 	std::vector<sf::Keyboard::Key> getKeyboardKeys(ControllerCommand c);
 	std::vector<int> getButtonKeys(ControllerCommand c);
 	std::vector<sf::Joystick::Axis> getAxisKeys(ControllerCommand c);
+	AxisHandler getAxisHandlerFromAxis(sf::Joystick::Axis axis);
+	ControllerCommand getAxisCommand(sf::Joystick::Axis axis);
+    float joystickDeadZone;//Zone in witch no input should result;
+    float joystickMaxZone;//Difference between slighlty held and Max held, if necessary
 private:
-
-	struct AxisHandler {
-		//sf::Joystick::Axis axis;
-		ControllerCommand positif;
-		ControllerCommand positifMax;
-		ControllerCommand negatif;
-		ControllerCommand negatifMax;
-	};
 
 	/*Cette structure de donnée me permet d'assigner une commande a chaque bouton, je suis ouvert au changements*/
 	std::map<sf::Keyboard::Key, ControllerCommand> keyMap;
@@ -53,8 +59,6 @@ private:
 
 	ControlMode controlMode;
     unsigned int joystickNumber;//the joystick in question 
-    float joystickDeadZone;//Zone in witch no input should result;
-    float joystickMaxZone;//Difference between slighlty held and Max held, if necessary
 
 };
 

@@ -14,6 +14,7 @@ Updated Dec 25, 2016
 #include <iostream>
 #include "../Game/Game.h"
 #include "Renderer.h"
+#include "PlayerDrawable.h"
 
 class GameRenderer : public Renderer{
 public:
@@ -24,6 +25,7 @@ public:
 	void draw();
 
 	void display();
+	void drawPlayers();
 	void addGame(Game * g);
 	void addWindow(sf::RenderWindow * g);
 	sf::Texture getLastFrame();
@@ -43,7 +45,7 @@ public:
 	const float size = 100.f;
 	//sf::CircleShape shape(size);
 	sf::CircleShape shape;
-	
+	PlayerDrawable * playerDrawable1;
 
 };
 

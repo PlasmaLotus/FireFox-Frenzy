@@ -21,7 +21,8 @@ void Game::reset() {
 void Game::tick() {
 	frame++;
 	dt = StateManager::getInstance().getElapsedTime();
-	printf("GameTick\n");
+	p1.update(dt);
+	printf("GameTick:  DT - %d\n");
 }
 
 void Game::pause() {
@@ -31,4 +32,9 @@ void Game::pause() {
 Player * Game::getPlayer(int playerNumber)
 {
 	return &p1;
+}
+
+Player Game::getPlayerCopy(int playerNumber)
+{
+	return p1;
 }
