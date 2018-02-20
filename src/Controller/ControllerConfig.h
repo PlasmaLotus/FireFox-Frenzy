@@ -31,6 +31,7 @@ public:
     ControllerConfig();
     ~ControllerConfig();
     bool loadConfig(std::string iniPath);
+	void loadDefaultConfig();
 	bool saveConfig();
 
     void setKey(ControllerCommand key, sf::Keyboard::Key value);

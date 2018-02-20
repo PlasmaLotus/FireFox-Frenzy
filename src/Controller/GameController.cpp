@@ -58,40 +58,61 @@ void GameController::handleCommand(ControllerCommand command){
 		{
 		case ControllerCommand::Up:
 		{
-			//menu->inputUp();
 			pAngleY = -70.f;
 			break;
 		}
 		case ControllerCommand::Down:
 		{
-			//menu->inputDown();
 			pAngleY = 70.f;
 			break;
 		}
 		case ControllerCommand::Left:
 		{
-			//menu->inputLeft();
-			pAngleX = -70.f;
+			pAngleX = -70.f; 
 			break;
 		}
 		case ControllerCommand::Right:
 		{
-			//menu->inputRight();
 			pAngleX = 70.f;
+			break;
+		}
+		case ControllerCommand::CursorUp:
+		{
+			cAngleY = -70.f;
+			break;
+		}
+		case ControllerCommand::CursorDown:
+		{
+			cAngleY = 70.f;
+			break;
+		}
+		case ControllerCommand::CursorLeft:
+		{
+			cAngleX = -70.f;
+			break;
+		}
+		case ControllerCommand::CursorRight:
+		{
+			cAngleX = 70.f;
 			break;
 		}
 		case ControllerCommand::Shoot:
 		{
-			//menu->inputSelect();
+			player->shoot();
 			break;
 		}
 		case ControllerCommand::ShootAlt:
 		{
-			//menu->inputBack();
+			player->shoot();
 			break;
 		}
 		case ControllerCommand::Shield:
 		{
+			break;
+		}
+		case ControllerCommand::Dash:
+		{
+			player->dash();
 			break;
 		}
 		case ControllerCommand::Pause:
@@ -118,21 +139,32 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	//printf("Joystick%d\n", axis);
 	//arbitrary dead zone of 7
 	
-	if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+	
 		//printf("Joystick%d - in switch\n", axis);
-		switch (handler.positifMax) {
+		ControllerCommand command;
+		if (value > 0) {
+			command = handler.positifMax;
+		}
+		else {
+			command = handler.negatifMax;
+		}
+		switch (command) {
 			case ControllerCommand::Up:
 			case ControllerCommand::Down:
 			case ControllerCommand::PVertical:
 			{
-				pAngleY = value;
+				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+					pAngleY = value;
+				}
 				break;
 			}
 			case ControllerCommand::Left:
 			case ControllerCommand::Right:
 			case ControllerCommand::PHorizontal:
 			{
-				pAngleX = value;
+				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+					pAngleX = value;
+				}
 				break;
 			}
 
@@ -140,7 +172,10 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 			case ControllerCommand::CursorDown:
 			case ControllerCommand::CVertical:
 			{
-				cAngleY = value;
+				//if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+				if (value >= 20.f || value <= -20.f) {
+					cAngleY = value;
+				}
 				break;
 			}
 
@@ -148,13 +183,33 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 			case ControllerCommand::CursorRight:
 			case ControllerCommand::CHorizontal:
 			{
-				cAngleX = value;
+				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+					cAngleX = value;
+				}
+				break;
+			}
+			case ControllerCommand::Shoot:
+			case ControllerCommand::ShootAlt: {
+				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+					player->shoot();
+				}
+				break;
+			}
+			case ControllerCommand::Dash: {
+				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+					player->dash();
+				}
+				break;
+			}
+			case ControllerCommand::Shield: {
+				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+					
+				}
 				break;
 			}
 			default:
 				break;
 		}
-	}
 }
 
 void GameController::handleMouseAxis() {

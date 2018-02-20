@@ -15,47 +15,7 @@ ControllerConfig::ControllerConfig() :
 	controlMode(ControlMode::Keyboard)
 {
 
-	/*
-	Pov XY = DPAD
-	X Y = Left Analog
-	R U = Right Analog
-	Z: - = Right bumper, += Left bumper
-	*/
-
-
-	/*Defaultkeys*/
-	keyMap[sf::Keyboard::Key::Up] = ControllerCommand::Up;
-	keyMap[sf::Keyboard::Key::Down] = ControllerCommand::Down;
-	keyMap[sf::Keyboard::Key::Left] = ControllerCommand::Left;
-	keyMap[sf::Keyboard::Key::Right] = ControllerCommand::Right;
-	keyMap[sf::Keyboard::Key::W] = ControllerCommand::Up;
-	keyMap[sf::Keyboard::Key::S] = ControllerCommand::Down;
-	keyMap[sf::Keyboard::Key::A] = ControllerCommand::Left;
-	keyMap[sf::Keyboard::Key::D] = ControllerCommand::Right;
-	keyMap[sf::Keyboard::Key::Return] = ControllerCommand::Pause;
-	keyMap[sf::Keyboard::Key::F] = ControllerCommand::Shoot;
-	keyMap[sf::Keyboard::Key::R] = ControllerCommand::ShootAlt;
-	keyMap[sf::Keyboard::Key::F4] = ControllerCommand::Cheat;
-	keyMap[sf::Keyboard::Key::E] = ControllerCommand::Shield;
-	keyMap[sf::Keyboard::Key::BackSpace] = ControllerCommand::SwitchControlMode;
-
-	buttonMap[0] = ControllerCommand::Shoot;
-	buttonMap[1] = ControllerCommand::ShootAlt;
-	buttonMap[2] = ControllerCommand::Shoot;
-	buttonMap[4] = ControllerCommand::Shield;//bumper //ForceRaise 
-	buttonMap[5] = ControllerCommand::Shield;//bumper
-	buttonMap[6] = ControllerCommand::Cheat;
-	buttonMap[7] = ControllerCommand::Pause;
-
-	//axisMap.insert(std::pair<sf::Joystick::Axis, AxisHandler>(sf::Joystick::Axis::PovY, { ControllerCommand::Up, ControllerCommand::Down}));
-	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Down, ControllerCommand::Down, ControllerCommand::Up , ControllerCommand::Up };
-	axisMap[sf::Joystick::Axis::PovX] = { ControllerCommand::Right, ControllerCommand::Right, ControllerCommand::Left, ControllerCommand::Left };
-	axisMap[sf::Joystick::Axis::R] = { ControllerCommand::CursorUp, ControllerCommand::CursorUp, ControllerCommand::CursorDown , ControllerCommand::CursorDown };
-	axisMap[sf::Joystick::Axis::U] = { ControllerCommand::CursorRight, ControllerCommand::CursorRight, ControllerCommand::CursorLeft, ControllerCommand::CursorLeft };
-	axisMap[sf::Joystick::Axis::Y] = { ControllerCommand::NoInput, ControllerCommand::Up, ControllerCommand::NoInput, ControllerCommand::Down };
-	axisMap[sf::Joystick::Axis::X] = { ControllerCommand::NoInput, ControllerCommand::Right, ControllerCommand::NoInput, ControllerCommand::Left };
-	//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
-
+	loadDefaultConfig();
 }
 
 ControllerConfig::~ControllerConfig()
@@ -72,6 +32,53 @@ bool ControllerConfig::loadConfig(std::string iniPath){
 		return true;
 	}
 	return false;
+}
+
+void ControllerConfig::loadDefaultConfig() {
+	/*
+	Pov XY = DPAD
+	X Y = Left Analog
+	R U = Right Analog
+	Z: - = Right bumper, += Left bumper
+	*/
+
+
+	/*Defaultkeys*/
+	keyMap[sf::Keyboard::Key::Up] = ControllerCommand::CursorUp;
+	keyMap[sf::Keyboard::Key::Down] = ControllerCommand::CursorDown;
+	keyMap[sf::Keyboard::Key::Left] = ControllerCommand::CursorLeft;
+	keyMap[sf::Keyboard::Key::Right] = ControllerCommand::CursorRight;
+	keyMap[sf::Keyboard::Key::W] = ControllerCommand::Up;
+	keyMap[sf::Keyboard::Key::S] = ControllerCommand::Down;
+	keyMap[sf::Keyboard::Key::A] = ControllerCommand::Left;
+	keyMap[sf::Keyboard::Key::D] = ControllerCommand::Right;
+	keyMap[sf::Keyboard::Key::Return] = ControllerCommand::Pause;
+	keyMap[sf::Keyboard::Key::F] = ControllerCommand::Shoot;
+	keyMap[sf::Keyboard::Key::R] = ControllerCommand::ShootAlt;
+	keyMap[sf::Keyboard::Key::F4] = ControllerCommand::Cheat;
+	keyMap[sf::Keyboard::Key::E] = ControllerCommand::Shield;
+	keyMap[sf::Keyboard::Key::BackSpace] = ControllerCommand::SwitchControlMode;
+
+	buttonMap[0] = ControllerCommand::Shoot;
+	buttonMap[1] = ControllerCommand::ShootAlt;
+	buttonMap[2] = ControllerCommand::Dash;
+	buttonMap[4] = ControllerCommand::Shield;//bumper //ForceRaise 
+	buttonMap[5] = ControllerCommand::Shield;//bumper
+	buttonMap[6] = ControllerCommand::Cheat;
+	buttonMap[7] = ControllerCommand::Pause;
+
+	//axisMap.insert(std::pair<sf::Joystick::Axis, AxisHandler>(sf::Joystick::Axis::PovY, { ControllerCommand::Up, ControllerCommand::Down}));
+	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Down, ControllerCommand::Down, ControllerCommand::Up , ControllerCommand::Up };
+	axisMap[sf::Joystick::Axis::PovX] = { ControllerCommand::Right, ControllerCommand::Right, ControllerCommand::Left, ControllerCommand::Left };
+	axisMap[sf::Joystick::Axis::R] = { ControllerCommand::CursorUp, ControllerCommand::CursorUp, ControllerCommand::CursorDown , ControllerCommand::CursorDown };
+	axisMap[sf::Joystick::Axis::U] = { ControllerCommand::CursorRight, ControllerCommand::CursorRight, ControllerCommand::CursorLeft, ControllerCommand::CursorLeft };
+	axisMap[sf::Joystick::Axis::Y] = { ControllerCommand::NoInput, ControllerCommand::Up, ControllerCommand::NoInput, ControllerCommand::Down };
+	axisMap[sf::Joystick::Axis::X] = { ControllerCommand::NoInput, ControllerCommand::Right, ControllerCommand::NoInput, ControllerCommand::Left };
+	axisMap[sf::Joystick::Axis::Z] = { ControllerCommand::Dash, ControllerCommand::Dash, ControllerCommand::Shoot, ControllerCommand::Shoot };
+	//axisMap[sf::Joystick::Axis::V] = { ControllerCommand::Dash, ControllerCommand::Dash, ControllerCommand::Shield, ControllerCommand::Shield };
+
+	//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
+
 }
 
 bool ControllerConfig::saveConfig()

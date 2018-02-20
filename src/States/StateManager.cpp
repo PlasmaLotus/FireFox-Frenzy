@@ -108,7 +108,7 @@ void StateManager::run()
 				printf("%d:%d  Frame: %d\n", minute, second, frame);
 				printf("NB Frames: %3.2f     \nTemps: %d           \nClocks per Sec: %3.2f\n",
 					(float)elapsedTime.asMilliseconds() * 60, elapsedTime, (float)CLOCKS_PER_SEC);
-
+				
 				//gotoxy(0, 0);
 			}
 
@@ -127,7 +127,8 @@ int32_t StateManager::getElapsedTime() {
 	printf("DT -- %3.9f\n", elapsedTime.asSeconds());
 	//long
 	//elapsedTime.as
-	return elapsedTime.asMilliseconds();
+	//return elapsedTime.asMilliseconds();
+	return 1000 / FPS;
 }
 
 int StateManager::getUniqueID() {
