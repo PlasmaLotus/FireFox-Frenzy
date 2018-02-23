@@ -5,11 +5,11 @@
 //#include "../States/StateManager.h"
 
 Player::Player() :
-MovingEntity() {
+SquareEntity() {
 	state = PlayerState::Moving;
 	posX = 10.f;
 	posY = 10.f;
-	posZ = 10.f;
+	//posZ = 10.f;
 	velocityX = 1.f;
 	velocityY = 1.f;
 	orientation = 0.f;
@@ -33,7 +33,7 @@ void Player::update(int dt)
 	/*Movement*/
 	prevPosX = posX;
 	prevPosY = posY;
-	prevPosZ = posZ;
+	//prevPosZ = posZ;
 	/*
 	posX += velocityX;
 	posY += velocityY;

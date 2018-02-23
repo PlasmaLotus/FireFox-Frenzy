@@ -4,7 +4,7 @@
 TitleScreen::TitleScreen(sf::RenderWindow * w):
 	MenuState(w, new MainMenu())
 {
-	p1Controller->getConfig()->saveConfig();
+	//p1Controller->getConfig()->saveConfig();
 }
 
 void TitleScreen::tick() {
@@ -16,7 +16,7 @@ void TitleScreen::tick() {
 	menu->tick();
 
 	//printf("MenuItems\n");
-	printf("NB SELECTIONS: %d\n", menu->items.size());
+	printf("NB SELECTIONS: %i\n", menu->items.size());
 	printf("CurrentSelection: %d\n", menu->selection);
 	for (unsigned i = 0; i < menu->items.size(); ++i) {
 		if (i == menu->selection) {

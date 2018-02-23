@@ -4,24 +4,23 @@
 #define __MOVING_ENTITY__
 
 #include "Entity.h"
+
+
+
 class MovingEntity: public Entity {
 public:
-	//float posX;
-	//float posY;
-	//float posZ;
-	//float orientation;
-	//float radianOrientation;
 
 	float prevPosX;
 	float prevPosY;
 	float prevPosZ;
+	//float prevPosZ;
 	float velocityX;
 	float velocityY;
-	float velocityZ;
+	//float velocityZ;
 	//Game * _game;
 	MovingEntity();
 	~MovingEntity();
-	void update(int dt);
+	virtual void update(int dt);
 	//void update();
 
 

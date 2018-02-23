@@ -21,19 +21,20 @@ enum ControllerInputType{KeyboardKey, MouseButton, MouseAxis, JoystickButton, Jo
 struct AxisHandler {
 	//sf::Joystick::Axis axis;
 	ControllerCommand positif;
-	ControllerCommand positifMax;
+	
 	ControllerCommand negatif;
-	ControllerCommand negatifMax;
+
 };
 
 class ControllerConfig{
 public:
     ControllerConfig();
+	ControllerConfig(std::string iniPath);
     ~ControllerConfig();
     bool loadConfig(std::string iniPath);
 	void loadDefaultConfig();
+	bool saveConfig(std::string iniPath);
 	bool saveConfig();
-
     void setKey(ControllerCommand key, sf::Keyboard::Key value);
     void setKey(ControllerCommand key, float value);
     void setKey(ControllerCommand key, int value);

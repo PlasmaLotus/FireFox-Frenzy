@@ -10,7 +10,7 @@ GameRenderer::GameRenderer()
 	
 }
 
-GameRenderer::GameRenderer(sf::RenderWindow *w, Game *g):
+GameRenderer::GameRenderer(sf::RenderWindow *w, GameLogic *g):
 	window(w),
 	game(g)
 {
@@ -60,7 +60,7 @@ void GameRenderer::drawPlayers()
 	window->draw(*playerDrawable1);
 }
 
-void GameRenderer::addGame(Game* g) {
+void GameRenderer::addGame(GameLogic* g) {
 	game = g;
 }
 void GameRenderer::addWindow(sf::RenderWindow* g) {

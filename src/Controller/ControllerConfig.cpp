@@ -6,6 +6,8 @@ Updated May 13, 2017
 #include "ControllerConfig.h"
 #include <ostream>
 #include <fstream>
+#include <iostream>
+#include <string>
 
 /*Contains all the commands that do stuff*/
 ControllerConfig::ControllerConfig() :
@@ -14,8 +16,16 @@ ControllerConfig::ControllerConfig() :
 	joystickMaxZone(70.f),
 	controlMode(ControlMode::Keyboard)
 {
-
 	loadDefaultConfig();
+}
+
+ControllerConfig::ControllerConfig(std::string iniPath) :
+	joystickNumber(0),
+	joystickDeadZone(15.f),
+	joystickMaxZone(70.f),
+	controlMode(ControlMode::Keyboard)
+{
+	loadConfig(iniPath);
 }
 
 ControllerConfig::~ControllerConfig()
@@ -26,12 +36,81 @@ ControllerConfig::~ControllerConfig()
 }
 
 bool ControllerConfig::loadConfig(std::string iniPath){
-	printf("Loading Config");
-	if ((float)joystickNumber == joystickNumber)
-	{
-		return true;
+	//printf("Loading Config");
+
+	std::ifstream file;
+	std::string line;
+	file.open(iniPath);
+	bool success = true;
+	if (file.is_open()) {
+		while (std::getline(file, line))
+		{
+			printf("%s\n",line);
+
+			if (line.find("Mode") != std::string::npos) {
+				if( line.find("Joystick") != std::string::npos) {
+					controlMode = ControlMode::Joystick;
+				}
+				else
+					controlMode = ControlMode::Keyboard;
+			}
+			else if (line.find("Joystick Number") != std::string::npos) {
+				int jn = std::stoi(line.substr(std::strlen("Joystick Number"), 2));
+				joystickNumber = jn;
+			}
+			else if(line.find("Command") != std::string::npos){
+				std::string s = line.substr(std::strlen("Command"), 2);
+				int commandNb = std::stoi(s);
+				int assignNb;
+				if (line.find("JButton") != std::string::npos) {
+					std::string s2 = line.substr(line.find("JButton")+ std::strlen("JButton"), 2);
+					assignNb = std::stoi(s2);
+					buttonMap[assignNb] = static_cast<ControllerCommand>(commandNb);
+
+				}
+				else if (line.find("Axis") != std::string::npos) {
+					std::string s2 = line.substr(line.find("Axis")+ std::strlen("Axis"), 2);
+					assignNb = std::stoi(s2);
+					bool positif = true;
+					if (line.find("-") != std::string::npos) {
+						positif = false;
+					}
+					AxisHandler handler;
+					try {
+						AxisHandler handler = axisMap.at(static_cast<sf::Joystick::Axis>(assignNb));
+					}
+					catch (const std::out_of_range& oor) {
+						handler.positif = NoInput;
+						handler.negatif = NoInput;
+					}
+
+					if (positif) {
+						handler.positif = static_cast<ControllerCommand>(commandNb);
+					}
+					else {
+						handler.negatif = static_cast<ControllerCommand>(commandNb);
+					}
+					axisMap[static_cast<sf::Joystick::Axis>(assignNb)] = handler;
+
+				}
+				else if (line.find("KeyboardKey") != std::string::npos) {
+					std::string s2 = line.substr(line.find("KeyboardKey")+ std::strlen("KeyboardKey"), 2);
+					assignNb = std::stoi(s2);
+					keyMap[static_cast<sf::Keyboard::Key>(assignNb)] = static_cast<ControllerCommand>(commandNb);
+				}
+			}
+
+
+		}
+		file.close();
 	}
-	return false;
+	else {
+		printf("Loading Default Config\n");
+		loadDefaultConfig();
+		success = false;
+	}
+
+	return success;
 }
 
 void ControllerConfig::loadDefaultConfig() {
@@ -41,8 +120,10 @@ void ControllerConfig::loadDefaultConfig() {
 	R U = Right Analog
 	Z: - = Right bumper, += Left bumper
 	*/
-
-
+	buttonMap.clear();
+	keyMap.clear();
+	axisMap.clear();
+	setJoystickNumber(0);
 	/*Defaultkeys*/
 	keyMap[sf::Keyboard::Key::Up] = ControllerCommand::CursorUp;
 	keyMap[sf::Keyboard::Key::Down] = ControllerCommand::CursorDown;
@@ -54,7 +135,7 @@ void ControllerConfig::loadDefaultConfig() {
 	keyMap[sf::Keyboard::Key::D] = ControllerCommand::Right;
 	keyMap[sf::Keyboard::Key::Return] = ControllerCommand::Pause;
 	keyMap[sf::Keyboard::Key::F] = ControllerCommand::Shoot;
-	keyMap[sf::Keyboard::Key::R] = ControllerCommand::ShootAlt;
+	keyMap[sf::Keyboard::Key::R] = ControllerCommand::Dash;
 	keyMap[sf::Keyboard::Key::F4] = ControllerCommand::Cheat;
 	keyMap[sf::Keyboard::Key::E] = ControllerCommand::Shield;
 	keyMap[sf::Keyboard::Key::BackSpace] = ControllerCommand::SwitchControlMode;
@@ -68,24 +149,29 @@ void ControllerConfig::loadDefaultConfig() {
 	buttonMap[7] = ControllerCommand::Pause;
 
 	//axisMap.insert(std::pair<sf::Joystick::Axis, AxisHandler>(sf::Joystick::Axis::PovY, { ControllerCommand::Up, ControllerCommand::Down}));
-	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Down, ControllerCommand::Down, ControllerCommand::Up , ControllerCommand::Up };
-	axisMap[sf::Joystick::Axis::PovX] = { ControllerCommand::Right, ControllerCommand::Right, ControllerCommand::Left, ControllerCommand::Left };
-	axisMap[sf::Joystick::Axis::R] = { ControllerCommand::CursorUp, ControllerCommand::CursorUp, ControllerCommand::CursorDown , ControllerCommand::CursorDown };
-	axisMap[sf::Joystick::Axis::U] = { ControllerCommand::CursorRight, ControllerCommand::CursorRight, ControllerCommand::CursorLeft, ControllerCommand::CursorLeft };
-	axisMap[sf::Joystick::Axis::Y] = { ControllerCommand::NoInput, ControllerCommand::Up, ControllerCommand::NoInput, ControllerCommand::Down };
-	axisMap[sf::Joystick::Axis::X] = { ControllerCommand::NoInput, ControllerCommand::Right, ControllerCommand::NoInput, ControllerCommand::Left };
-	axisMap[sf::Joystick::Axis::Z] = { ControllerCommand::Dash, ControllerCommand::Dash, ControllerCommand::Shoot, ControllerCommand::Shoot };
+	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Down, ControllerCommand::Up };
+	axisMap[sf::Joystick::Axis::PovX] = { ControllerCommand::Right, ControllerCommand::Left };
+	axisMap[sf::Joystick::Axis::R] = { ControllerCommand::CursorUp, ControllerCommand::CursorDown };
+	axisMap[sf::Joystick::Axis::U] = { ControllerCommand::CursorRight, ControllerCommand::CursorLeft };
+	axisMap[sf::Joystick::Axis::Y] = { ControllerCommand::Up, ControllerCommand::Down };
+	axisMap[sf::Joystick::Axis::X] = { ControllerCommand::Right, ControllerCommand::Left };
+	axisMap[sf::Joystick::Axis::Z] = { ControllerCommand::Dash, ControllerCommand::Shoot };
 	//axisMap[sf::Joystick::Axis::V] = { ControllerCommand::Dash, ControllerCommand::Dash, ControllerCommand::Shield, ControllerCommand::Shield };
 
 	//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
-
 }
 
 bool ControllerConfig::saveConfig()
 {
+	return saveConfig("esketit.test");
+}
+
+bool ControllerConfig::saveConfig(std::string iniPath)
+{
 
 	std::ofstream file;
-	file.open("esketit.test");
+	file.open(iniPath);
+	//file << "\n";
 	//file << "Writing this to a file.\n";
 	if (controlMode == ControlMode::Joystick) {
 		file << "Joystick Mode " << "\n";
@@ -93,10 +179,22 @@ bool ControllerConfig::saveConfig()
 	else if (controlMode == ControlMode::Keyboard) {
 		file << "Keyboard Mode " << "\n";
 	}
-	file << "Joystick Number: " << joystickNumber << "\n";
+	file << "Joystick Number" << joystickNumber << "\n";
+	file << "\n";
+	//Writing all joystick button maps 
 	for (std::map<int, ControllerCommand>::iterator it = buttonMap.begin(); it != buttonMap.end(); ++it) {
-		//Enum ^ ControllerCommand c = ;
-		file << "Command" << it->second << " : " << "Button" << it->first << "\n";
+		file << "Command" << it->second << " : " << "JButton" << it->first << "\n";
+	}
+	file << "\n";
+	//Writing all Joystick Axis Bindings
+	for (std::map<sf::Joystick::Axis, AxisHandler>::iterator it = axisMap.begin(); it != axisMap.end(); ++it) {
+		file << "Command" << it->second.positif << " : " << "Axis" << it->first << " +" << "\n";
+		file << "Command" << it->second.negatif << " : " << "Axis" << it->first << " -" << "\n";
+	}
+	file << "\n";
+	//Writing all keyboard key bindings
+	for (std::map<sf::Keyboard::Key, ControllerCommand>::iterator it = keyMap.begin(); it != keyMap.end(); ++it) {
+		file << "Command" << it->second << " : " << "KeyboardKey" << it->first << "\n";
 	}
 
 	file.close();
@@ -108,7 +206,7 @@ void ControllerConfig::setKey(ControllerCommand key, sf::Keyboard::Key value){
 	keyMap.at(value) = key;
 }
 void ControllerConfig::setKey(ControllerCommand key, float value){
-	//axisMap.at(value) = key;
+	//AxisHandler ah = axisMap.at(key);// = key;
 }
 void ControllerConfig::setKey(ControllerCommand key, int value){
 	buttonMap.at(value) = key;
@@ -132,27 +230,14 @@ ControllerCommand ControllerConfig::getCommand(sf::Joystick::Axis axis, float va
 	if (value > joystickDeadZone || value *-1 > joystickDeadZone)//if the value is over the dead zone
 	{
 		try {
-			if (value >= joystickMaxZone || value *-1 >= joystickMaxZone)//Higher than the treashhold to register max hold
+			//if (value >= joystickMaxZone || value *-1 >= joystickMaxZone)//Higher than the treashhold to register max hold
+			if (value > 0.f)//positif
 			{
-				if (value > 0.f)//positif
-				{
-					command = axisMap.at(axis).positifMax;
-				}
-				else
-				{
-					command = axisMap.at(axis).negatifMax;
-				}
+				command = axisMap.at(axis).positif;
 			}
 			else
 			{
-				if (value > 0.f)//positif
-				{
-					command = axisMap.at(axis).positif;
-				}
-				else
-				{
-					command = axisMap.at(axis).negatif;
-				}
+				command = axisMap.at(axis).negatif;
 			}
 		}
 		catch (const std::out_of_range& oor) {
@@ -190,7 +275,6 @@ void ControllerConfig::getKeys() {
 	std::vector<sf::Keyboard::Key> vec;
 	for (std::map<sf::Keyboard::Key, ControllerCommand>::iterator it = keyMap.begin(); it != keyMap.end(); ++it) {
 		vec.push_back(it->first);
-		//cout << it->first << "\n";
 	}
 }
 
@@ -217,8 +301,7 @@ std::vector<int> ControllerConfig::getButtonKeys(ControllerCommand c) {
 std::vector<sf::Joystick::Axis> ControllerConfig::getAxisKeys(ControllerCommand c) {
 	std::vector<sf::Joystick::Axis> vec;
 	for (std::map<sf::Joystick::Axis, AxisHandler>::iterator it = axisMap.begin(); it != axisMap.end(); ++it) {
-		//if (it->second)
-		if (it->second.negatifMax == c || it->second.positifMax == c) {
+		if (it->second.negatif == c || it->second.positif == c) {
 			vec.push_back(it->first);
 		}
 	}
@@ -226,27 +309,11 @@ std::vector<sf::Joystick::Axis> ControllerConfig::getAxisKeys(ControllerCommand 
 }
 
 AxisHandler ControllerConfig::getAxisHandlerFromAxis(sf::Joystick::Axis axis) {
-	//////////
 	try {
 		AxisHandler ah = axisMap.at(axis);
 		return AxisHandler(ah);
 	}
 	catch (const std::out_of_range& oor) {
-		return AxisHandler{ NoInput, NoInput, NoInput, NoInput };
+		return AxisHandler{ NoInput, NoInput };
 	}
-	
-}
-
-ControllerCommand ControllerConfig::getAxisCommand(sf::Joystick::Axis axis) {
-	//////////
-	return ControllerCommand::NoInput;
-	/*
-	try {
-		AxisHandler ah = axisMap.at(axis);
-		return AxisHandler(ah);
-	}
-	catch (const std::out_of_range& oor) {
-		return AxisHandler{ NoInput, NoInput, NoInput, NoInput };
-	}
-	*/
 }

@@ -3,14 +3,19 @@
 #ifndef __ENTITY__
 #define __ENTITY__
 
+struct  Vector2
+{
+	float x;
+	float y;
+};
+
 class Entity {
 public:
+	float orientation;
+	int _id;
 	float posX;
 	float posY;
 	float posZ;
-	float orientation;
-	//float radianOrientation;
-	int _id;
 	//Game * _game;
 	Entity();
 	~Entity();

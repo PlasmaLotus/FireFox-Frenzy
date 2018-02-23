@@ -12,7 +12,7 @@ Updated Dec 25, 2016
 #include <string.h>
 #include <string>
 #include <iostream>
-#include "../Game/Game.h"
+#include "../Game/GameLogic.h"
 #include "Renderer.h"
 #include "PlayerDrawable.h"
 
@@ -26,19 +26,19 @@ public:
 
 	void display();
 	void drawPlayers();
-	void addGame(Game * g);
+	void addGame(GameLogic * g);
 	void addWindow(sf::RenderWindow * g);
 	sf::Texture getLastFrame();
 
 	GameRenderer();
-	GameRenderer(sf::RenderWindow* window, Game* game);
+	GameRenderer(sf::RenderWindow* window, GameLogic* game);
 	~GameRenderer();
 	//void setBoards(Board b1, Board b2);
 	
 	bool initRenderer();
 
 	sf::RenderWindow* window;
-	Game* game;
+	GameLogic* game;
 
 	sf::Texture lastFrame;//not implemented
 	bool texturesLoaded = false;

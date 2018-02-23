@@ -145,3 +145,14 @@ ControllerConfig *StateManager::getControllerConfig(int playerNumber)
 	}
 
 }
+
+std::string StateManager::getControllerConfigPath(int playerNumber)
+{
+	if (playerNumber == 1) {
+		return "p1Controls.ctl";
+	}
+	else {
+		return "p2Controls.ctl";
+	}
+
+}

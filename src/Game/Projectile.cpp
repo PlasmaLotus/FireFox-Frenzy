@@ -1,6 +1,6 @@
 #include "Projectile.h"
 
-Projectile::Projectile(): MovingEntity(){
+Projectile::Projectile(): CircleEntity(){
 
 }
 
@@ -12,7 +12,7 @@ void Projectile::update(int dt)
 {
 	prevPosX = posX;
 	prevPosY = posY;
-	prevPosZ = posZ;
+	//prevPosZ = posZ;
 	float speedX = 0.f;
 	float speedY = 0.f;
 

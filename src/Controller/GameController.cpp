@@ -139,14 +139,13 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	//printf("Joystick%d\n", axis);
 	//arbitrary dead zone of 7
 	
-	
 		//printf("Joystick%d - in switch\n", axis);
 		ControllerCommand command;
 		if (value > 0) {
-			command = handler.positifMax;
+			command = handler.positif;
 		}
 		else {
-			command = handler.negatifMax;
+			command = handler.negatif;
 		}
 		switch (command) {
 			case ControllerCommand::Up:

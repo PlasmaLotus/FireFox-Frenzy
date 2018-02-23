@@ -3,12 +3,13 @@
 #ifndef __PLAYER__
 #define __PLAYER__
 #include <math.h>
-#include "MovingEntity.h"
+#include "SquareEntity.h"
 #include "Projectile.h"
+
 #include <vector>
 #include <cmath>
 enum PlayerState{ ShootWindup, Shooting, ShootCooldown, Moving, Dashing};
-class Player: public MovingEntity {
+class Player: public SquareEntity{
 public:
 	//float posX;
 	//float posY;

@@ -12,7 +12,7 @@ window(w),
 menu(m)
 {
 	//currentMenu = new MainMenu(window);
-	p1KeyConfig = new ControllerConfig();
+	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
 	p1Controller = new MenuController(p1KeyConfig, menu);
 	//p1Controller->config = StateManager::getInstance().getControllerConfig(1);
 	//p1Controller = new MenuController(StateManager::getInstance().getControllerConfig(1), menu);

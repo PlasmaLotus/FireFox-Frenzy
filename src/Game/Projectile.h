@@ -3,10 +3,11 @@
 #ifndef __PROJECTILE__
 #define __PROJECTILE__
 #include <math.h>
-#include "MovingEntity.h"
+#include "CircleEntity.h"
+
 #include <cmath>
 //enum PlayerState { ShootWindup, Shooting, ShootCooldown, Moving };
-class Projectile : public MovingEntity {
+class Projectile : public CircleEntity {
 public:
 	//float posX;
 	//float posY;

@@ -9,11 +9,13 @@ Updated May 13, 2017
 GameState::GameState(sf::RenderWindow *w)
 {
 	window = w;
-	game = new Game();
+	game = new GameLogic();
 	renderer = new GameRenderer(window, game);
 	
-	p1KeyConfig = new ControllerConfig();
+	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
 	p1Controller = new GameController(p1KeyConfig, game->getPlayer(1));
+	p2KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(2));
+	p1Controller = new GameController(p1KeyConfig, game->getPlayer(2));
 	//p1Controller = new GameController(StateManager::getInstance().getControllerConfig(1), game->getPlayer(1));
 }
 
@@ -37,6 +39,8 @@ void GameState::tick()
 		p1Controller->viewDebugJoystick();
 		break;
 	case GameCurrentState::PAUSED:
+		renderer->render();
+		//pauseRenderer->render();
 		break;
 	case GameCurrentState::ENDED:
 		break;
@@ -46,7 +50,7 @@ void GameState::tick()
 
 }
 
-Game * GameState::getGame()
+GameLogic * GameState::getGame()
 {
 	return game;
 }

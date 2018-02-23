@@ -7,7 +7,7 @@ Updated May 17, 2017
 #define __GameState__
 
 #include "State.h"
-#include "../Game/Game.h"
+#include "../Game/GameLogic.h"
 #include "../Renderer/GameRenderer.h"
 #include "../Controller/GameController.h"
 class GameState : public State {
@@ -16,13 +16,14 @@ public:
 
 	virtual ~GameState();
 	virtual void tick();
-	Game *getGame();
+	GameLogic *getGame();
 
 	void pause();
 
 private:
-	Game *game;
+	GameLogic *game;
 	GameRenderer *renderer;
+	//PauseMenuRenderer *pauseRenderer;
 	sf::RenderWindow *window;
 	GameController *p1Controller;
 	GameController *p2Controller;

@@ -8,6 +8,7 @@ Updated May 17, 2017
 #define __StateManager__
 
 #include <stdint.h>
+#include <string.h>
 //#include "SFML\Graphics.hpp"
 #include "State.h"
 //#include "GameState.h"
@@ -33,6 +34,7 @@ public:
 	int SCREEN_WIDTH = 1080;
 	int SCREEN_HEIGHT = 720;
 	ControllerConfig *getControllerConfig(int playerNumber);
+	static std::string getControllerConfigPath(int playerNumber);
 private:
 	StateManager();
 	int _id{ 0 };

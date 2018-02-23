@@ -16,7 +16,6 @@ Updated May 13, 2017
 #include <sstream>
 
 //#include <SDL.h>
-//#include "Game.h"
 void gotoxy(int x, int y);
 
 
