@@ -30,6 +30,8 @@ ControllerConfig::ControllerConfig(std::string iniPath) :
 
 ControllerConfig::~ControllerConfig()
 {
+	//ControllerCommand::Up
+	//sf::Keyboard::Key::Delete // 66
 	buttonMap.clear();
 	keyMap.clear();
 	axisMap.clear();
@@ -156,9 +158,11 @@ void ControllerConfig::loadDefaultConfig() {
 	axisMap[sf::Joystick::Axis::Y] = { ControllerCommand::Up, ControllerCommand::Down };
 	axisMap[sf::Joystick::Axis::X] = { ControllerCommand::Right, ControllerCommand::Left };
 	axisMap[sf::Joystick::Axis::Z] = { ControllerCommand::Dash, ControllerCommand::Shoot };
-	//axisMap[sf::Joystick::Axis::V] = { ControllerCommand::Dash, ControllerCommand::Dash, ControllerCommand::Shield, ControllerCommand::Shield };
-
-	//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
+	axisMap[sf::Joystick::Axis::V] = { ControllerCommand::Dash, ControllerCommand::Shield };
+	//ControllerCommand::dash
+	//sf::Keyboard::Key::shi
+	
+		//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
 }
 
 bool ControllerConfig::saveConfig()
@@ -247,7 +251,7 @@ ControllerCommand ControllerConfig::getCommand(sf::Joystick::Axis axis, float va
 	return command;
 }
 
-ControllerCommand ControllerConfig::getCommand(int button)
+ControllerCommand ControllerConfig::getCommand(unsigned int button)
 {
 	ControllerCommand command = ControllerCommand::NoInput;
 	if (button < sf::Joystick::getButtonCount(joystickNumber))

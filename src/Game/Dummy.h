@@ -11,7 +11,7 @@ public:
 
 	Dummy();
 	~Dummy();
-	void update(int dt);
+	void update(int32_t dt);
 	void onHit();
 	int life{ 100 };
 

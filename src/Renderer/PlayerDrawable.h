@@ -17,7 +17,7 @@ Updated Feb 11, 2018
 #include <string.h>
 #include <string>
 #include "../Game/Player.h"
-
+#include <vector>
 class PlayerDrawable : public sf::Drawable {
 public:
 
@@ -39,9 +39,12 @@ public:
 	int posY;
 	int width;
 	int height;
+	sf::Color playerColor;
 	sf::RectangleShape playerShape;
 	sf::CircleShape cursorShape;
-
+	std::vector<sf::RectangleShape>dashOffsetShapes;
+	//sf::Shader m_shader;
+	//bool m_shaderLoaded;
 };
 
 #endif // !__Player_Renderer__

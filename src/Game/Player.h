@@ -5,56 +5,87 @@
 #include <math.h>
 #include "SquareEntity.h"
 #include "Projectile.h"
-
+#include <stdint.h>
 #include <vector>
 #include <cmath>
+class GameLogic;
 enum PlayerState{ ShootWindup, Shooting, ShootCooldown, Moving, Dashing};
 class Player: public SquareEntity{
 public:
-	//float posX;
-	//float posY;
-	//float posZ;
-	//float orientation;
-	//float radianOrientation;
-	//float prevPosX;
-	//float prevPosY;
-	//float prevPosZ;
-	//float velocityX;
-	//float velocityY;
-	//float velocityZ;
+	Player();
+	Player(GameLogic *g);
+	//Player & operator= (const Player &) = default;
+	~Player();
+	GameLogic * _game;
+	void setGame(GameLogic *g);
+	GameLogic* getGame();
+
 	float orientationX;
 	float orientationY;
 	float cursorOrientation;
 	float cursorOrientationX;
 	float cursorOrientationY;
 
-
-	//Game * _game;
-	Player();
-	~Player();
-	void update(int dt);
+	bool isAlive();
+	void update(int32_t dt);
 	PlayerState state;
 	void shoot();
+	void chargeShoot();
 	void dash();
-	std::vector <Projectile> projectiles;
-	//void update();
+	void shield();
+	void move(float x, float y);
 	void setPlayerOrienation(float x, float y);
 	void setCursorOrientation(float x, float y);
 
+	void _gainAmmo(int nb);
+	void _loseAmmo(int nb);
+	std::vector <Projectile> projectiles;
+	//void update();
+	
 	void setCursorOrientationFromMouse(int x, int y);
-	
-	
+	bool testCollision(Entity e);
+	bool testCollision(SquareEntity e);
+	bool testCollision(CircleEntity e);
+	void handleCollision();
+	void handleCollision(Projectile p);
+	void handleCollision(Entity *e);
+	bool collidableWith(Entity e);
+	bool collidableWith(Projectile e);
+	bool collidableWith(Player e);
+	int HP = 100;
+	bool _moveEngaged = false;
+	/*Shooting*/
 	int const SHOOT_COOLDOWN {10};
 	bool shootHeld{ false };
 	int shootTime{ 0 };
 	bool canShoot{ true };
-
+	bool _chargingShooting;
+	int _shotChargeHeldTime{ 0 };
+	int __shotChargeInitialCooldown{ 5 };
+	void _handleMovement(int dt);
+	/*Dash*/
 	float dashVelocity;
 	int dashMaxDuration;
 	int dashTime;
 	float dashOrientation;
 	float dashOrientationX;
 	float dashOrientationY;
+	int dashAmmo;
+	int _dashAmmoRechargeProgress;
+	
+	void handleDash();
+	/*Projectile*/
+	int32_t ammo;
+	int32_t _ammoRechargeProgress; //as miliseconds
+	void handleAmmo();
+	void handleProjectiles();
+	void handleShooting(int dt);
+	/*Shield*/
+	Projectile _shield;
+	bool shieldActive;
+	bool _shieldActive;
+	int _shieldActiveDuration;
+	void handleShield();
 
 	//protected:
 

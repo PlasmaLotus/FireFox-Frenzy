@@ -5,26 +5,17 @@
 
 #include "Entity.h"
 
-
-
+#include <math.h>
+#include <cmath>
 class MovingEntity: public Entity {
 public:
 
-	float prevPosX;
-	float prevPosY;
-	float prevPosZ;
-	//float prevPosZ;
-	float velocityX;
-	float velocityY;
-	//float velocityZ;
-	//Game * _game;
 	MovingEntity();
 	~MovingEntity();
-	virtual void update(int dt);
-	//void update();
+	virtual void update(int32_t dt);
+	virtual void handleCollision();
+	virtual void handleCollision(Entity e);
 
-
-//protected:
 
 };
 #endif // !__MOVING_ENTITY__

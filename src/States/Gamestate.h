@@ -10,6 +10,7 @@ Updated May 17, 2017
 #include "../Game/GameLogic.h"
 #include "../Renderer/GameRenderer.h"
 #include "../Controller/GameController.h"
+#include "../Event/EventManager.h"
 class GameState : public State {
 public:
 	GameState(sf::RenderWindow *w);
@@ -19,10 +20,11 @@ public:
 	GameLogic *getGame();
 
 	void pause();
-
+	void reset();
 private:
 	GameLogic *game;
 	GameRenderer *renderer;
+	EventManager &eventManager;
 	//PauseMenuRenderer *pauseRenderer;
 	sf::RenderWindow *window;
 	GameController *p1Controller;

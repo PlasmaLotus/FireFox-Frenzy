@@ -19,6 +19,17 @@ StateManager::StateManager():
 
 }
 
+int StateManager::getWindowWidth()
+{
+	//window.getSize().x;
+	return StateManager::getInstance().window.getSize().x;
+}
+
+int StateManager::getWindowHeight()
+{
+	return StateManager::getInstance().window.getSize().y;
+}
+
 StateManager::~StateManager()
 {
 	delete _newState;
@@ -80,10 +91,9 @@ void StateManager::run()
 					minute++;
 					second = 0;
 				}
-				
 			}
-			if (frame % 10000) {
-				//system("cls");
+			if (frame % 1000 == 0) {
+				system("cls");
 			}
 			/*~Manage Time Beta*/
 			//current = clock();
@@ -105,9 +115,10 @@ void StateManager::run()
 
 			{
 				gotoxy(0, 0);
-				printf("%d:%d  Frame: %d\n", minute, second, frame);
-				printf("NB Frames: %3.2f     \nTemps: %d           \nClocks per Sec: %3.2f\n",
-					(float)elapsedTime.asMilliseconds() * 60, elapsedTime, (float)CLOCKS_PER_SEC);
+				printf("Framerate: %3.5f \n ", elapsedTime.asMicroseconds() / 1000.f);
+				printf("%d:%d  Frame: %d ", minute, second, frame);
+				printf("NB Frames: %3.8f     Temps: %d    Clocks per Sec: %3.2f\n",
+					(float)elapsedTime.asMilliseconds() * 60, elapsedTime.asMilliseconds(), (float)CLOCKS_PER_SEC);
 				
 				//gotoxy(0, 0);
 			}
@@ -124,11 +135,12 @@ void StateManager::run()
 }
 
 int32_t StateManager::getElapsedTime() {
-	printf("DT -- %3.9f\n", elapsedTime.asSeconds());
+	int i = std::nearbyint(1000.0 / FPS);
+	printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
 	//long
 	//elapsedTime.as
 	//return elapsedTime.asMilliseconds();
-	return 1000 / FPS;
+	return std::nearbyint( 1000.0 / FPS);
 }
 
 int StateManager::getUniqueID() {
@@ -148,11 +160,17 @@ ControllerConfig *StateManager::getControllerConfig(int playerNumber)
 
 std::string StateManager::getControllerConfigPath(int playerNumber)
 {
-	if (playerNumber == 1) {
+	switch (playerNumber) {
+	case 1: {
 		return "p1Controls.ctl";
+		break;
 	}
-	else {
+	case 2:
+	default: {
 		return "p2Controls.ctl";
+		break;
+	}
+
 	}
 
 }

@@ -107,7 +107,7 @@ void Controller::handleInputMouse() {
 		sf::Mouse::Button mouseButton = static_cast<sf::Mouse::Button>(i);
 		if (sf::Mouse::isButtonPressed(mouseButton)) {
 			if (mode == ControlMode::Keyboard){
-				handleCommand(config->getCommand(mouseButton));
+				//handleCommand(config->getCommand(mouseButton));
 			}
 			else{
 				swapToControlMode(ControlMode::Keyboard);

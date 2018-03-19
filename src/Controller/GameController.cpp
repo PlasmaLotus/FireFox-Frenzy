@@ -21,6 +21,13 @@ player(e)
 	buttonCanBeHeld[ControllerCommand::Pause] = true;
 }
 
+GameController::GameController(State *s, ControllerConfig * c, Player * e):
+	Controller(c),
+	player(e),
+	state(s)
+{
+}
+
 GameController::~GameController()
 {
 }
@@ -32,6 +39,8 @@ void GameController::handleInput() {
 	cAngleX = 0.f;
 	cAngleY = 0.f;
 	//printf("REDEFINED HANDLEINPUT\n\n\n");
+	//Controller::handleInput();
+	/*
 	if (config != NULL) {
 		if (_swapConfig) {
 			mode = _nextMode;
@@ -41,13 +50,21 @@ void GameController::handleInput() {
 		handleInputMouse();
 		handleMouseAxis();
 		if (sf::Joystick::isConnected(config->getJoystickNumber())) {
-			mode = ControlMode::Joystick;
+			//mode = ControlMode::Joystick;
 			handleInputJoystick();
 		}
 	}
+	*/
+	Controller::handleInput();
 	player->setPlayerOrienation(pAngleX, pAngleY);
+	if ((pAngleX >= config->joystickDeadZone || pAngleX <= -config->joystickDeadZone)||
+		(pAngleY >= config->joystickDeadZone || pAngleY <= -config->joystickDeadZone)) {
+		player->move(pAngleX, pAngleY);
+	}
+
 	player->setCursorOrientation(cAngleX, cAngleY);
 	return;
+	
 }
 
 /*When an input is detected, a command is raised to this function*/
@@ -108,6 +125,7 @@ void GameController::handleCommand(ControllerCommand command){
 		}
 		case ControllerCommand::Shield:
 		{
+			player->shield();
 			break;
 		}
 		case ControllerCommand::Dash:
@@ -202,7 +220,7 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 			}
 			case ControllerCommand::Shield: {
 				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
-					
+					player->shield();
 				}
 				break;
 			}
@@ -213,13 +231,12 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 
 void GameController::handleMouseAxis() {
 	sf::Vector2i mousePos = sf::Mouse::getPosition(*StateManager::getInstance().getWindow());
-	printf("HandleMouseAxis - MousePos: %d, %d\n", mousePos.x, mousePos.y);
+	//printf("HandleMouseAxis - MousePos: %d, %d\n", mousePos.x, mousePos.y);
 	if (mode == ControlMode::Keyboard) {
-		printf("ControllerModeKeyboardMouse\n");
+		//printf("ControllerModeKeyboardMouse\n");
 		player->setCursorOrientationFromMouse(mousePos.x, mousePos.y);
 		//sf::Mouse::setPosition(sf::Vector2i(100, 100));
 	}
-	
 }
 void GameController::setPlayer(Player* e){
         player = e;

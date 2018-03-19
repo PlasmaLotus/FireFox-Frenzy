@@ -3,7 +3,7 @@
 //#include "../States/StateManager.h"
 
 SquareEntity::SquareEntity() :
-MovingEntity()
+Entity()
 //prevPosX(0.f),
 //prevPosY(0.f),
 //prevPosZ(0.f),
@@ -26,26 +26,36 @@ SquareEntity::SquareEntity(float pX, float pY, float wdth, float hght) {
 	height = hght;
 }
 
-void SquareEntity::update(int dt)
+void SquareEntity::update(int32_t dt)
 {
 }
 
-void MovingEntity::update(int dt)
-{
-	prevPosX = posX;
-	prevPosY = posY;
-}
+/*Return false if no collision*/
 
 bool SquareEntity::testCollision(Entity e) {
-	return false;
+	return (_testVerticalCollision(e) && _testHorizontalCollision(e));
 }
 bool SquareEntity::testCollision(SquareEntity e) {
-	return false;
+	return (_testVerticalCollision(e) && _testHorizontalCollision(e));
 }
 bool SquareEntity::testCollision(CircleEntity e) {
-	return false;
+
+	Vector2 v1{ posX - width / 2, posY - height / 2 };
+	Vector2 v2{ posX - width / 2, posY + height / 2 };
+	Vector2 v3{ posX + width / 2, posY + height / 2 };
+	Vector2 v4{ posX + width / 2, posY - height / 2 };
+
+	return (e._distanceBetween(v1) <= e.width || e._distanceBetween(v2) <= e.width ||
+		e._distanceBetween(v3) <= e.width || e._distanceBetween(v4) <= e.width);
+	return (_testVerticalCollision(e) && _testHorizontalCollision(e));
 }
 
 void SquareEntity::handleCollision()
 {
 }
+
+void SquareEntity::handleCollision( Entity e)
+{
+	handleCollision();
+}
+

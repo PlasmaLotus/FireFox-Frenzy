@@ -8,6 +8,7 @@ Updated May 13, 2017
 
 #include "Controller.h"
 #include "../Game/Player.h"
+#include "../States/State.h"
 
 //enum MenuCommands{};
 
@@ -16,6 +17,7 @@ public:
 
 	
 	GameController(ControllerConfig* config, Player* entity);
+	GameController(State *state, ControllerConfig* config, Player* entity);
 	~GameController();
 	void handleInput();
 	void handleJoystickAxis(sf::Joystick::Axis axis);
@@ -29,6 +31,7 @@ public:
 
 private:
 	Player *player;
+	State *state;
 	//ControlMode mode;
 	void handleCommand(ControllerCommand command);
 	float pAngleX;

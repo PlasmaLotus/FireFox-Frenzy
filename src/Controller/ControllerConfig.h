@@ -40,7 +40,8 @@ public:
     void setKey(ControllerCommand key, int value);
     ControllerCommand getCommand(sf::Keyboard::Key key);
     ControllerCommand getCommand(sf::Joystick::Axis axis, float value);
-    ControllerCommand getCommand(int button);
+	ControllerCommand getCommand(unsigned int button);
+    //ControllerCommand getCommand(int button);
 	int getJoystickNumber(void);
 	void setJoystickNumber(int number);
 	void getKeys();

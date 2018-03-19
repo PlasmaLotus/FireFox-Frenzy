@@ -9,7 +9,7 @@ Dummy::~Dummy() {
 
 }
 
-void Dummy::update(int dt) {
+void Dummy::update(int32_t dt) {
 	//nothing
 }
 

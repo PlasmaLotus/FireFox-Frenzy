@@ -2,94 +2,87 @@
 #include <cmath>
 #include "Player.h"
 #include "../Main.h"
+#include "GameLogic.h"
 //#include "../States/StateManager.h"
 
-Player::Player() :
-SquareEntity() {
-	state = PlayerState::Moving;
+Player::Player():
+	Player(nullptr) 
+{
+}
+
+Player::Player(GameLogic *g) :
+SquareEntity(0,0,GameLogic::PLAYER_COLLISION_HITBOX_WIDTH, GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT),
+_game(g),
+state(PlayerState::Moving)
+
+{
 	posX = 10.f;
 	posY = 10.f;
 	//posZ = 10.f;
-	velocityX = 1.f;
-	velocityY = 1.f;
+	velocityX = 0.f;
+	velocityY = 0.f;
 	orientation = 0.f;
 	orientationX = 0.f;
 	orientationY = 0.f;
 	cursorOrientation = 0.f;
 	cursorOrientationX = 0.f;
 	cursorOrientationY = 0.f;
-	dashVelocity = 2.0f;
-	dashMaxDuration = 20;
+	shootHeld = false;
+	dashVelocity = 5.0f;
+	dashMaxDuration = 150;
 	dashTime = 0;
+	ammo = 5;
+	shieldActive = false;
+	_shieldActive = false;
+	_shieldActiveDuration = 0;
+	_shield.width = GameLogic::PLAYER_SHIELD_RADIUS;
+	_shield.height = GameLogic::PLAYER_SHIELD_RADIUS;
 }
 
 Player::~Player()
 {
-	projectiles.empty();
+	projectiles.clear();
 }
 
-void Player::update(int dt)
+void Player::setGame(GameLogic * g)
 {
-	/*Movement*/
-	prevPosX = posX;
-	prevPosY = posY;
-	//prevPosZ = posZ;
-	/*
-	posX += velocityX;
-	posY += velocityY;
-	posZ += velocityZ;
-	*/
-	float speedX = 0.f;
-	float speedY = 0.f;
+	_game = g;
+}
 
-	printf("PLAYER STATE:: %d\n", state);
-	switch (state) {
-	case::PlayerState::Moving: {
-		//if (orientation)
-		//posX += std::sin(orientation) * dt * velocityX;
-		//posY += std::cos(orientation) * dt * velocityY;
-		posX += std::sin(orientation) *std::abs(orientationX) / 10 * velocityX;
-		posY += std::cos(orientation)  *std::abs(orientationY) / 10 * velocityY;
-		printf("posX: %3.2f - posY: %3.2f\n", posX, posY);
-		//printf("TickX: %3.4f -- TickY: %3.4f\n", std::sin(orientation) * velocityX, std::cos(orientation)  * velocityY);
-		//	; Math.sin(direction) * dt * velocityX;
-		break;
-	}
-	case::PlayerState::Dashing: {
-		dashTime--;
+GameLogic * Player::getGame()
+{
+	return _game;
+}
 
-		posX += std::sin(dashOrientation) * (50) / 10 * dashVelocity;
-		posY += std::cos(dashOrientation) * (50) / 10 * dashVelocity;
+bool Player::isAlive() {
+	/*kfjdshaoflas*/
+	return true;
+}
+void Player::update(int32_t dt)
+{
+	Entity::update(dt);
+	_handleMovement(dt);
+	/*Projectiles*/
+	handleProjectiles();
 
-		if (dashTime <= 0){
-			state = PlayerState::Moving;
-		}
-		break;
-	}
-	}
+	handleShooting(dt);
+	//shootHeld = false;
 	
 
+	for (int i = projectiles.size() - 1; i >= 0; i--) {
+		Projectile pro = projectiles.at(i);
+		//projectiles.at(i).update(dt);
+		if (!projectiles.at(i).isAlive()) {
+			//projectiles
+			//projectiles.erase(projectiles.begin() + i);
+		}
+	}
 
-	/*Projectiles*/
-	shootHeld = false;
-	shootTime--;
-	if (shootTime <= 0) {
-		canShoot = true;
-	}
-	for (std::vector<Projectile>::iterator it = projectiles.begin(); it != projectiles.end(); it++) {
-		it->update(dt);
-		if (it->durability <= 0) {
-			projectiles.erase(it);
-		}
-	}
-	/*
-	for (int i = projectiles.size() -1; i >= 0 ; i--) {
-		projectiles.at(i).update(dt);
-		if (projectiles.at(i).durability <= 0) {
-			projectiles.erase(projectiles.begin() + i);
-		}
-	}
-	*/
+	/*Recharging ammo*/
+	_ammoRechargeProgress += dt;
+	handleAmmo();
+	/*Shield*/
+	handleShield();
 }
 
 void Player::setPlayerOrienation(float x, float y)
@@ -108,31 +101,196 @@ void Player::setCursorOrientation(float x, float y)
 
 void Player::setCursorOrientationFromMouse(int x, int y)
 {
-	printf("MousePos: %d, %d\n", x, y);
+	//printf("MousePos: %d, %d\n", x, y);
 	setCursorOrientation( x - posX , y - posY);
 }
 
-void Player::shoot() {
-	//shootTime--;
-	//shootTime <= 0
-	if (canShoot && !shootHeld) {
-		Projectile p;
-		p.durability = 1;
-		p.lifetime = 300;
-		p.orientation = cursorOrientation;
-		p.posX = posX;
-		p.posY = posY;
-		p.velocityX = 10.f;
-		p.velocityY = 10.f;
-
-		projectiles.push_back(p);
-		
+bool Player::testCollision(Entity e) {
+	if (shieldActive) {
+		return _shield.testCollision(e);
 	}
-	canShoot = false;
-	shootHeld = true;
-	shootTime = SHOOT_COOLDOWN;
+	else {
+		return SquareEntity::testCollision(e);
+	}
+}
 
-	printf("SHOOTING: shootTime: %d,  --  nbProjectiles %d \n", shootTime, projectiles.size());
+bool Player::testCollision(SquareEntity e) {
+	if (shieldActive) {
+		return _shield.testCollision(e);
+	}
+	else {
+		return SquareEntity::testCollision(e);
+	}
+}
+
+bool Player::testCollision(CircleEntity e) {
+	if (shieldActive) {
+		return _shield.testCollision(e);
+	}
+	else {
+		return SquareEntity::testCollision(e);
+	}
+}
+
+void Player::handleCollision()
+{
+	//--HP;
+}
+
+void Player::handleCollision(Projectile p)
+{
+	/*Projectile hits the player*/
+	HP -= p.power;
+	//HP--;
+}
+
+void Player::handleCollision(Entity * e)
+{
+	try
+	{
+		Player *p = dynamic_cast<Player *>(e);
+		if (p != nullptr) {
+			//handlecollisoin with player;
+		}
+	}
+	catch (const std::bad_cast& cast){
+	}
+
+	try
+	{
+		Projectile *p = dynamic_cast<Projectile *>(e);
+		if (p != nullptr) {
+			//handlecollisoin with Projectile;
+			bool handle = true;
+			//If projectile isnt generated by this
+			if (p->getPlayerID() != getID()) {
+
+				//Check if projectile hasnt colllided with this before
+				for (int i = _collisions.size()-1; i >= 0; i--){
+					CollisionStack stack = _collisions.at(i);
+					if (stack._id == p->getID()) {
+						if (stack.delay >= 0) {
+							handle = false;
+						}
+					}
+				}
+
+				if (handle) {
+					CollisionStack stack{ p->getID(), GameLogic::PROJECTILE_COLLISION_DELAY_GENERAL };
+					_collisions.push_back(stack);
+					handleCollision(*p);
+				}
+			}
+		}
+	}
+	catch (const std::bad_cast& cast){
+	}
+	
+}
+
+bool Player::collidableWith(Entity e)
+{
+	return true;
+}
+
+bool Player::collidableWith(Projectile e)
+{
+	return (e.getPlayerID() != getID());
+}
+
+bool Player::collidableWith(Player e)
+{
+	return (e.getID() != getID());
+}
+
+void Player::handleDash()
+{
+}
+
+void Player::handleAmmo()
+{
+	if (ammo >= GameLogic::MAX_AMMO) {
+		ammo = GameLogic::MAX_AMMO;
+		_ammoRechargeProgress = 0;
+	}
+	else {
+		if (_ammoRechargeProgress >= GameLogic::AMMO_RECHARGE_COOLDOWN) {
+			_ammoRechargeProgress -= GameLogic::AMMO_RECHARGE_COOLDOWN;
+			if (ammo < GameLogic::MAX_AMMO) {
+				_gainAmmo(1);
+			}
+		}
+	}
+}
+
+void Player::handleProjectiles()
+{
+	
+}
+void Player::handleShooting(int dt)
+{
+	shootTime-= dt;
+	if (shootTime <= 0) {
+		canShoot = true;
+	}
+	if (shootHeld && canShoot) {
+		_shotChargeHeldTime += dt;
+		if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+			//_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+		}
+
+
+	}
+	else {
+
+		if (_shotChargeHeldTime > 0) {
+			//shootHeld = false;
+			canShoot = false;
+			shootTime = SHOOT_COOLDOWN;
+			if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+				_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+			}
+			_loseAmmo(1);
+			Projectile *p{ new Projectile(this) };
+			p->durability = 1;
+			p->lifetime = 300;
+			p->orientation = cursorOrientation;
+			p->posX = posX;
+			p->posY = posY;
+			p->velocityX = 1.f;
+			p->velocityY = 1.f;
+			p->power = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
+
+			_game->addEntity(p);
+			_shotChargeHeldTime = 0;
+		}
+	}
+	shootHeld = false;
+}
+void Player::handleShield()
+{
+	if (!_shieldActive) {
+		shieldActive = false;
+		_shieldActiveDuration = 0;
+	}
+	else {
+		_shieldActiveDuration++;
+		shieldActive = true;
+	}
+	_shield.posX = posX;
+	_shield.posY = posY;
+
+	_shieldActive = false;
+}
+
+void Player::chargeShoot() {
+	_chargingShooting = true;
+}
+
+
+/*Handle when Player presses the Shoot command*/
+void Player::shoot() {
+	shootHeld = true;
 }
 
 void Player::dash() {
@@ -143,6 +301,114 @@ void Player::dash() {
 		dashOrientationX = orientationX;
 		dashOrientationY = orientationY;
 		dashTime = dashMaxDuration;
+	}
+}
+
+void Player::shield()
+{
+	_shieldActive = true;
+}
+
+void Player::_gainAmmo(int nb){
+	ammo += nb;
+	//onAmmoGain
+}
+
+void Player::_loseAmmo(int nb){
+	ammo -= nb;
+	///Spawn ammoItem
+	//onAmmoLoss
+}
+
+//move the 
+void Player::move(float x, float y) {
+	_moveEngaged = true;
+}
+
+void Player::_handleMovement(int dt) {
+	/*Movement*/
+	prevPosX = posX;
+	prevPosY = posY;
+	
+	
+
+	//printf("PLAYER STATE:: %d\n", state);
+	switch (state) {
+	case::PlayerState::Moving: {
+		if (_moveEngaged) {
+			int reducethespeedaittle = 100;
+			velocityX += orientationX * GameLogic::PLAYER_ACCELERATION_RATE;
+			velocityY += orientationY * GameLogic::PLAYER_ACCELERATION_RATE;
+		}
+		bool vXPositif = true;
+		bool vYPositif = true;
+		if (velocityX < 0.f) {
+			vXPositif = false;
+		}
+		if (velocityY < 0.f) {
+			vYPositif = false;
+		}
+
+		/*Friction*/
+		if (std::abs(velocityX) <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE) {
+			velocityX = 0.f;
+		}
+		else {
+			velocityX *= GameLogic::PLAYER_FRICTION;
+		}
+		if (std::abs(velocityY) <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE) {
+			velocityY = 0.f;
+		}
+		else {
+			velocityY *= GameLogic::PLAYER_FRICTION;
+		}
+
+		
+		/// Reduce Velocity when exceeding max ///
+		if (std::abs(velocityX) > GameLogic::PLAYER_MAX_VELOCITY) {
+			if (vXPositif) {
+				//velocityX = GameLogic::PLAYER_MAX_VELOCITY;
+				velocityX -= orientationX * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
+			}
+			else {
+				//velocityX = GameLogic::PLAYER_MAX_VELOCITY * -1.0f;
+				velocityX -= orientationX * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE * -1.0f;
+
+			}
+		}
+		if (std::abs(velocityY) > GameLogic::PLAYER_MAX_VELOCITY) {
+			if (vYPositif) {
+				//velocityY = GameLogic::PLAYER_MAX_VELOCITY;
+				velocityY -= orientationY * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
+			}
+			else {
+				//velocityY = GameLogic::PLAYER_MAX_VELOCITY * -1.0f;
+				velocityY -= orientationX * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE * -1.0f;
+			}
+		}
+		
+		posX += velocityX;
+		posY += velocityY;
+		break;
 
 	}
+	case::PlayerState::Dashing: {
+		handleDash();
+		dashTime -= dt;
+
+		posX += std::sin(dashOrientation) * (50) / 10 * dashVelocity;
+		posY += std::cos(dashOrientation) * (50) / 10 * dashVelocity;
+
+		if (dashTime <= 0) {
+			state = PlayerState::Moving;
+		}
+		break;
+	}
+	default:break;
+	}
+	//posX += std::sin(orientation) *std::abs(orientationX) / 10 * velocityX;
+	//posY += std::cos(orientation)  *std::abs(orientationY) / 10 * velocityY;
+	
+
+	_moveEngaged = false;
 }

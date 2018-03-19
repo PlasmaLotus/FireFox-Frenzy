@@ -2,33 +2,31 @@
 
 #ifndef __PROJECTILE__
 #define __PROJECTILE__
-#include <math.h>
 #include "CircleEntity.h"
 
-#include <cmath>
+class Player;
 //enum PlayerState { ShootWindup, Shooting, ShootCooldown, Moving };
 class Projectile : public CircleEntity {
 public:
-	//float posX;
-	//float posY;
-	//float posZ;
-	//float orientation;
-	//float radianOrientation;
-	//float prevPosX;
-	//float prevPosY;
-	//float prevPosZ;
-	//float velocityX;
-	//float velocityY;
-	//float velocityZ;
+	int power;
 	float orientationX;
 	float orientationY;
 	int durability;
 	int lifetime;
-
-	//Game * _game;
+	Projectile(Player* pID);
 	Projectile();
 	~Projectile();
-	void update(int dt);
+	void update(int32_t dt);
 
+	bool isAlive();
+	bool collidableWith(Entity e);
+	bool collidableWith(Projectile e);
+	bool collidableWith(Player e);
+	void handleCollision();
+	void handleCollision(Projectile p);
+	
+	Player *playerPtr;
+	Player* getPlayer();
+	int getPlayerID();
 };
-#endif // !__PLAYER__
+#endif // !__PROJECTILE__

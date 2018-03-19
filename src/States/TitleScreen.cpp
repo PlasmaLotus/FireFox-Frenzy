@@ -8,7 +8,7 @@ TitleScreen::TitleScreen(sf::RenderWindow * w):
 }
 
 void TitleScreen::tick() {
-	gotoxy(0, 5);
+	//gotoxy(0, 5);
 	printf("Title Screen State Tick \n");
 	p1Controller->handleInput();
 	p1Controller->updateConfig();

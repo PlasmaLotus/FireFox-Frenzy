@@ -3,31 +3,23 @@
 #ifndef __MOVING_SQUARE_ENTITY__
 #define __MOVING_SQUARE_ENTITY__
 
-#include "MovingEntity.h"
+#include "Entity.h"
 class CircleEntity;
-class SquareEntity: public MovingEntity {
+class SquareEntity: public Entity {
 public:
 
-	//float prevPosX;
-	//float prevPosY;
-	//float prevPosZ;
-	//float velocityX;
-	//float velocityY;
-	//float velocityZ;
-	//Game * _game;
-	float width;
-	float height;
 	SquareEntity();
 	~SquareEntity();
 	SquareEntity(float pX, float pY, float wdth, float hght);
-	void update(int dt);
-	//void update();
-	bool testCollision(Entity e);
-	bool testCollision(SquareEntity e);
-	bool testCollision(CircleEntity e);
+	virtual void update(int32_t dt);
+	virtual bool testCollision(Entity e);
+	virtual bool testCollision(SquareEntity e);
+	virtual bool testCollision(CircleEntity e);
 	virtual void handleCollision();
-	Vector2 distanceBetweenCenter(Entity e);
-	Vector2 angleBetweenCenter(Entity e);
+	virtual void handleCollision(Entity e);
+	//bool _testCircleCollision(CircleEntity circle);
+	//Vector2 distanceBetweenCenter(Entity e);
+	//Vector2 angleBetweenCenter(Entity e);
 
 //protected:
 

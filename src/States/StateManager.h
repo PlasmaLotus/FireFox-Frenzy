@@ -30,11 +30,13 @@ public:
 	int32_t getElapsedTime();
 	int getUniqueID();
 	//void play();
-	static const int FPS = 120;
+	static const int FPS = 144;
 	int SCREEN_WIDTH = 1080;
 	int SCREEN_HEIGHT = 720;
 	ControllerConfig *getControllerConfig(int playerNumber);
 	static std::string getControllerConfigPath(int playerNumber);
+	static int getWindowWidth();
+	static int getWindowHeight();
 private:
 	StateManager();
 	int _id{ 0 };

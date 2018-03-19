@@ -6,8 +6,6 @@ Updated May 13, 2017
 #include "MenuController.h"
 
 /*The controller recieves input from a Keyboard or Joystick and outputs Commands to execute on the Board and Game*/
-
-
 MenuController::MenuController(ControllerConfig* c, Menu* m) :
 Controller(c),
 menu(m)

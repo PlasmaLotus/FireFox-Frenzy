@@ -6,25 +6,30 @@ Updated May 13, 2017
 #include "GameState.h"
 #include "../States/StateManager.h"
 
-GameState::GameState(sf::RenderWindow *w)
+GameState::GameState(sf::RenderWindow *w):
+	State(),
+	eventManager(EventManager::getInstance())
 {
+	eventManager.setRenderer(renderer);
+	eventManager.setGame(game);
 	window = w;
 	game = new GameLogic();
 	renderer = new GameRenderer(window, game);
-	
+	//eventManager = 
 	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
-	p1Controller = new GameController(p1KeyConfig, game->getPlayer(1));
+	p1Controller = new GameController(this, p1KeyConfig, game->getPlayer(1));
 	p2KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(2));
-	p1Controller = new GameController(p1KeyConfig, game->getPlayer(2));
-	//p1Controller = new GameController(StateManager::getInstance().getControllerConfig(1), game->getPlayer(1));
+	p2Controller = new GameController(this, p2KeyConfig, game->getPlayer(2));
 }
 
 GameState::~GameState()
 {
-	delete p1KeyConfig;
-	delete game;
-	delete renderer;
 	delete p1Controller;
+	delete p1KeyConfig;
+	delete p2Controller;
+	delete p2KeyConfig;
+	delete renderer;
+	delete game;
 }
 
 void GameState::tick()
@@ -33,10 +38,11 @@ void GameState::tick()
 	{
 	case GameCurrentState::RUNNING:
 		p1Controller->handleInput();
-		//p1Controller->updateConfig();
+		p2Controller->handleInput();
 		game->tick();
 		renderer->render();
-		p1Controller->viewDebugJoystick();
+		eventManager.handleEvents();
+		//p1Controller->viewDebugJoystick();
 		break;
 	case GameCurrentState::PAUSED:
 		renderer->render();
@@ -47,7 +53,6 @@ void GameState::tick()
 	default:
 		break;
 	}
-
 }
 
 GameLogic * GameState::getGame()
@@ -56,6 +61,11 @@ GameLogic * GameState::getGame()
 }
 
 void GameState::pause() {
-
+	//game->reset();
 }
 
+void GameState::reset() {
+	game->reset();
+	p1Controller->setPlayer(game->getPlayer(1));
+	p2Controller->setPlayer(game->getPlayer(2));
+}

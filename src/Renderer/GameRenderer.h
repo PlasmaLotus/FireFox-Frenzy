@@ -46,6 +46,7 @@ public:
 	//sf::CircleShape shape(size);
 	sf::CircleShape shape;
 	PlayerDrawable * playerDrawable1;
+	PlayerDrawable * playerDrawable2;
 
 };
 
