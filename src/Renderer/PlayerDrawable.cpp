@@ -90,16 +90,6 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 		c.setPosition(sf::Vector2f(it->posX - it->width/2, it->posY- it->width/2));
 		target.draw(c);
 	}
-
-	if (player->shieldActive) {
-		Projectile &shield{ player->_shield };
-		sf::CircleShape c(1);
-		c.setFillColor(sf::Color(100, 100, 100, 100));
-		c.setRadius(shield.width / 2);
-		c.setOutlineColor(sf::Color::Red);
-		c.setPosition(sf::Vector2f(shield.posX - shield.width / 2, shield.posY - shield.width / 2));
-		target.draw(c);
-	}
 }
 
 bool PlayerDrawable::onLoad()

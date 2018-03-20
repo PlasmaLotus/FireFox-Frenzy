@@ -26,6 +26,7 @@ public:
 
 	void display();
 	void drawPlayers();
+	void drawProjectiles();
 	void addGame(GameLogic * g);
 	void addWindow(sf::RenderWindow * g);
 	sf::Texture getLastFrame();

@@ -36,12 +36,16 @@ void GameState::tick()
 {
 	switch (game->gameState)
 	{
+	case::GameCurrentState::COUNTDOWN: 
+		game->tick();
+		renderer->render();
+		break;
 	case GameCurrentState::RUNNING:
+		eventManager.handleEvents();
 		p1Controller->handleInput();
 		p2Controller->handleInput();
 		game->tick();
 		renderer->render();
-		eventManager.handleEvents();
 		//p1Controller->viewDebugJoystick();
 		break;
 	case GameCurrentState::PAUSED:

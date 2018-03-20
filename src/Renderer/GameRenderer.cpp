@@ -48,6 +48,7 @@ void GameRenderer::clear() {
 void GameRenderer::draw()
 {
 	drawPlayers();
+	drawProjectiles();
 	//window->draw(shape);
 }
 
@@ -62,24 +63,27 @@ void GameRenderer::drawPlayers()
 	window->draw(*playerDrawable1);
 	playerDrawable2->update();
 	window->draw(*playerDrawable2);
+}
 
-	for (int i = game->_entities.size() - 1; i >= 0; i--) {
-		Entity *e = game->_entities.at(i);
-		try
-		{
-			Projectile *p = dynamic_cast<Projectile *>(e);
+void GameRenderer::drawProjectiles()
+{
+	std::vector<Entity*> vec = game->_entities;
+
+	for (int i = 0; i < vec.size(); i++) {
+		try {
+			Projectile * p = dynamic_cast<Projectile *> (vec.at(i));
 			if (p != nullptr) {
-				sf::CircleShape c(1);
-				c.setFillColor(sf::Color::White);
-				c.setRadius(p->width / 2);
-				c.setOutlineColor(sf::Color::Red);
-				c.setPosition(sf::Vector2f(p->posX - p->width / 2, p->posY - p->width / 2));
-				window->draw(c);
+				sf::CircleShape circle;
+				circle.setFillColor(sf::Color::Green);
+				circle.setPosition(p->posX, p->posY);
+				circle.setRadius(p->width);
+				//circle.set
+				window->draw(circle);
 			}
 		}
 		catch (const std::bad_cast& cast)
 		{
-
+			//std::cerr << e.what() << std::endl;
 		}
 	}
 }

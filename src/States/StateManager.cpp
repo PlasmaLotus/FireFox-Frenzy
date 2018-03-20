@@ -115,7 +115,6 @@ void StateManager::run()
 
 			{
 				gotoxy(0, 0);
-				printf("Framerate: %3.5f \n ", elapsedTime.asMicroseconds() / 1000.f);
 				printf("%d:%d  Frame: %d ", minute, second, frame);
 				printf("NB Frames: %3.8f     Temps: %d    Clocks per Sec: %3.2f\n",
 					(float)elapsedTime.asMilliseconds() * 60, elapsedTime.asMilliseconds(), (float)CLOCKS_PER_SEC);

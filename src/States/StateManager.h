@@ -51,6 +51,7 @@ private:
 	ControllerConfig p2Config;
 	//GameRenderer *renderer;
 	
+	
 };
 
 #endif
