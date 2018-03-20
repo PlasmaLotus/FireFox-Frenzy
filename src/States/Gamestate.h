@@ -15,6 +15,7 @@ class GameState : public State {
 public:
 	GameState(sf::RenderWindow *w);
 
+
 	virtual ~GameState();
 	virtual void tick();
 	GameLogic *getGame();
