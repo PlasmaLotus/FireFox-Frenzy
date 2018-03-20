@@ -63,6 +63,7 @@ public:
 	int _shotChargeHeldTime{ 0 };
 	int __shotChargeInitialCooldown{ 5 };
 	void _handleMovement(int dt);
+	
 	/*Dash*/
 	float dashVelocity;
 	int dashMaxDuration;
@@ -72,22 +73,20 @@ public:
 	float dashOrientationY;
 	int dashAmmo;
 	int _dashAmmoRechargeProgress;
-	
-	void handleDash();
+	bool canDash;
+	void handleDash(int dt);
 	/*Projectile*/
 	int32_t ammo;
 	int32_t _ammoRechargeProgress; //as miliseconds
-	void handleAmmo();
-	void handleProjectiles();
+	void handleAmmo(int dt);
+	void handleProjectiles(int dt);
 	void handleShooting(int dt);
 	/*Shield*/
 	Projectile _shield;
 	bool shieldActive;
 	bool _shieldActive;
 	int _shieldActiveDuration;
-	void handleShield();
-
+	void handleShield(int dt);
 	//protected:
-
 };
 #endif // !__PLAYER__

@@ -7,15 +7,17 @@ Updated May 13, 2017
 #include "../Main.h"
 #include "../States/StateManager.h"
 
-const float GameLogic::PLAYER_MAX_VELOCITY(6.0f);
+const float GameLogic::PLAYER_MAX_VELOCITY(9.0f);
 const float GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE(0.06f);
+const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
 const float GameLogic::PLAYER_FRICTION(0.98f);
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.001f);
-const float GameLogic::PLAYER_ACCELERATION_RATE(0.05f);
-const float GameLogic::PLAYER_SHIELD_RADIUS(80.0f);
+const float GameLogic::PLAYER_ACCELERATION_RATE(0.06f);
+const float GameLogic::PLAYER_DASH_VELOCITY(12.54f);
 
-GameLogic::GameLogic():
-gameState(GameCurrentState::RUNNING)
+
+GameLogic::GameLogic() :
+	gameState(GameCurrentState::COUNTDOWN)
 {
 
 	init();
@@ -41,14 +43,14 @@ void GameLogic::init() {
 		case 3: {
 			_spawnPoints.push_back(Vector2{ 500.f, 500.f });
 			break;
-			}
+		}
 		case 2: {
-		_spawnPoints.push_back(Vector2{ 200.f, 500.f });
-		break;
+			_spawnPoints.push_back(Vector2{ 200.f, 500.f });
+			break;
 		}
 		case 1: {
 			_spawnPoints.push_back(Vector2{ 500.f, 200.f });
-			   break;
+			break;
 		}
 		case 0: {
 			_spawnPoints.push_back(Vector2{ 200.f, 200.f });
@@ -56,7 +58,7 @@ void GameLogic::init() {
 		}
 		default:
 			break;
-	}
+		}
 	}
 
 	{
@@ -101,13 +103,31 @@ void GameLogic::reset() {
 
 void GameLogic::tick() {
 	dt = StateManager::getInstance().getElapsedTime();
-	printf("GameTick:  DT - %ld\n", dt);
 
-	frame++;
-	printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
-	_handleEntitiesUpdate(dt);
-	_handleEntitiesCollisions(dt);
-	_handleEntitesEnd();
+	switch (gameState)
+	{
+	case::GameCurrentState::COUNTDOWN:
+		countdownTimer -= dt;
+		if (countdownTimer <= 0){
+			gameState = GameCurrentState::RUNNING;
+			countdownTimer = 0;
+		}
+		break;
+	case GameCurrentState::RUNNING:
+		dt = StateManager::getInstance().getElapsedTime();
+		printf("GameTick:  DT - %ld\n", dt);
+
+		frame++;
+		printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
+		_handleEntitiesUpdate(dt);
+		_handleEntitiesCollisions(dt);
+		_handleEntitesEnd();
+		//findEntity(2);
+		break;
+	default:
+		break;
+	}
+	
 }
 
 void GameLogic::pause() {
@@ -129,11 +149,9 @@ void GameLogic::_handleEntitiesUpdate(int32_t dt)
 				{
 					Player *p = dynamic_cast<Player *>(e);
 					//p.update(dt);
-					printf("Player id-%d: HP: %d - x:%3.2f - y:%3.2f | Ammo: %d/%d, %d/%d,\n", p->getID(), p->HP, p->posX, p->posY, p->ammo, MAX_AMMO, p->_ammoRechargeProgress, AMMO_RECHARGE_COOLDOWN);
-					printf(" -- Ori: %3.2f| OriX:%3.2f - OriY:%3.2f | velocityX:%3.2f, velocityY:%3.2f\n", p->orientation, p->orientationX, p->orientationY, p->velocityX, p->velocityY);
-					if (p->shieldActive) {
-						printf("Shield:\n");
-					}
+					printf("Player id-%d: x:%3.2f - y:%3.2f | Ammo: %d/%d, %d/%d,\n", p->getID(), p->posX, p->posY, p->ammo, PLAYER_MAX_AMMO, p->_ammoRechargeProgress, PLAYER_AMMO_RECHARGE_COOLDOWN);
+					printf(" -- OriX:%3.2f - OriY:%3.2f | velocityX:%3.2f, velocityY:%3.2f\n", p->orientationX, p->orientationY, p->velocityX, p->velocityY);
+					//e = static_cast<Entity &>(p);
 				}
 				catch (const std::bad_cast& cast)
 				{
@@ -157,14 +175,10 @@ void GameLogic::_handleEntitiesCollisions(int32_t dt)
 			Entity *e2 = _entities.at(j);
 			if (e1 != e2) {
 				if (e1->testCollision(*e2)) {
-					//e1->handleCollision(*e2);
-					e1->handleCollision(e2);
+					e1->handleCollision(*e2);
 					printf("Collision Detected, ID:%d, ID:%d -  Distance: %3.3f!!!\n", e1->getID(), e2->getID(), e1->_distanceBetween(*e2));
+
 				}
-				/*
-				if (e1->collidableWith(*e2)) {	
-				}
-				*/
 			}
 		}
 	}
@@ -213,7 +227,7 @@ void GameLogic::_handleEntitesEnd()
 	while (!_idsToDestroy.empty()) {
 		id = _idsToDestroy.top();
 		
-		for (int i = _entities.size(); i-- > 0; ) {
+		for (int i = _entities.size() - 1; i >= 0; i--) {
 			if (_entities.at(i)->getID() == id) {
 				delete _entities.at(i);
 				_entities.erase(_entities.begin() + i);
@@ -243,34 +257,29 @@ void GameLogic::addEntity(Entity *e) {
 	_entities.push_back(e);
 }
 
-Entity& GameLogic::findEntity(int id) {
-	/*
-	for (int i = _entities.size(); i-- > 0; ) {
-		if (_entities.at(i).getID() == id) {
+Entity* GameLogic::findEntity(int id) {
+	
+	for (int i = 0;  i < _entities.size(); i++) {
+		if (_entities.at(i)->getID() == id) {
 			return _entities.at(i);
 		}
 	}
-	*/
-	Entity e;
-	Entity f = e;
-	return f;
+	return nullptr;
 }
 
-Entity GameLogic::findEntityCopy(int id) {
-	/*
-	for (int i = _entities.size(); i-- > 0; ) {
-		if (_entities.at(i).getID() == id) {
-			return _entities.at(i);
+Entity& GameLogic::findEntityCopy(int id) {
+	for (int i = 0; i < _entities.size(); i++) {
+		if (_entities.at(i)->getID() == id) {
+			return *_entities.at(i);
 		}
 	}
-	*/
 	Entity e;
 	return e;
 }
 
 Player& GameLogic::findPlayer(int id) {
 
-	for (int i = _entities.size() - 1; i >= 0; i--) {
+	for (int i = 0; i < _entities.size(); i++) {
 		Entity *e = _entities.at(i);
 		if (e->getID() == id) {
 			try
@@ -291,7 +300,7 @@ Player& GameLogic::findPlayer(int id) {
 Player * GameLogic::getPlayer(int playerNumber)
 {
 	int id = _playerIDs.at(playerNumber - 1);
-	for (int i = _entities.size() - 1; i >= 0; i--) {
+	for (int i = 0; i < _entities.size(); i++) {
 		Entity *e = _entities.at(i);
 		if (e->getID() == id) {
 			try
@@ -311,7 +320,7 @@ Player * GameLogic::getPlayer(int playerNumber)
 Player GameLogic::getPlayerCopy(int playerNumber)
 {
 	int id = _playerIDs[playerNumber - 1];
-	for (int i = _entities.size() - 1; i >= 0; i--) {
+	for (int i = 0; i < _entities.size(); i++) {
 		Entity *e = _entities.at(i);
 		if (e->getID() == id) {
 			try

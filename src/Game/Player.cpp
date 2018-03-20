@@ -3,7 +3,7 @@
 #include "Player.h"
 #include "../Main.h"
 #include "GameLogic.h"
-//#include "../States/StateManager.h"
+#include "../Event/EventManager.h"
 
 Player::Player():
 	Player(nullptr) 
@@ -32,6 +32,7 @@ state(PlayerState::Moving)
 	dashMaxDuration = 150;
 	dashTime = 0;
 	ammo = 5;
+	dashAmmo = 3;
 	shieldActive = false;
 	_shieldActive = false;
 	_shieldActiveDuration = 0;
@@ -63,26 +64,18 @@ void Player::update(int32_t dt)
 	Entity::update(dt);
 	_handleMovement(dt);
 	/*Projectiles*/
-	handleProjectiles();
-
-	handleShooting(dt);
-	//shootHeld = false;
-	
-
-	for (int i = projectiles.size() - 1; i >= 0; i--) {
-		Projectile pro = projectiles.at(i);
-		//projectiles.at(i).update(dt);
-		if (!projectiles.at(i).isAlive()) {
-			//projectiles
-			//projectiles.erase(projectiles.begin() + i);
-		}
+	handleProjectiles(dt);
+	shootHeld = false;
+	shootTime--;
+	if (shootTime <= 0) {
+		canShoot = true;
 	}
-
+	handleShooting(dt);
 	/*Recharging ammo*/
-	_ammoRechargeProgress += dt;
-	handleAmmo();
+	handleAmmo(dt);
 	/*Shield*/
-	handleShield();
+	handleShield(dt);
+	handleDash(dt);
 }
 
 void Player::setPlayerOrienation(float x, float y)
@@ -203,27 +196,41 @@ bool Player::collidableWith(Player e)
 	return (e.getID() != getID());
 }
 
-void Player::handleDash()
+void Player::handleDash(int dt)
 {
+	_dashAmmoRechargeProgress += dt;
+	if (dashAmmo >= GameLogic::PLAYER_DASH_MAX_AMMO) {
+		dashAmmo = GameLogic::PLAYER_DASH_MAX_AMMO;
+		_dashAmmoRechargeProgress = 0;
+	}
+	else {
+		if (_dashAmmoRechargeProgress >= GameLogic::PLAYER_DASH_RECHARGE_COOLDOWN) {
+			_dashAmmoRechargeProgress -= GameLogic::PLAYER_DASH_RECHARGE_COOLDOWN;
+			if (dashAmmo < GameLogic::PLAYER_DASH_MAX_AMMO) {
+				dashAmmo+=1;
+			}
+		}
+	}
 }
 
-void Player::handleAmmo()
+void Player::handleAmmo(int dt)
 {
-	if (ammo >= GameLogic::MAX_AMMO) {
-		ammo = GameLogic::MAX_AMMO;
+	_ammoRechargeProgress += dt;
+	if (ammo >= GameLogic::PLAYER_MAX_AMMO) {
+		ammo = GameLogic::PLAYER_MAX_AMMO;
 		_ammoRechargeProgress = 0;
 	}
 	else {
-		if (_ammoRechargeProgress >= GameLogic::AMMO_RECHARGE_COOLDOWN) {
-			_ammoRechargeProgress -= GameLogic::AMMO_RECHARGE_COOLDOWN;
-			if (ammo < GameLogic::MAX_AMMO) {
+		if (_ammoRechargeProgress >= GameLogic::PLAYER_AMMO_RECHARGE_COOLDOWN) {
+			_ammoRechargeProgress -= GameLogic::PLAYER_AMMO_RECHARGE_COOLDOWN;
+			if (ammo < GameLogic::PLAYER_MAX_AMMO) {
 				_gainAmmo(1);
 			}
 		}
 	}
 }
 
-void Player::handleProjectiles()
+void Player::handleProjectiles(int dt)
 {
 	
 }
@@ -238,11 +245,8 @@ void Player::handleShooting(int dt)
 		if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
 			//_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
 		}
-
-
 	}
 	else {
-
 		if (_shotChargeHeldTime > 0) {
 			//shootHeld = false;
 			canShoot = false;
@@ -267,9 +271,10 @@ void Player::handleShooting(int dt)
 	}
 	shootHeld = false;
 }
-void Player::handleShield()
+void Player::handleShield(int dt)
 {
-	if (!_shieldActive) {
+	if (shieldActive) {
+		if (!_shieldActive) {
 		shieldActive = false;
 		_shieldActiveDuration = 0;
 	}
@@ -287,10 +292,9 @@ void Player::chargeShoot() {
 	_chargingShooting = true;
 }
 
-
 /*Handle when Player presses the Shoot command*/
 void Player::shoot() {
-	shootHeld = true;
+shootHeld = true;
 }
 
 void Player::dash() {
@@ -300,7 +304,7 @@ void Player::dash() {
 		dashOrientation = orientation;
 		dashOrientationX = orientationX;
 		dashOrientationY = orientationY;
-		dashTime = dashMaxDuration;
+		dashTime = GameLogic::PLAYER_DASH_DURATION;
 	}
 }
 
@@ -329,63 +333,81 @@ void Player::_handleMovement(int dt) {
 	/*Movement*/
 	prevPosX = posX;
 	prevPosY = posY;
-	
-	
-
+	float orienX = orientationX / 100;
+	float orienY = orientationY / 100;
 	//printf("PLAYER STATE:: %d\n", state);
 	switch (state) {
 	case::PlayerState::Moving: {
 		if (_moveEngaged) {
 			int reducethespeedaittle = 100;
-			velocityX += orientationX * GameLogic::PLAYER_ACCELERATION_RATE;
-			velocityY += orientationY * GameLogic::PLAYER_ACCELERATION_RATE;
+			velocityX += orienX * GameLogic::PLAYER_ACCELERATION_RATE;
+			velocityY += orienY * GameLogic::PLAYER_ACCELERATION_RATE;
 		}
 		bool vXPositif = true;
 		bool vYPositif = true;
-		if (velocityX < 0.f) {
+		if (velocityX < 0.0f) {
 			vXPositif = false;
 		}
-		if (velocityY < 0.f) {
+		if (velocityY < 0.0f) {
 			vYPositif = false;
 		}
 
 		/*Friction*/
+
 		if (std::abs(velocityX) <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE) {
-			velocityX = 0.f;
+			velocityX = 0.0f;
 		}
 		else {
 			velocityX *= GameLogic::PLAYER_FRICTION;
 		}
+
 		if (std::abs(velocityY) <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE) {
-			velocityY = 0.f;
+			velocityY = 0.0f;
 		}
 		else {
 			velocityY *= GameLogic::PLAYER_FRICTION;
 		}
 
-		
+		/*Friciton 2*/
+		/*
+		if (velocityX <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE && velocityX >= (-1.f * GameLogic::PLAYER_VELOCITY_DEAD_ZONE)) {
+			velocityX = 0.0f;
+		}
+		else {
+			velocityX *= GameLogic::PLAYER_FRICTION;
+		}
+		if (velocityY <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE && velocityY >= (-1.f * GameLogic::PLAYER_VELOCITY_DEAD_ZONE)) {
+			velocityY = 0.0f;
+		}
+		else {
+			velocityY *= GameLogic::PLAYER_FRICTION;
+		}
+		*/
+
 		/// Reduce Velocity when exceeding max ///
+		if (std::abs(velocityX) > GameLogic::PLAYER_DASH_VELOCITY) {
+			velocityX += orienX * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
+		}
 		if (std::abs(velocityX) > GameLogic::PLAYER_MAX_VELOCITY) {
+			velocityX += orienX * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE ;
+		}
+
+		if (std::abs(velocityY) > GameLogic::PLAYER_DASH_VELOCITY) {
+			velocityY += orienY * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
+		}
+		if (std::abs(velocityY) > GameLogic::PLAYER_MAX_VELOCITY) {
+			velocityY += orienY * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE ;
+		}
+			/*
 			if (vXPositif) {
 				//velocityX = GameLogic::PLAYER_MAX_VELOCITY;
 				velocityX -= orientationX * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
 			}
 			else {
 				//velocityX = GameLogic::PLAYER_MAX_VELOCITY * -1.0f;
-				velocityX -= orientationX * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE * -1.0f;
-
+				velocityX += orientationX * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE * -1.0f;
 			}
-		}
-		if (std::abs(velocityY) > GameLogic::PLAYER_MAX_VELOCITY) {
-			if (vYPositif) {
-				//velocityY = GameLogic::PLAYER_MAX_VELOCITY;
-				velocityY -= orientationY * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
-			}
-			else {
-				//velocityY = GameLogic::PLAYER_MAX_VELOCITY * -1.0f;
-				velocityY -= orientationX * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE * -1.0f;
-			}
-		}
+			*/
 		
 		posX += velocityX;
 		posY += velocityY;
@@ -396,12 +418,21 @@ void Player::_handleMovement(int dt) {
 		handleDash();
 		dashTime -= dt;
 
+		float dashOriX = dashOrientationX / 100.f;
+		float dashOriY = dashOrientationY / 100.f;
+		velocityX = dashOriX * GameLogic::PLAYER_DASH_VELOCITY;;
+		velocityY = dashOriY * GameLogic::PLAYER_DASH_VELOCITY;
+
+		/*
 		posX += std::sin(dashOrientation) * (50) / 10 * dashVelocity;
 		posY += std::cos(dashOrientation) * (50) / 10 * dashVelocity;
+		*/
 
 		if (dashTime <= 0) {
 			state = PlayerState::Moving;
 		}
+		posX += velocityX;
+		posY += velocityY;
 		break;
 	}
 	default:break;
@@ -409,6 +440,5 @@ void Player::_handleMovement(int dt) {
 	//posX += std::sin(orientation) *std::abs(orientationX) / 10 * velocityX;
 	//posY += std::cos(orientation)  *std::abs(orientationY) / 10 * velocityY;
 	
-
 	_moveEngaged = false;
 }
