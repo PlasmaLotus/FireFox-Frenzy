@@ -1,0 +1,80 @@
+{
+    "configurations": [
+        {
+            "name": "Mac",
+            "includePath": [
+                "D:/Documents/SFML-2.4.2/include",
+                "D:/Documents/SFML-2.4.2/include/SFML",
+                "/usr/include",
+                "/usr/local/include",
+                "${workspaceRoot}"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "/usr/include",
+                    "/usr/local/include",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
+            "macFrameworkPath": [
+                "/System/Library/Frameworks",
+                "/Library/Frameworks"
+            ]
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "/usr/include",
+                "/usr/local/include",
+                "${workspaceRoot}"
+            ],
+            "defines": [],
+            "intelliSenseMode": "clang-x64",
+            "browse": {
+                "path": [
+                    "/usr/include",
+                    "/usr/local/include",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "D:/Program Files/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.12.25827/include/*",
+                "D:/Program Files/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.12.25827/atlmfc/include/*",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/um",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/ucrt",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/shared",
+                "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/winrt",
+                "${workspaceRoot}"
+            ],
+            "defines": [
+                "_DEBUG",
+                "UNICODE",
+                "_UNICODE"
+            ],
+            "intelliSenseMode": "msvc-x64",
+            "browse": {
+                "path": [
+                    "D:/Program Files/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.12.25827/include/*",
+                    "D:/Program Files/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.12.25827/atlmfc/include/*",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/um",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/ucrt",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/shared",
+                    "C:/Program Files (x86)/Windows Kits/10/Include/10.0.16299.0/winrt",
+                    "${workspaceRoot}"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            }
+        }
+    ],
+    "version": 3
+}

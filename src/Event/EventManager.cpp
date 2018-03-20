@@ -36,13 +36,14 @@ void EventManager::handleEvents()
 		}
 	}
 	*/
-
+	//if 
 	for (int i = _events.size() - 1; i >= 0; i--) {
 		Event &event = _events.at(i);
 		event.lifetime += dt;
 		if (!event.handled) {
-			__handleEvent(event.type, event._id);
-			event.handled = true;
+			if (__handleEvent(event)) {
+				event.handled = true;
+			}
 		}
 		if (event.lifetime >= DEFAULT_LIFETIME_DEATH) {
 			_events.erase(_events.begin() + i);
@@ -60,6 +61,32 @@ void EventManager::setRenderer(Renderer * r)
 	renderer = r;
 }
 
-void EventManager::__handleEvent(EventType e, int id){
-	printf("Event, NOEVENT!!!\n : ID: %d", id);
+bool EventManager::__handleEvent(Event event){
+	EventType e = event.type;
+	//int id = even
+	switch (e) {
+	case EventType::ProjectileSpawn: {
+		//Entity *e = game->findEntity(id);
+
+		Projectile* p = dynamic_cast<Projectile*>(event.entity);
+		__handleEventProjectileSpawn(p);
+		printf("Event, PROJECTILE SPAWN -- PROJECTILE SPAWN -- PROJECTILE SPAWN!!!\n : ID: %d", event._id);
+		break;
+		}
+	case EventType::NoEvent:
+	default: {	
+		printf("Event, NOEVENT!!!\n : ID: %d", event._id);
+		break;
+		}
+	}
+	return true;
+}
+
+void EventManager::__handleEventProjectileSpawn(Projectile* projectile) {
+	
+	bool loaded = sbuffer.loadFromFile("Assets/Sounds/Pew_Pew-DKnight556-1379997159.wav");
+	sound.setBuffer(sbuffer);
+	sound.setVolume(100.f);
+	//sound.play();
+	//sound.getSta
 }
