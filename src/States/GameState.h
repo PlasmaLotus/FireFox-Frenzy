@@ -7,22 +7,26 @@ Updated May 17, 2017
 #define __GameState__
 
 #include "State.h"
-#include "../Game/Game.h"
+#include "../Game/GameLogic.h"
 #include "../Renderer/GameRenderer.h"
 #include "../Controller/GameController.h"
+#include "../Event/EventManager.h"
 class GameState : public State {
 public:
 	GameState(sf::RenderWindow *w);
 
+
 	virtual ~GameState();
 	virtual void tick();
-	Game *getGame();
+	GameLogic *getGame();
 
 	void pause();
-
+	void reset();
 private:
-	Game *game;
+	GameLogic *game;
 	GameRenderer *renderer;
+	EventManager &eventManager;
+	//PauseMenuRenderer *pauseRenderer;
 	sf::RenderWindow *window;
 	GameController *p1Controller;
 	GameController *p2Controller;
