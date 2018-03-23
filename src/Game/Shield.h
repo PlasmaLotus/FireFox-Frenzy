@@ -15,7 +15,7 @@ public:
 	~Shield();
 	void update(int32_t dt);
 	void handleCollision();
-	void handleCollision(Projectile p);
+	void handleCollision(Entity *e);
 	
 
 };

@@ -1,6 +1,6 @@
 #include "Projectile.h"
 #include "Player.h"
-#include "../Event/EventManager.h"
+#include "../States/StateManager.h"
 
 Projectile::Projectile(Player* pID) :
 	CircleEntity(0, 0, 10),
@@ -8,7 +8,8 @@ Projectile::Projectile(Player* pID) :
 	lifetime{ 3000 },
 	durability{ 1 },
 	orientationX{ 0.f },
-	orientationY{ 0.f } 
+	orientationY{ 0.f },
+	power{1}
 {
 }
 	
@@ -60,10 +61,10 @@ bool Projectile::collidableWith(Player e)
 void Projectile::handleCollision()
 {
 	--durability;
-	EventManager::queueEvent(Event(EventType::CollisionGeneral, getID()));
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, getID()));
 }
 
-void Projectile::handleCollision(Projectile p)
+void Projectile::handleCollision(Entity *e)
 {
 	handleCollision();
 }

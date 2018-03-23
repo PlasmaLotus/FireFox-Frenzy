@@ -16,7 +16,7 @@ public:
 	virtual bool testCollision(SquareEntity e);
 	virtual bool testCollision(CircleEntity e);
 	virtual void handleCollision();
-	virtual void handleCollision(Entity e);
+	virtual void handleCollision(Entity *e);
 	//bool _testCircleCollision(CircleEntity circle);
 	//Vector2 distanceBetweenCenter(Entity e);
 	//Vector2 angleBetweenCenter(Entity e);

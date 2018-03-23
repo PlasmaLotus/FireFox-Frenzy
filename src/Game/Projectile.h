@@ -17,12 +17,15 @@ public:
 	Projectile();
 	~Projectile();
 	void update(int32_t dt);
-
 	bool isAlive();
-	
+	int power;
 	void handleCollision();
-	void handleCollision(Projectile p);
-	
+	void handleCollision(Entity *e);
+	bool collidableWith(Entity e);
+	bool collidableWith(Projectile e);
+	bool collidableWith(Player e);
+
+
 	Player *playerPtr;
 	Player* getPlayer();
 	int getPlayerID();

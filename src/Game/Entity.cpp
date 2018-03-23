@@ -1,7 +1,6 @@
 #include "Entity.h"
 #include "../States/StateManager.h"
 
-
 Entity::Entity() :
 _id(StateManager::getInstance().getUniqueID()),
 orientation(0.f){
@@ -49,11 +48,6 @@ bool Entity::testCollision(Entity e) {
 
 void Entity::handleCollision()
 {
-}
-
-void Entity::handleCollision(Entity e)
-{
-	handleCollision();
 }
 
 void Entity::handleCollision(Entity * e)

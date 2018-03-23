@@ -57,7 +57,7 @@ void CircleEntity::handleCollision()
 {
 }
 
-void CircleEntity::handleCollision(Entity e)
+void CircleEntity::handleCollision(Entity *e)
 {
 	handleCollision();
 }

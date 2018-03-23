@@ -14,7 +14,8 @@ const float GameLogic::PLAYER_FRICTION(0.98f);
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.06f);
 const float GameLogic::PLAYER_DASH_VELOCITY(12.54f);
-
+const float GameLogic::PLAYER_SHIELD_RADIUS(15.0f);
+//const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
 
 GameLogic::GameLogic() :
 	gameState(GameCurrentState::COUNTDOWN)
@@ -94,6 +95,7 @@ void GameLogic::init() {
 		//_entities.push_back(p4);
 	}
 	frame = 0;
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown3));
 }
 void GameLogic::reset() {
 	_emptyAllEntities();
@@ -108,9 +110,30 @@ void GameLogic::tick() {
 	{
 	case::GameCurrentState::COUNTDOWN:
 		countdownTimer -= dt;
+		int it;
+		if (countdownTimer > GAME_COUNTDOWN_TIME / 3 * 2) {
+			//_countdownIt = 2;
+			it = 2;
+		}
+		if (countdownTimer > GAME_COUNTDOWN_TIME / 3) {
+			//_countdownIt = 1;
+			it = 1;
+		}
+		if (it != _countdownIt) {
+			if (it == 2) {
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown2));
+			}
+			if (it == 1) {
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown1));
+			}
+		}
+		_countdownIt = it;
+
+		//if (countdownTimer
 		if (countdownTimer <= 0){
 			gameState = GameCurrentState::RUNNING;
 			countdownTimer = 0;
+			StateManager::getInstance().eventManager.queueEvent(Event(EventType::CountdownStart));
 		}
 		break;
 	case GameCurrentState::RUNNING:
@@ -149,8 +172,9 @@ void GameLogic::_handleEntitiesUpdate(int32_t dt)
 				{
 					Player *p = dynamic_cast<Player *>(e);
 					//p.update(dt);
-					printf("Player id-%d: x:%3.2f - y:%3.2f | Ammo: %d/%d, %d/%d,\n", p->getID(), p->posX, p->posY, p->ammo, PLAYER_MAX_AMMO, p->_ammoRechargeProgress, PLAYER_AMMO_RECHARGE_COOLDOWN);
+					printf("Player id-%d - HP:%d -  x:%3.2f - y:%3.2f | Ammo: %d/%d, %d/%d,\n", p->getID(), p->HP, p->posX, p->posY, p->ammo, PLAYER_MAX_AMMO, p->_ammoRechargeProgress, PLAYER_AMMO_RECHARGE_COOLDOWN);
 					printf(" -- OriX:%3.2f - OriY:%3.2f | velocityX:%3.2f, velocityY:%3.2f\n", p->orientationX, p->orientationY, p->velocityX, p->velocityY);
+					
 					//e = static_cast<Entity &>(p);
 				}
 				catch (const std::bad_cast& cast)
@@ -175,7 +199,7 @@ void GameLogic::_handleEntitiesCollisions(int32_t dt)
 			Entity *e2 = _entities.at(j);
 			if (e1 != e2) {
 				if (e1->testCollision(*e2)) {
-					e1->handleCollision(*e2);
+					e1->handleCollision(e2);
 					printf("Collision Detected, ID:%d, ID:%d -  Distance: %3.3f!!!\n", e1->getID(), e2->getID(), e1->_distanceBetween(*e2));
 
 				}

@@ -30,7 +30,7 @@ public:
 	void update(int32_t dt);
 	PlayerState state;
 	void shoot();
-	void chargeShoot();
+	void chargeShooting();
 	void dash();
 	void shield();
 	void move(float x, float y);
@@ -39,7 +39,7 @@ public:
 
 	void _gainAmmo(int nb);
 	void _loseAmmo(int nb);
-	std::vector <Projectile> projectiles;
+	//std::vector <Projectile> projectiles;
 	//void update();
 	
 	void setCursorOrientationFromMouse(int x, int y);
@@ -47,7 +47,7 @@ public:
 	bool testCollision(SquareEntity e);
 	bool testCollision(CircleEntity e);
 	void handleCollision();
-	void handleCollision(Projectile p);
+	void _handleCollision(Projectile p);
 	void handleCollision(Entity *e);
 	bool collidableWith(Entity e);
 	bool collidableWith(Projectile e);
@@ -57,6 +57,7 @@ public:
 	/*Shooting*/
 	int const SHOOT_COOLDOWN {10};
 	bool shootHeld{ false };
+	bool _shootHeld{ false };
 	int shootTime{ 0 };
 	bool canShoot{ true };
 	bool _chargingShooting;
@@ -79,7 +80,6 @@ public:
 	int32_t ammo;
 	int32_t _ammoRechargeProgress; //as miliseconds
 	void handleAmmo(int dt);
-	void handleProjectiles(int dt);
 	void handleShooting(int dt);
 	/*Shield*/
 	Projectile _shield;

@@ -57,10 +57,10 @@ public:
 	void _handleEntitiesCollisions_PlayersToProjectiles(int32_t dt);
 	void _handleEntitesEnd();
 	void addEntityIDToDelete(int id);
-	static const int PLAYER_COLLISION_HITBOX_WIDTH = 10;
-	static const int PLAYER_COLLISION_HITBOX_HEIGHT = 20;
-	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 3500 }; //as miliseconds
-	static int const PLAYER_MAX_AMMO{ 10 };
+	static const int PLAYER_COLLISION_HITBOX_WIDTH = 20;
+	static const int PLAYER_COLLISION_HITBOX_HEIGHT = 30;
+	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 25 }; //as miliseconds
+	static int const PLAYER_MAX_AMMO{ 1000 };
 
 	static const int PLAYER_DASH_DURATION{ 150 };
 	static const int PLAYER_DASH_RECHARGE_COOLDOWN{ 250 };
@@ -75,6 +75,13 @@ public:
 	static const float PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE;
 	static const int GAME_COUNTDOWN_TIME{ 3000 };
 	int countdownTimer = GAME_COUNTDOWN_TIME;
+	int _countdownIt;
+
+	static const int PROJECTILE_COLLISION_DELAY_GENERAL{ 30 };
+	static const float PLAYER_SHIELD_RADIUS;
+
+	static const int PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST{ 100 };
+	static const int PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME{ 2500 };
 private:
 	void _emptyAllEntities();
 

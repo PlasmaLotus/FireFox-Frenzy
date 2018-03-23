@@ -26,7 +26,7 @@ void Shield::handleCollision()
 	}
 }
 
-void Shield::handleCollision(Projectile p)
+void Shield::handleCollision(Entity *e)
 {
 }
 

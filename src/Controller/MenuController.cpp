@@ -82,6 +82,86 @@ void MenuController::handleCommand(ControllerCommand command){
 
 void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	//config->get
+	//ControllerCommand command;
+	AxisHandler handler = config->getAxisHandlerFromAxis(axis);
+	float value = sf::Joystick::getAxisPosition(config->getJoystickNumber(), axis);
+	//printf("Joystick%d\n", axis);
+	//arbitrary dead zone of 7
+
+	//printf("Joystick%d - in switch\n", axis);
+	ControllerCommand command;
+	if (value > 0) {
+		command = handler.positif;
+	}
+	else {
+		command = handler.negatif;
+	}
+	switch (command) {
+	case ControllerCommand::Up:
+	{
+		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+			menu->inputUp();
+		}
+		break;
+	}
+	case ControllerCommand::Down:
+	{
+		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+			menu->inputDown();
+		}
+		break;
+	}
+
+	case ControllerCommand::Left: {
+		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+			menu->inputLeft();
+		}
+		break;
+	}
+	case ControllerCommand::Right:
+	{
+		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+			menu->inputRight();
+		}
+		break;
+	}
+
+	case ControllerCommand::CursorUp:
+	case ControllerCommand::CursorDown:
+	case ControllerCommand::CVertical:
+	{
+		break;
+	}
+
+	case ControllerCommand::CursorLeft:
+	case ControllerCommand::CursorRight:
+	case ControllerCommand::CHorizontal:
+	{
+		break;
+	}
+	case ControllerCommand::Shoot:
+	case ControllerCommand::ShootAlt: {
+		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+			menu->inputSelect();
+		}
+		break;
+	}
+	case ControllerCommand::Dash: {
+		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+			menu->inputBack();
+		}
+		break;
+	}
+	case ControllerCommand::Shield: {
+		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+			menu->inputBack();
+		}
+		break;
+	}
+	default:
+		break;
+	}
+
 }
 
 void MenuController::handleMouseAxis() {

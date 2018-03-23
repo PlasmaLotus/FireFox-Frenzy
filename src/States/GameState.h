@@ -25,7 +25,7 @@ public:
 private:
 	GameLogic *game;
 	GameRenderer *renderer;
-	EventManager &eventManager;
+	//EventManager &eventManager;
 	//PauseMenuRenderer *pauseRenderer;
 	sf::RenderWindow *window;
 	GameController *p1Controller;

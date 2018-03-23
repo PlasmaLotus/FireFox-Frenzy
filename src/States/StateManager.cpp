@@ -5,8 +5,8 @@
 StateManager::StateManager():
 	_currentState(NULL),
 	_newState(NULL),
-	_switchState(false),
-	_running(true)
+	_switchState(false)
+	//_running(true)
 {
 	_id = 0;
 	//p1Config = new ControllerConfig();
@@ -16,7 +16,8 @@ StateManager::StateManager():
 	//window.create(sf::VideoMode(240, 160), "PlasmaFlux");
 	_currentState = new TitleScreen(&window);
 	//renderer = new GameRenderer(w, currentState->getGame());
-
+	eventManager.setAudioEventManager(&audioEventManager);
+	//AudioEventManager *a{ &audioEventManager };
 }
 
 int StateManager::getWindowWidth()
@@ -108,9 +109,10 @@ void StateManager::run()
 					_running = false;
 				}
 			}
-
+			
 			elapsedTime = currentTime.getElapsedTime();
-			_currentState->tick();
+			_run();
+			
 			//elapsedTime.asMilliseconds()
 
 			{
@@ -133,6 +135,11 @@ void StateManager::run()
 	return;
 }
 
+void StateManager::_run() {
+	eventManager.handleEvents(getElapsedTime());
+	audioEventManager.handleEvents(getElapsedTime());
+	_currentState->tick();
+}
 int32_t StateManager::getElapsedTime() {
 	int i = std::nearbyint(1000.0 / FPS);
 	printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());

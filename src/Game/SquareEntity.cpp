@@ -54,7 +54,7 @@ void SquareEntity::handleCollision()
 {
 }
 
-void SquareEntity::handleCollision( Entity e)
+void SquareEntity::handleCollision( Entity *e)
 {
 	handleCollision();
 }

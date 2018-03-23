@@ -16,7 +16,7 @@ public:
 	virtual bool testCollision(SquareEntity e);
 	virtual bool testCollision(CircleEntity e);
 	virtual void handleCollision();
-	virtual void handleCollision(Entity e);
+	virtual void handleCollision(Entity *e);
 	
 //protected:
 

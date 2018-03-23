@@ -1,5 +1,7 @@
 #include "PlayerDrawable.h"
 #include "../States/StateManager.h"
+#include "../Game/Shield.h"
+#include "../Game/GameLogic.h"
 PlayerDrawable::PlayerDrawable() {
 
 }
@@ -10,7 +12,9 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 {
 
 	playerShape.setFillColor(sf::Color::Blue);
-	playerShape.setSize(sf::Vector2f(player->width, player->height));
+	int width = GameLogic::PLAYER_COLLISION_HITBOX_WIDTH;
+	int height = GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT;
+	playerShape.setSize(sf::Vector2f(width, height));
 
 	cursorShape.setFillColor(sf::Color::Cyan);
 	cursorShape.setRadius(2);
@@ -82,13 +86,17 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 		*/
 	}
 
-	for (std::vector<Projectile>::iterator it = player->projectiles.begin(); it != player->projectiles.end(); it++) {
-		sf::CircleShape c(1);
-		c.setFillColor(playerColor);
-		c.setRadius(it->width / 2);
-		c.setOutlineColor(sf::Color::Red);
-		c.setPosition(sf::Vector2f(it->posX - it->width/2, it->posY- it->width/2));
-		target.draw(c);
+	//Shield Display
+	if (player->shieldActive) {
+		//player->
+		int shieldHitboxExtension = 10;
+		sf::CircleShape shieldShape;
+		//class Shield &s{ player->_shield };
+		Projectile &sh{ player->_shield };
+		shieldShape.setFillColor(sf::Color(100,100,100,25));
+		shieldShape.setRadius(sh.width + shieldHitboxExtension);
+		shieldShape.setPosition(sf::Vector2f(sh.posX - ((sh.width + shieldHitboxExtension) / 2), sh.posY - ((sh.width + shieldHitboxExtension) / 2)));
+		target.draw(shieldShape);
 	}
 }
 

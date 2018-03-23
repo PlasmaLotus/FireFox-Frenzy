@@ -7,11 +7,11 @@ Updated May 13, 2017
 #include "../States/StateManager.h"
 
 GameState::GameState(sf::RenderWindow *w):
-	State(),
-	eventManager(EventManager::getInstance())
+	State()
+	//eventManager(EventManager::getInstance())
 {
-	eventManager.setRenderer(renderer);
-	eventManager.setGame(game);
+	//eventManager.setRenderer(renderer);
+	//eventManager.setGame(game);
 	window = w;
 	game = new GameLogic();
 	renderer = new GameRenderer(window, game);
@@ -41,7 +41,7 @@ void GameState::tick()
 		renderer->render();
 		break;
 	case GameCurrentState::RUNNING:
-		eventManager.handleEvents();
+		//eventManager.handleEvents();
 		p1Controller->handleInput();
 		p2Controller->handleInput();
 		game->tick();

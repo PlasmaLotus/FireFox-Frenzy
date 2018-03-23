@@ -40,7 +40,7 @@ public:
 	virtual bool collidableWith(Entity e);
 	virtual bool testCollision(Entity e);
 	virtual void handleCollision();
-	virtual void handleCollision(Entity e);
+	//virtual void handleCollision(Entity e);
 	virtual void handleCollision(Entity *e);
 	float _distanceBetween(float x, float y);
 	float _distanceBetween(Vector2 v);

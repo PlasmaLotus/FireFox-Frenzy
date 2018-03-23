@@ -1,5 +1,5 @@
 #include "EventManager.h"
-#include "../States/StateManager.h"
+//#include "../States/StateManager.h"
 //#include "../Game/GameLogic.h"
 
 EventManager::EventManager()
@@ -10,20 +10,20 @@ EventManager::~EventManager()
 {
 	_events.clear();
 }
-
+/*
 EventManager& EventManager::getInstance() {
 	static EventManager instance;
 	return instance;
 }
-
+*/
 
 void EventManager::queueEvent(Event e) {
-	getInstance()._events.push_back(e);
+	_events.push_back(e);
 }
 
-void EventManager::handleEvents()
+void EventManager::handleEvents(int dt)
 {
-	int dt = StateManager::getInstance().getElapsedTime();
+	//int dt = StateManager::getInstance().getElapsedTime();
 	/*
 	for (std::vector<Event>::iterator i = _events.begin(); i != _events.end(); i++) {
 		i->lifetime += dt;
@@ -73,6 +73,16 @@ bool EventManager::__handleEvent(Event event){
 		printf("Event, PROJECTILE SPAWN -- PROJECTILE SPAWN -- PROJECTILE SPAWN!!!\n : ID: %d", event._id);
 		break;
 		}
+	case EventType::Countdown1:
+	case EventType::Countdown2:
+	case EventType::Countdown3: {
+		__handleEventCoundownTick();
+		break;
+	}
+	case EventType::CountdownStart: {
+		__handleEventCoundownStart();
+		break;
+	}
 	case EventType::NoEvent:
 	default: {	
 		printf("Event, NOEVENT!!!\n : ID: %d", event._id);
@@ -84,9 +94,25 @@ bool EventManager::__handleEvent(Event event){
 
 void EventManager::__handleEventProjectileSpawn(Projectile* projectile) {
 	
-	bool loaded = sbuffer.loadFromFile("Assets/Sounds/Pew_Pew-DKnight556-1379997159.wav");
-	sound.setBuffer(sbuffer);
-	sound.setVolume(100.f);
+	//bool loaded = sbuffer.loadFromFile("Assets/Sounds/Pew_Pew-DKnight556-1379997159.wav");
+	//sound.setBuffer(sbuffer);
+	//sound.setVolume(100.f);
 	//sound.play();
 	//sound.getSta
+	audio->queueAudioEvent(AudioEvent::DefaultEventAudio, false);
+}
+
+void EventManager::__handleEventCoundownStart()
+{
+	audio->queueAudioEvent(AudioEvent::AudioCountdownTick, false);
+}
+
+void EventManager::__handleEventCoundownTick()
+{
+	audio->queueAudioEvent(AudioEvent::AudioCountdownStart, false);
+}
+
+
+void EventManager::setAudioEventManager(AudioEventManager *aem) {
+	audio = aem;
 }

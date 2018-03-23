@@ -17,6 +17,8 @@ Updated May 17, 2017
 #include "../Controller/ControllerConfig.h"
 //#include "../Renderer/GameRenderer.h"
 #include "../Main.h"
+#include "../Event/EventManager.h"
+#include "../Event/AudioEventManager.h"
 
 class StateManager {
 public:
@@ -37,10 +39,14 @@ public:
 	static std::string getControllerConfigPath(int playerNumber);
 	static int getWindowWidth();
 	static int getWindowHeight();
-private:
+	void _run();
+	EventManager eventManager;
+	AudioEventManager audioEventManager;
+
+protected:
 	StateManager();
 	int _id{ 0 };
-	bool _running;
+	bool _running{ true };
 	sf::RenderWindow window;
 	State *_currentState;
 	State *_newState;
@@ -50,7 +56,6 @@ private:
 	ControllerConfig p1Config;
 	ControllerConfig p2Config;
 	//GameRenderer *renderer;
-	
 	
 };
 
