@@ -14,18 +14,20 @@ AudioEventManager::~AudioEventManager() {
 
 bool AudioEventManager::_initSoundBuffers() {
 	sf::SoundBuffer buffer;
+	bool success = true;
 	if (!buffer.loadFromFile("Assets/Sounds/ding.flac"))
-		return false;
+		success = false;
 	_soundBufferMap[AudioEvent::DefaultEventAudio] = buffer;
 	
 	buffer = sf::SoundBuffer();
 	if (!buffer.loadFromFile("Assets/Sounds/countdown.wav"))
-		return false;
+		success = false;
 	
 	buffer = sf::SoundBuffer();
 	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
 	if (!buffer.loadFromFile("Assets/Sounds/go.wav"))
-		return false;
+		success = false;
+
 	_soundBufferMap[AudioEvent::AudioCountdownStart] = buffer;
 	return true;
 } 
@@ -36,7 +38,9 @@ void AudioEventManager::queueAudioEvent(AudioEvent event, bool repeat = false) {
 		_sounds.push_back(sound);
 		if (repeat) {
 			sf::Sound * s{ &(_sounds.at(_sounds.size() - 1)) };
+
 		}
+		_sounds.at(_sounds.size() - 1).play();
 	}
 	catch (const std::out_of_range& oor) {
 		printf("cannot find the sound for this event...,\n");
@@ -51,14 +55,10 @@ void AudioEventManager::stopAudioEvent(AudioEvent event){
 		}
 	}
 
-
 	for (int i = _soundsOnRepeat.size()-1; i>=0; i--) {
-		
-		
 		//sf::SoundBuffer& buffer = _sounds.at(i).getBuffer();
 		/*
 		if ( buffer == _soundBufferMap.at(event)) {
-
 		}
 		*/
 	}
@@ -68,6 +68,7 @@ void AudioEventManager::handleEvents( int dt ) {
 
 	for (int i = _sounds.size()-1; i >=0; i--) {
 		try {
+			/**/
 			if (_sounds.at(i).getStatus() == sf::SoundSource::Status::Stopped) {
 				_sounds.erase(_sounds.begin() + i);
 			}
@@ -77,5 +78,6 @@ void AudioEventManager::handleEvents( int dt ) {
 		}
 		
 	}
+	printf("Audio Queue ---------- : %d\n", _sounds.size());
 } 
  

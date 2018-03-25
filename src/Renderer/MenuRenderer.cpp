@@ -31,7 +31,6 @@ void MenuRenderer::render()
 bool MenuRenderer::initRenderer() {
 	//sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	shape.setRadius(100.f);
-	//sf::CircleShape
 	shape.setFillColor(sf::Color::Red);
 	debugText.setString("Debug Text");
 	debugText.setFillColor(sf::Color::Magenta);
@@ -41,29 +40,30 @@ bool MenuRenderer::initRenderer() {
 	nbMenuItems = menu->items.size();
 
 	//if (!font.loadFromFile("Assets\fonts\LemonMilk.LemonMilk.otf")) {
-	if (!font.loadFromFile("./Assets/fonts/arial.ttf")) {
-		//
+	if (!font.loadFromFile("Assets/Fonts/LemonMilk/LemonMilk.otf")){
+		fontLoaded = false;
 		//return EXIT_FAILURE;
 		//resources/sansation.ttf
-		fontLoaded = false;
+		//fontLoaded = false;
 		//sf::Font::
 		//font.loadFromMemory("", 367112);
 	}
+	debugText.setFont(font);
+	debugText.setString("Hello world");
+	debugText.setCharacterSize(24);
+	debugText.setFillColor(sf::Color::Red);
+	debugText.setStyle(sf::Text::Bold | sf::Text::Underlined);
+	debugText.setPosition(50, 50);
 
 	for (int i = 0; i < menu->items.size(); i++) {
 		menuItems[i] = sf::RectangleShape(sf::Vector2f(100, 50));
 		menuItems[i].setPosition(50, i * 100);
 		//menuItems[i].setFillColor(sf::Color::Magenta);
 		_menuItems[i] = MenuItemDrawable(&menu->items.at(i), 50, i*100);
-		_menuItems[i].setFont(font);
-
+		//_menuItems[i].setFont(font);
 	}
 	bool success = false;
 
-	
-
-
-	//test.
 	return success;
 }
 
@@ -87,11 +87,10 @@ void MenuRenderer::draw()
 {
 	//window->draw(shape);
 	sf::Font font;
-	
 	int y = 100;
+
 	for (unsigned i = 0; i < menu->items.size(); ++i) {
 		y += 18;
-		//std::string text();
 		std::string text = "XDXDXDXD";
 		sf::Text textDrawable;
 		textDrawable.setString("XDXDXDXD");
@@ -99,6 +98,7 @@ void MenuRenderer::draw()
 		textDrawable.setPosition(sf::Vector2f(20, y));
 		window->draw(textDrawable);
 	}
+
 	window->draw(debugText);
 	for (int i = 0; i < menu->items.size(); i++) {
 		if (menu->selection == i){
@@ -107,7 +107,6 @@ void MenuRenderer::draw()
 		else {
 			menuItems[i].setFillColor(sf::Color::Magenta);
 		}
-		//window->draw(menuItems[i]);
 		window->draw(_menuItems[i]);
 	}
 

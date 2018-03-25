@@ -49,6 +49,7 @@ void EventManager::handleEvents(int dt)
 			_events.erase(_events.begin() + i);
 		}
 	}
+	printf("Event Queue ---------- : %d\n", _events.size());
 }
 
 void EventManager::setGame(GameLogic * g)

@@ -32,7 +32,7 @@ state(PlayerState::Moving)
 	dashMaxDuration = 150;
 	dashTime = 0;
 	ammo = 500;
-	dashAmmo = 3;
+	//dashAmmo = 3;
 	shieldActive = false;
 	_shieldActive = false;
 	_shieldActiveDuration = 0;
@@ -42,7 +42,6 @@ state(PlayerState::Moving)
 
 Player::~Player()
 {
-	//projectiles.clear();
 }
 
 void Player::setGame(GameLogic * g)
@@ -56,7 +55,6 @@ GameLogic * Player::getGame()
 }
 
 bool Player::isAlive() {
-	/*kfjdshaoflas*/
 	return true;
 }
 void Player::update(int32_t dt)
@@ -66,8 +64,8 @@ void Player::update(int32_t dt)
 	/*Projectiles*/
 	//handleProjectiles(dt);
 	shootHeld = false;
-	shootTime--;
-	if (shootTime <= 0) {
+	shootCooldownTime--;
+	if (shootCooldownTime <= 0) {
 		canShoot = true;
 	}
 	handleShooting(dt);
@@ -133,6 +131,8 @@ void Player::_handleCollision(Projectile p)
 {
 	/*Projectile hits the player*/
 	if (shieldActive) {
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldHit, this));
+		_loseAmmo(p.power / 2);
 	}
 	else {
 		HP -= p.power;
@@ -171,7 +171,6 @@ void Player::handleCollision(Entity * e)
 						}
 					}
 				}
-
 				if (handle) {
 					CollisionStack stack{ p->getID(), GameLogic::PROJECTILE_COLLISION_DELAY_GENERAL };
 					_collisions.push_back(stack);
@@ -202,6 +201,57 @@ bool Player::collidableWith(Player e)
 
 void Player::handleDash(int dt)
 {
+	dashHeld = _dashHeld;
+	/*
+	if (_dashHeld) {
+		dashHeld = true;
+	}
+	else {
+		dashHeld = false;
+	}
+	*/
+	dashCooldownTime -= dt;
+	if (dashCooldownTime <= 0) {
+		canDash = true;
+		dashCooldownTime = 0;
+	}
+
+	if (dashHeld && canDash) {
+		_dashChargeHeldTime += dt;
+		if (_dashChargeHeldTime >= GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME) {
+			_dashChargeHeldTime = GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME;
+		}
+	}
+	else {
+		if (_dashChargeHeldTime > 0) {
+			//shootHeld = false;
+			canDash = false;
+			dashCooldownTime = DASH_COOLDOWN;
+			if (_dashChargeHeldTime >= GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME) {
+				_dashChargeHeldTime = GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME;
+			}
+			if (state == PlayerState::Moving) {
+				if (ammo >= GameLogic::PLAYER_DASH_MINIMUM_CHARGE_TIME) {
+					int dashPower = 1.0f * _dashChargeHeldTime / GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_DASH_MAXIMUM_ENERGY_COST;
+					_loseAmmo(dashPower);
+					state = PlayerState::Dashing;
+					dashOrientation = orientation;
+					dashOrientationX = orientationX;
+					dashOrientationY = orientationY;
+					dashTime = GameLogic::PLAYER_DASH_DURATION;
+					dashVelocity = GameLogic::PLAYER_DASH_VELOCITY * _dashChargeHeldTime / GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME + GameLogic::PLAYER_MINIMUM_DASH_VELOCITY;
+				}
+				else {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::OutOfAmmo, this));
+				}
+			}
+			_dashChargeHeldTime = 0;
+			dashHeld = false;
+		}
+		dashHeld = false;
+	}
+	_dashHeld = false;
+	/*
 	_dashAmmoRechargeProgress += dt;
 	if (dashAmmo >= GameLogic::PLAYER_DASH_MAX_AMMO) {
 		dashAmmo = GameLogic::PLAYER_DASH_MAX_AMMO;
@@ -215,10 +265,14 @@ void Player::handleDash(int dt)
 			}
 		}
 	}
+	*/
 }
 
 void Player::handleAmmo(int dt)
 {
+	if (ammo < 0) {
+		ammo = 0;
+	}
 	_ammoRechargeProgress += dt;
 	if (ammo >= GameLogic::PLAYER_MAX_AMMO) {
 		ammo = GameLogic::PLAYER_MAX_AMMO;
@@ -234,6 +288,7 @@ void Player::handleAmmo(int dt)
 			}
 		}
 	}
+
 }
 
 void Player::handleShooting(int dt)
@@ -241,10 +296,10 @@ void Player::handleShooting(int dt)
 	if (_shootHeld) {
 		shootHeld = true;
 	}
-	shootTime-= dt;
-	if (shootTime <= 0) {
+	shootCooldownTime-= dt;
+	if (shootCooldownTime <= 0) {
 		canShoot = true; 
-		shootTime = 0;
+		shootCooldownTime = 0;
 	}
 	if (shootHeld && canShoot) {
 		_shotChargeHeldTime += dt;
@@ -256,30 +311,42 @@ void Player::handleShooting(int dt)
 		if (_shotChargeHeldTime > 0) {
 			//shootHeld = false;
 			canShoot = false;
-			shootTime = SHOOT_COOLDOWN;
+			shootCooldownTime = SHOOT_COOLDOWN;
 			if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
 				_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
 			}
-			_loseAmmo(1);
-			Projectile *p{ new Projectile(this) };
-			p->durability = 1;
-			p->lifetime = 300;
-			p->orientation = cursorOrientation;
-			p->posX = posX;
-			p->posY = posY;
-			p->velocityX = 1.f;
-			p->velocityY = 1.f;
-			p->power = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
 
-			_game->addEntity(p);
-			_shotChargeHeldTime = 0;
-			shootHeld = false;
-			StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, p));
+			int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
+			if (ammo >= projectilePower) {
+				_loseAmmo(projectilePower);
+				Projectile *p{ new Projectile(this) };
+				p->durability = 1;
+				p->lifetime = 300;
+				p->orientation = cursorOrientation;
+				p->posX = posX;
+				p->posY = posY;
+				p->velocityX = 1.f;
+				p->velocityY = 1.f;
+				p->power = projectilePower;
+				_game->addEntity(p);
+				_shotChargeHeldTime = 0;
+				shootHeld = false;
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, p));
+			}
+			else {
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::OutOfAmmo, this));
+			}
 		}
 		shootHeld = false;
 	}
 	_shootHeld = false;
 }
+/*
+void Player::_handleShooting(int dt) {
+
+}
+*/
+
 void Player::handleShield(int dt)
 {
 	if (!_shieldActive) {
@@ -302,14 +369,10 @@ void Player::shoot() {
 }
 
 void Player::dash() {
-	if (state == PlayerState::Moving){
-		state = PlayerState::Dashing;
-
-		dashOrientation = orientation;
-		dashOrientationX = orientationX;
-		dashOrientationY = orientationY;
-		dashTime = GameLogic::PLAYER_DASH_DURATION;
-	}
+	_dashHeld = true;
+	dashOrientation = orientation;
+	dashOrientationX = orientationX;
+	dashOrientationY = orientationY;
 }
 
 void Player::shield()
@@ -319,7 +382,7 @@ void Player::shield()
 
 void Player::_gainAmmo(int nb){
 	ammo += nb;
-	StateManager::getInstance().eventManager.queueEvent(Event(EventType::GainAmmo, this));
+	//StateManager::getInstance().eventManager.queueEvent(Event(EventType::GainAmmo, this));
 }
 
 void Player::_loseAmmo(int nb){
@@ -423,8 +486,10 @@ void Player::_handleMovement(int dt) {
 
 		float dashOriX = dashOrientationX / 100.f;
 		float dashOriY = dashOrientationY / 100.f;
-		velocityX = dashOriX * GameLogic::PLAYER_DASH_VELOCITY;;
-		velocityY = dashOriY * GameLogic::PLAYER_DASH_VELOCITY;
+		//velocityX = dashOriX * GameLogic::PLAYER_DASH_VELOCITY;
+		//velocityY = dashOriY * GameLogic::PLAYER_DASH_VELOCITY;
+		velocityX = dashOriX * dashVelocity;
+		velocityY = dashOriY * dashVelocity;
 
 		/*
 		posX += std::sin(dashOrientation) * (50) / 10 * dashVelocity;

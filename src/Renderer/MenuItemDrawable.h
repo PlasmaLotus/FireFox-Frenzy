@@ -24,7 +24,6 @@ public:
 	MenuItemDrawable(MenuItem *menuItem, int px, int py);
 	~MenuItemDrawable();
 	
-
 	// Hérité via Drawable
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
 	// Virtual functions to be implemented in derived effects

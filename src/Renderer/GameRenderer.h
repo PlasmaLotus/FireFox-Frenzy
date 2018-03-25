@@ -40,7 +40,7 @@ public:
 
 	sf::RenderWindow* window;
 	GameLogic* game;
-
+	sf::Font font;
 	sf::Texture lastFrame;//not implemented
 	bool texturesLoaded = false;
 	const float size = 100.f;

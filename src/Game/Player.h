@@ -30,7 +30,7 @@ public:
 	void update(int32_t dt);
 	PlayerState state;
 	void shoot();
-	void chargeShooting();
+	//void chargeShooting();
 	void dash();
 	void shield();
 	void move(float x, float y);
@@ -58,9 +58,9 @@ public:
 	int const SHOOT_COOLDOWN {10};
 	bool shootHeld{ false };
 	bool _shootHeld{ false };
-	int shootTime{ 0 };
+	int shootCooldownTime{ 0 };
 	bool canShoot{ true };
-	bool _chargingShooting;
+	//bool _chargingShooting;
 	int _shotChargeHeldTime{ 0 };
 	int __shotChargeInitialCooldown{ 5 };
 	void _handleMovement(int dt);
@@ -72,9 +72,15 @@ public:
 	float dashOrientation;
 	float dashOrientationX;
 	float dashOrientationY;
-	int dashAmmo;
-	int _dashAmmoRechargeProgress;
-	bool canDash;
+
+	int const DASH_COOLDOWN{ 10 };
+	bool canDash{ true };
+	bool dashHeld{ true };
+	bool _dashHeld{ true };
+	int dashCooldownTime{ 0 };
+	int _dashChargeHeldTime{ 0 };
+	int __dashChargeInitialCooldown{ 5 };
+
 	void handleDash(int dt);
 	/*Projectile*/
 	int32_t ammo;

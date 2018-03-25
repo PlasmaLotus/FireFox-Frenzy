@@ -25,7 +25,9 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	for (int i = 0; i <= dashOffsetNumber; i++) {
 		sf::RectangleShape r(sf::Vector2f(player->width, player->height));
 		r.setFillColor(playerColor);
-		r.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
+		//r.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
+		r.setPosition(sf::Vector2f(posX , posY ));
+
 		dashOffsetShapes.push_back(r);
 	}
 
@@ -66,7 +68,6 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 			}
 			target.draw(r);
 		}
-
 		/*
 		sf::RectangleShape dashShape;
 		dashShape.setFillColor(playerColor);
@@ -95,8 +96,11 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 		Projectile &sh{ player->_shield };
 		shieldShape.setFillColor(sf::Color(100,100,100,25));
 		shieldShape.setRadius(sh.width + shieldHitboxExtension);
-		shieldShape.setPosition(sf::Vector2f(sh.posX - ((sh.width + shieldHitboxExtension) / 2), sh.posY - ((sh.width + shieldHitboxExtension) / 2)));
+		//shieldShape.setPosition(sf::Vector2f(sh.posX - ((sh.width + shieldHitboxExtension) / 2), sh.posY - ((sh.width + shieldHitboxExtension) / 2)));
+		shieldShape.setPosition(sf::Vector2f(sh.posX - sh.width - player->width/2, sh.posY  - sh.height- player->height/2));
+
 		target.draw(shieldShape);
+
 	}
 }
 

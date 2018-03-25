@@ -13,7 +13,8 @@ const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
 const float GameLogic::PLAYER_FRICTION(0.98f);
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.06f);
-const float GameLogic::PLAYER_DASH_VELOCITY(12.54f);
+const float GameLogic::PLAYER_DASH_VELOCITY(13.54f);
+const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(3.0f);
 const float GameLogic::PLAYER_SHIELD_RADIUS(15.0f);
 //const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
 

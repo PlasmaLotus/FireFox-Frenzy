@@ -20,7 +20,6 @@ Updated Dec 25, 2016
 
 class MenuRenderer : public Renderer{
 public:
-
 	void render();
 	void clear();
 	void update();
@@ -34,8 +33,6 @@ public:
 	MenuRenderer();
 	MenuRenderer(sf::RenderWindow* window, Menu* m);
 	~MenuRenderer();
-	//void setBoards(Board b1, Board b2);
-	
 	bool initRenderer();
 
 	sf::RenderWindow* window;
@@ -43,6 +40,7 @@ public:
 
 	sf::Texture lastFrame;//not implemented
 	sf::Text debugText;
+	sf::Font font;
 	bool texturesLoaded = false;
 	const float ok = 100.f;
 	//sf::CircleShape shape(ok);
@@ -50,7 +48,6 @@ public:
 	sf::RectangleShape menuItems[10];
 	MenuItemDrawable _menuItems[10];
 	int nbMenuItems;
-	sf::Font font;
 	bool fontLoaded{ true };
 	//MenuItemDrawable test;
 };

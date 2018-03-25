@@ -18,9 +18,10 @@ MenuItemDrawable::MenuItemDrawable(MenuItem *menuItem, int px, int py):
 	shape.setPosition(posX, posY);
 	shape.setFillColor(sf::Color::Red);
 	
-	if (font.loadFromFile("./Assets/fonts/arial.ttf")) {
+	if (font.loadFromFile("Assets/Fonts/LemonMilk/LemonMilk.otf")) {
 		shape.setFillColor(sf::Color::White);
 	}
+	
 	//s1.setFont(*_font);
 	//s2.setFont(*_font);
 	s1.setFont(font);
@@ -58,7 +59,6 @@ MenuItemDrawable::MenuItemDrawable(MenuItem *menuItem, int px, int py):
 		}
 
 	}
-
 	shape.setSize(sf::Vector2f(width, height));
 
 }

@@ -159,10 +159,10 @@ void ControllerConfig::loadDefaultConfig() {
 	axisMap[sf::Joystick::Axis::X] = { ControllerCommand::Right, ControllerCommand::Left };
 	axisMap[sf::Joystick::Axis::Z] = { ControllerCommand::Dash, ControllerCommand::Shoot };
 	axisMap[sf::Joystick::Axis::V] = { ControllerCommand::Dash, ControllerCommand::Shield };
-	//ControllerCommand::dash
+	//ControllerCommand::D
 	//sf::Keyboard::Key::shi
 	
-		//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
+	//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
 }
 
 bool ControllerConfig::saveConfig()

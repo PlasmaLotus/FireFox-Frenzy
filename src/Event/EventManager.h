@@ -9,7 +9,7 @@
 //class GameLogic;
 #include "../Game/GameLogic.h"
 #include "AudioEventManager.h"
-enum EventType{NoEvent, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, GainAmmo, LoseAmmo};
+enum EventType{NoEvent, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo};
 class Event {
 public:
 	Event(EventType et) { type = et;};
@@ -24,11 +24,8 @@ public:
 class EventManager
 {
 public:
-	//EventManager();
 	EventManager();
-	//void tick();
 	virtual ~EventManager();
-	//static EventManager& getInstance();
 	void queueEvent(Event e);
 	void handleEvents(int dt);
 	const int DEFAULT_LIFETIME_DEATH = 1000;
@@ -40,11 +37,7 @@ public:
 	AudioEventManager *audio;
 	void setAudioEventManager(AudioEventManager *aem);
 private:
-	//sf::Sound sound;
-	//sf::SoundBuffer sbuffer;
-	//static EventManager& instance;
 	bool __handleEvent(Event event);
-
 	void __handleEventProjectileSpawn(Projectile * projectile);
 	void __handleEventCoundownStart();
 	void __handleEventCoundownTick();

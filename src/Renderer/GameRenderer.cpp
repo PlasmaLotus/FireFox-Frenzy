@@ -29,6 +29,7 @@ void GameRenderer::render()
 }
 
 bool GameRenderer::initRenderer() {
+	bool success = true;
 	shape.setFillColor(sf::Color::Blue);
 	shape.setPosition(100, 100);
 	shape.setRadius(size);
@@ -36,8 +37,11 @@ bool GameRenderer::initRenderer() {
 	playerDrawable1 = new PlayerDrawable(game->getPlayer(1));
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2));
 	playerDrawable2->playerColor = sf::Color::Magenta;
-	bool success = false;
 	
+	
+	if (!font.loadFromFile("Assets/Fonts/LemonMilk/LemonMilk.otf"))
+		success = false;
+
 	return success;
 }
 
@@ -49,12 +53,10 @@ void GameRenderer::draw()
 {
 	drawPlayers();
 	drawProjectiles();
-	//window->draw(shape);
 }
 
 void GameRenderer::display() {
 	window->display();
-	//lastFrame.update(*(window));
 }
 
 void GameRenderer::drawPlayers()
@@ -77,7 +79,6 @@ void GameRenderer::drawProjectiles()
 				circle.setFillColor(sf::Color::Green);
 				circle.setPosition(p->posX, p->posY);
 				circle.setRadius(p->width);
-				//circle.set
 				window->draw(circle);
 			}
 		}
