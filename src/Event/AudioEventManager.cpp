@@ -32,6 +32,7 @@ bool AudioEventManager::_initSoundBuffers() {
 	return true;
 } 
 void AudioEventManager::queueAudioEvent(AudioEvent event, bool repeat = false) {
+	/*
 	sf::Sound sound;
 	try {
 		sound.setBuffer(_soundBufferMap[event]);
@@ -45,6 +46,17 @@ void AudioEventManager::queueAudioEvent(AudioEvent event, bool repeat = false) {
 	catch (const std::out_of_range& oor) {
 		printf("cannot find the sound for this event...,\n");
 	}
+	*/
+
+
+	for (int i = 0; i < SOUNDS_COUNT; i++) {
+		if (__sounds[i].getStatus() != sf::SoundSource::Status::Playing) {
+			__sounds[i].stop();
+			__sounds[i].setBuffer(_soundBufferMap[event]);
+			__sounds[i].play();
+		}
+	}
+
 } 
 
 void AudioEventManager::stopAudioEvent(AudioEvent event){
@@ -79,5 +91,11 @@ void AudioEventManager::handleEvents( int dt ) {
 		
 	}
 	printf("Audio Queue ---------- : %d\n", _sounds.size());
+	for (int i = 0; i < SOUNDS_COUNT; i++) {
+		if (__sounds[i].getStatus() != sf::SoundSource::Status::Playing) {
+			__sounds[i].stop();
+		}
+	}
+		
 } 
  

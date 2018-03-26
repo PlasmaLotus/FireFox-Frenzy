@@ -9,7 +9,7 @@
 #include <vector>
 #include <cmath>
 class GameLogic;
-enum PlayerState{ ShootWindup, Shooting, ShootCooldown, Moving, Dashing};
+enum PlayerState{ ShootWindup, Shooting, ShootCooldown, Moving, Dashing, Shielding};
 class Player: public SquareEntity{
 public:
 	Player();

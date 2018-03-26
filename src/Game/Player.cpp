@@ -349,9 +349,11 @@ void Player::_handleShooting(int dt) {
 
 void Player::handleShield(int dt)
 {
+	shieldActive = _shieldActive;
 	if (!_shieldActive) {
 		shieldActive = false;
 		_shieldActiveDuration = 0;
+		state = Moving;
 	}
 	else {
 		_shieldActiveDuration++;
@@ -361,6 +363,9 @@ void Player::handleShield(int dt)
 	_shield.posY = posY;
 
 	_shieldActive = false;
+	if (shieldActive) {
+		state = Shielding;
+	}
 }
 
 /*Handle when Player presses the Shoot command*/
@@ -503,6 +508,7 @@ void Player::_handleMovement(int dt) {
 		posY += velocityY;
 		break;
 	}
+	case::PlayerState::Shielding:
 	default:break;
 	}
 	//posX += std::sin(orientation) *std::abs(orientationX) / 10 * velocityX;
