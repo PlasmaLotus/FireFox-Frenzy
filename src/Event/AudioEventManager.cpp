@@ -20,12 +20,12 @@ bool AudioEventManager::_initSoundBuffers() {
 	_soundBufferMap[AudioEvent::DefaultEventAudio] = buffer;
 	
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("Assets/Sounds/countdown.wav"))
+	if (!buffer.loadFromFile("Assets/Sounds/countdown.mp3"))
 		success = false;
 	
 	buffer = sf::SoundBuffer();
 	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
-	if (!buffer.loadFromFile("Assets/Sounds/go.wav"))
+	if (!buffer.loadFromFile("Assets/Sounds/go.mp3"))
 		success = false;
 
 	_soundBufferMap[AudioEvent::AudioCountdownStart] = buffer;

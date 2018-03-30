@@ -311,23 +311,24 @@ void Player::handleShooting(int dt)
 		if (_shotChargeHeldTime > 0) {
 			//shootHeld = false;
 			canShoot = false;
-			shootCooldownTime = SHOOT_COOLDOWN;
+			shootCooldownTime = GameLogic::PLAYER_SHOOT_COOLDOWN;
 			if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
 				_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
 			}
-
+			float ratio = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME ;
 			int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
 			if (ammo >= projectilePower) {
 				_loseAmmo(projectilePower);
 				Projectile *p{ new Projectile(this) };
 				p->durability = 1;
-				p->lifetime = 300;
+				p->lifetime = 600;
 				p->orientation = cursorOrientation;
 				p->posX = posX;
 				p->posY = posY;
-				p->velocityX = 1.f;
-				p->velocityY = 1.f;
+				p->velocityX = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
+				p->velocityY = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
 				p->power = projectilePower;
+				p->setRadius((GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM - GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM) * ratio + GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM);
 				_game->addEntity(p);
 				_shotChargeHeldTime = 0;
 				shootHeld = false;

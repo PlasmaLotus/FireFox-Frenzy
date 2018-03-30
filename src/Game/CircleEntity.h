@@ -11,6 +11,7 @@ public:
 	CircleEntity();
 	CircleEntity(float pX, float pY, float r);
 	~CircleEntity();
+	void setRadius(float r);
 	virtual void update(int32_t dt);
 	virtual bool testCollision(Entity e);
 	virtual bool testCollision(SquareEntity e);

@@ -55,7 +55,7 @@ public:
 	int HP = 100;
 	bool _moveEngaged = false;
 	/*Shooting*/
-	int const SHOOT_COOLDOWN {10};
+	//int const SHOOT_COOLDOWN {7};
 	bool shootHeld{ false };
 	bool _shootHeld{ false };
 	int shootCooldownTime{ 0 };

@@ -64,12 +64,18 @@ public:
 	int _countdownIt;
 
 	static const int PROJECTILE_COLLISION_DELAY_GENERAL{ 30 };
+	static const float PROJECTILE_HITBOX_RADIUS_MINIMUM;
+	static const float PROJECTILE_HITBOX_RADIUS_MAXIMUM;
+	static const float PROJECTILE_SPEED_MINIMUM;
+	static const float PROJECTILE_SPEED_MAXIMUM;
 	static const float PLAYER_SHIELD_RADIUS;
+
 	static const int PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST{ 100 };
 	static const int PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME{ 2500 };
 
+	static const int PLAYER_SHOOT_COOLDOWN{ 7 };
 	static const int PLAYER_DASH_MAXIMUM_ENERGY_COST{ 100 };
-	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 2500 };
+	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 2000 };
 	static const int PLAYER_DASH_MINIMUM_CHARGE_TIME{ 10 };
 
 private:

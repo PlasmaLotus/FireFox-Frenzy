@@ -62,3 +62,8 @@ void CircleEntity::handleCollision(Entity *e)
 	handleCollision();
 }
 
+void CircleEntity::setRadius(float r)
+{
+	width = r;
+	height = r;
+}
