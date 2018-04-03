@@ -14,7 +14,6 @@ class Player: public SquareEntity{
 public:
 	Player();
 	Player(GameLogic *g);
-	//Player & operator= (const Player &) = default;
 	~Player();
 	GameLogic * _game;
 	void setGame(GameLogic *g);
@@ -30,18 +29,14 @@ public:
 	void update(int32_t dt);
 	PlayerState state;
 	void shoot();
-	//void chargeShooting();
 	void dash();
 	void shield();
 	void move(float x, float y);
 	void setPlayerOrienation(float x, float y);
 	void setCursorOrientation(float x, float y);
-
 	void _gainAmmo(int nb);
 	void _loseAmmo(int nb);
-	//std::vector <Projectile> projectiles;
-	//void update();
-	
+
 	void setCursorOrientationFromMouse(int x, int y);
 	bool testCollision(Entity e);
 	bool testCollision(SquareEntity e);
@@ -55,12 +50,10 @@ public:
 	int HP = 100;
 	bool _moveEngaged = false;
 	/*Shooting*/
-	//int const SHOOT_COOLDOWN {7};
 	bool shootHeld{ false };
 	bool _shootHeld{ false };
 	int shootCooldownTime{ 0 };
 	bool canShoot{ true };
-	//bool _chargingShooting;
 	int _shotChargeHeldTime{ 0 };
 	int __shotChargeInitialCooldown{ 5 };
 	void _handleMovement(int dt);
@@ -93,6 +86,5 @@ public:
 	bool _shieldActive;
 	int _shieldActiveDuration;
 	void handleShield(int dt);
-	//protected:
 };
 #endif // !__PLAYER__

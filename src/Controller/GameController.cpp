@@ -9,62 +9,33 @@ Updated May 13, 2017
 GameController::GameController(ControllerConfig* c, Player* e) :
 Controller(c),
 player(e)
-//mode(ControlMode::Joystick)
 {
-	//config.loadConfig("controllerConfig.ini");
 	mode = ControlMode::Joystick;
-	buttonCanBeHeld[ControllerCommand::Left] = true;
-	buttonCanBeHeld[ControllerCommand::Right] = true;
-	buttonCanBeHeld[ControllerCommand::Up] = true;
-	buttonCanBeHeld[ControllerCommand::Down] = true;
-	buttonCanBeHeld[ControllerCommand::Shield] = true;
-	buttonCanBeHeld[ControllerCommand::Pause] = true;
 }
 
 GameController::GameController(State *s, ControllerConfig * c, Player * e):
 	Controller(c),
 	player(e),
-	state(s)
-{
+	state(s){
 }
 
-GameController::~GameController()
-{
+GameController::~GameController(){
 }
 
 /*Main input check call -- Checks if any input is pressed and acts accordingly*/
-void GameController::handleInput() {
+bool GameController::handleInput() {
 	pAngleX = 0.f;
 	pAngleY = 0.f;
 	cAngleX = 0.f;
 	cAngleY = 0.f;
-	//printf("REDEFINED HANDLEINPUT\n\n\n");
-	//Controller::handleInput();
-	/*
-	if (config != NULL) {
-		if (_swapConfig) {
-			mode = _nextMode;
-			_swapConfig = false;
-		}
-		handleInputKeyboard();
-		handleInputMouse();
-		handleMouseAxis();
-		if (sf::Joystick::isConnected(config->getJoystickNumber())) {
-			//mode = ControlMode::Joystick;
-			handleInputJoystick();
-		}
-	}
-	*/
-	Controller::handleInput();
+	bool input = Controller::handleInput();
 	player->setPlayerOrienation(pAngleX, pAngleY);
 	if ((pAngleX >= config->joystickDeadZone || pAngleX <= -config->joystickDeadZone)||
 		(pAngleY >= config->joystickDeadZone || pAngleY <= -config->joystickDeadZone)) {
 		player->move(pAngleX, pAngleY);
 	}
-
 	player->setCursorOrientation(cAngleX, cAngleY);
-	return;
-	
+	return true;
 }
 
 /*When an input is detected, a command is raised to this function*/
@@ -147,7 +118,6 @@ void GameController::handleCommand(ControllerCommand command){
 		default: break;
 		}
 	}
-	
 }
 
 void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {

@@ -1,5 +1,4 @@
 #pragma once
-
 #ifndef __MOVING_SQUARE_ENTITY__
 #define __MOVING_SQUARE_ENTITY__
 
@@ -7,7 +6,6 @@
 class CircleEntity;
 class SquareEntity: public Entity {
 public:
-
 	SquareEntity();
 	~SquareEntity();
 	SquareEntity(float pX, float pY, float wdth, float hght);
@@ -17,11 +15,5 @@ public:
 	virtual bool testCollision(CircleEntity e);
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
-	//bool _testCircleCollision(CircleEntity circle);
-	//Vector2 distanceBetweenCenter(Entity e);
-	//Vector2 angleBetweenCenter(Entity e);
-
-//protected:
-
 };
-#endif // !__MOVING_ENTITY__
+#endif //

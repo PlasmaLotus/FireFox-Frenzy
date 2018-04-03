@@ -61,7 +61,6 @@ void Controller::handleInputJoystick() {
 			else {
 				swapToControlMode(ControlMode::Joystick);
 			}
-			
 		}
 	}
 	/*Check Axis*/
@@ -84,7 +83,6 @@ void Controller::handleInputJoystick() {
 
 void Controller::viewDebugJoystick() {
 	printf("DebugJoystickInputs\n");
-
 	//if (mode == ControlMode::Joystick) {
 		printf("\nDebug Joystick %d info\n", config->getJoystickNumber());
 		printf("X Axis: %f3.2\n", sf::Joystick::getAxisPosition(config->getJoystickNumber(), sf::Joystick::Axis::X));
@@ -96,12 +94,10 @@ void Controller::viewDebugJoystick() {
 		printf("V Axis: %f3.2\n", sf::Joystick::getAxisPosition(config->getJoystickNumber(), sf::Joystick::Axis::V));
 		printf("Z Axis: %f3.2\n", sf::Joystick::getAxisPosition(config->getJoystickNumber(), sf::Joystick::Axis::Z));
 	//}
-
 }
 
 	/*Handles all the input of the mouse*/
 void Controller::handleInputMouse() {
-
 	for (int i = 0; i < sf::Mouse::ButtonCount; i++)
 	{
 		sf::Mouse::Button mouseButton = static_cast<sf::Mouse::Button>(i);
@@ -118,7 +114,8 @@ void Controller::handleInputMouse() {
 }
 
 /*Main input check call -- Checks if any input is pressed and acts accordingly*/
-void Controller::handleInput() {
+bool Controller::handleInput() {
+	bool input = false;
 	if (config != NULL) {
 		if (_swapConfig) {
 			mode = _nextMode;
@@ -132,20 +129,17 @@ void Controller::handleInput() {
 			handleInputJoystick();
 		}
 	}
-	return;
+	return true;
 }
 
 void Controller::handleCommand(ControllerCommand command) {
-	/*Apply action on the player dependant on the command
-	to be defined*/
+	/*Apply action dependant on the command*/
 }
 void Controller::handleJoystickAxis(sf::Joystick::Axis) {
-	/*Apply action on the player dependant on the Axis
-	to be defined*/
+	/*Apply action dependant on the Axis*/
 }
 void Controller::handleMouseAxis(){
-	/*Apply action on the player dependant on the MousePos
-	to be defined*/
+	/*Apply action dependant on the MousePos*/
 }
 void Controller::swapToControlMode(ControlMode m)
 {
@@ -154,72 +148,6 @@ void Controller::swapToControlMode(ControlMode m)
 }
 ControllerConfig* Controller::getConfig() {
 	return config;
-}
-
-
-void Controller::__handleInput() {
-	if (config != NULL) {
-		switch (mode)
-		{
-		case Keyboard:
-		{
-			/*Check Every key on the keyboard for a conrresponding key*/
-			for (int i = 0; i < sf::Keyboard::KeyCount; i++)
-			{
-				sf::Keyboard::Key key = static_cast<sf::Keyboard::Key>(i);
-				if (sf::Keyboard::isKeyPressed(key))
-				{
-					handleCommand(config->getCommand(key));
-				}
-			}
-			break;
-		}
-		case Joystick:
-		{
-			unsigned int js = config->getJoystickNumber();
-			/*Check Buttons*/
-			for (unsigned int i = 0; i < sf::Joystick::getButtonCount(js); i++)
-			{
-				if (sf::Joystick::isButtonPressed(js, i)) {
-					handleCommand(config->getCommand(i));
-				}
-			}
-			/*Check Axis*/
-			for (int i = 0; i < sf::Joystick::AxisCount; i++)
-			{
-				sf::Joystick::Axis axis = static_cast<sf::Joystick::Axis>(i);
-				if (sf::Joystick::hasAxis(js, axis))
-				{
-					handleCommand(config->getCommand(axis, sf::Joystick::getAxisPosition(js, axis)));
-				}
-			}
-			break;
-		}
-		default: break;
-		}
-	}
-	for (int i = 0; i < ControllerCommand::CommandMax; i++) {
-
-
-		if (buttonHeldTime[i] <= _buttonHeldTime[i]) {
-			//button isnt held
-			buttonHeld[i] = false;
-		}
-		else {
-			buttonHeld[i] = true;
-		}
-
-		if (buttonHeld[i] == false) {
-			buttonHeldTime[i] = buttonHeldTimeMinimum;// 0
-		}
-
-		_buttonHeldTime[i] = buttonHeldTime[i];
-
-		buttonUsedThisTick[i] = false;
-
-	}
-
-	return;
 }
 
 void Controller::__updateConfig() {

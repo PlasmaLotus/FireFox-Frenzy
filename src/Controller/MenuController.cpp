@@ -2,25 +2,15 @@
 Created by PlasmaLotus
 Updated May 13, 2017
 */
-
 #include "MenuController.h"
 
 /*The controller recieves input from a Keyboard or Joystick and outputs Commands to execute on the Board and Game*/
 MenuController::MenuController(ControllerConfig* c, Menu* m) :
 Controller(c),
-menu(m)
-{
-	//config.loadConfig("controllerConfig.ini");
-	buttonCanBeHeld[ControllerCommand::Left] = true;
-	buttonCanBeHeld[ControllerCommand::Right] = true;
-	buttonCanBeHeld[ControllerCommand::Up] = true;
-	buttonCanBeHeld[ControllerCommand::Down] = true;
-	buttonCanBeHeld[ControllerCommand::Shoot] = true;
-	buttonCanBeHeld[ControllerCommand::Pause] = true;
+menu(m){
 }
 
-MenuController::~MenuController()
-{
+MenuController::~MenuController(){
 }
 
 /*Act accordingly to the needed commands*/
@@ -70,7 +60,6 @@ void MenuController::handleCommand(ControllerCommand command){
 		}
 		case ControllerCommand::Cheat:
 		{
-			//board->Cheat();
 			break;
 		}
 		case ControllerCommand::NoInput:
@@ -81,14 +70,8 @@ void MenuController::handleCommand(ControllerCommand command){
 }
 
 void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
-	//config->get
-	//ControllerCommand command;
 	AxisHandler handler = config->getAxisHandlerFromAxis(axis);
 	float value = sf::Joystick::getAxisPosition(config->getJoystickNumber(), axis);
-	//printf("Joystick%d\n", axis);
-	//arbitrary dead zone of 7
-
-	//printf("Joystick%d - in switch\n", axis);
 	ControllerCommand command;
 	if (value > 0) {
 		command = handler.positif;
@@ -161,7 +144,6 @@ void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	default:
 		break;
 	}
-
 }
 
 void MenuController::handleMouseAxis() {

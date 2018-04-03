@@ -2,20 +2,14 @@
 #include "../Main.h"
 
 TitleScreen::TitleScreen(sf::RenderWindow * w):
-	MenuState(w, new MainMenu())
-{
-	//p1Controller->getConfig()->saveConfig();
+	MenuState(w, new MainMenu()){
 }
 
 void TitleScreen::tick() {
-	//gotoxy(0, 5);
-	printf("Title Screen State Tick \n");
 	p1Controller->handleInput();
 	p1Controller->updateConfig();
 	renderer->render();
 	menu->tick();
-
-	//printf("MenuItems\n");
 	printf("NB SELECTIONS: %i\n", menu->items.size());
 	printf("CurrentSelection: %d\n", menu->selection);
 	for (unsigned i = 0; i < menu->items.size(); ++i) {
@@ -24,11 +18,7 @@ void TitleScreen::tick() {
 		}
 		printf("%s\n", menu->items.at(i).getName());
 	}
-
-
 }
 
-
-TitleScreen::~TitleScreen()
-{
+TitleScreen::~TitleScreen(){
 }

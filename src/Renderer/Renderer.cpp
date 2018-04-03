@@ -1,30 +1,19 @@
 #include "Renderer.h"
 
-
-
-Renderer::Renderer()
-{
+Renderer::Renderer(){
 }
 
-
-
-Renderer::~Renderer()
-{
-	//delete window;
+Renderer::~Renderer(){
 }
 
-void Renderer::render()
-{
+void Renderer::render(){
 }
 
-void Renderer::clear()
-{
+void Renderer::clear(){
 }
 
-void Renderer::draw()
-{
+void Renderer::draw(){
 }
 
-void Renderer::display()
-{
+void Renderer::display(){
 }

@@ -2,27 +2,21 @@
 Created by PlasmaLotus
 Updated May 13, 2017
 */
-
 #include "GameRenderer.h"
 
-GameRenderer::GameRenderer()
-{
-	
+GameRenderer::GameRenderer(){
 }
 
 GameRenderer::GameRenderer(sf::RenderWindow *w, GameLogic *g):
 	window(w),
-	game(g)
-{
+	game(g){
 	initRenderer();
 }
 
-GameRenderer::~GameRenderer()
-{
+GameRenderer::~GameRenderer(){
 }
 
-void GameRenderer::render()
-{
+void GameRenderer::render(){
 	clear();
 	draw();
 	display();
@@ -38,7 +32,6 @@ bool GameRenderer::initRenderer() {
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2));
 	playerDrawable2->playerColor = sf::Color::Magenta;
 	
-	
 	if (!font.loadFromFile("Assets/Fonts/LemonMilk/LemonMilk.otf"))
 		success = false;
 
@@ -49,8 +42,7 @@ void GameRenderer::clear() {
 	window->clear();
 }
 
-void GameRenderer::draw()
-{
+void GameRenderer::draw(){
 	drawPlayers();
 	drawProjectiles();
 }
@@ -59,18 +51,15 @@ void GameRenderer::display() {
 	window->display();
 }
 
-void GameRenderer::drawPlayers()
-{
+void GameRenderer::drawPlayers(){
 	playerDrawable1->update();
 	window->draw(*playerDrawable1);
 	playerDrawable2->update();
 	window->draw(*playerDrawable2);
 }
 
-void GameRenderer::drawProjectiles()
-{
+void GameRenderer::drawProjectiles(){
 	std::vector<Entity*> vec = game->_entities;
-
 	for (int i = 0; i < vec.size(); i++) {
 		try {
 			Projectile * p = dynamic_cast<Projectile *> (vec.at(i));
@@ -82,9 +71,7 @@ void GameRenderer::drawProjectiles()
 				window->draw(circle);
 			}
 		}
-		catch (const std::bad_cast& cast)
-		{
-			//std::cerr << e.what() << std::endl;
+		catch (const std::bad_cast& cast){
 		}
 	}
 }

@@ -16,7 +16,6 @@ Updated May 13, 2017
 enum GameCurrentState { RUNNING, PAUSED, ENDED, COUNTDOWN };
 
 class GameLogic{
-	
 public:
 	int frame = 0;
 	int32_t dt;
@@ -49,7 +48,6 @@ public:
 
 	static const int PLAYER_DASH_DURATION{ 150 };
 	static const int PLAYER_DASH_RECHARGE_COOLDOWN{ 250 };
-	//static const int PLAYER_DASH_MAX_AMMO{ 3 };
 
 	static float const PLAYER_MAX_VELOCITY;
 	static float const PLAYER_MAX_VELOCITY_DECREASE_RATE;
@@ -78,6 +76,9 @@ public:
 	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 2000 };
 	static const int PLAYER_DASH_MINIMUM_CHARGE_TIME{ 10 };
 
+	static const float ENTITY_MINIMUM_RADIUS;
+	static const float ENTITY_MINIMUM_WIDTH;
+	static const float ENTITY_MINIMUM_HEIGHT;
 private:
 	void init();
 	void _emptyAllEntities();
@@ -86,7 +87,6 @@ private:
 	void _handleEntitiesCollisions(int32_t dt);
 	void _handleEntitiesCollisions_Players(int32_t dt);
 	void _handleEntitiesCollisions_PlayersToProjectiles(int32_t dt);
-
 };
 
 #endif // !_Game_

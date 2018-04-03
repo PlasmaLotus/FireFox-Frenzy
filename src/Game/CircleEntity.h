@@ -7,7 +7,6 @@
 class SquareEntity;
 class CircleEntity : public Entity {
 public:
-
 	CircleEntity();
 	CircleEntity(float pX, float pY, float r);
 	~CircleEntity();
@@ -18,8 +17,5 @@ public:
 	virtual bool testCollision(CircleEntity e);
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
-	
-//protected:
-
 };
-#endif // !__MOVING_ENTITY__
+#endif

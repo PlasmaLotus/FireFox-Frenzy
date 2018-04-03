@@ -21,29 +21,24 @@ const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 5 );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20 );
 const float GameLogic::PROJECTILE_SPEED_MINIMUM( 3.0f );
 const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 9.0f );
+const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
+const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
+const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
 //const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
 
 GameLogic::GameLogic() :
-	gameState(GameCurrentState::COUNTDOWN)
-{
-
+	gameState(GameCurrentState::COUNTDOWN){
 	init();
-	//window.create(sf::VideoMode(800, 600), "SFML! Y U NO DRAW BLOCK!!");
 }
 
 GameLogic::~GameLogic(){
 	_playerIDs.clear();
-	//_projectiles.clear();
-	//_players.clear();
 	_emptyAllEntities();
 	_entities.clear();
-	//_otherPlayers.clear();
 	_spawnPoints.clear();
-	//_entities.clear();
 }
 
 void GameLogic::init() {
-	//Player player(this);
 	_spawnPoints.clear();
 	for (int i = 4; i-- >= 0; ) {
 		switch (i) {
@@ -69,14 +64,14 @@ void GameLogic::init() {
 	}
 
 	{
-		Player *p1{ new Player(this) };
-		Player *p2{ new Player(this) };
-		Player *p3{ new Player(this) };
-		Player *p4{ new Player(this) };
 		Vector2 v1 = _spawnPoints.at(0);
 		Vector2 v2 = _spawnPoints.at(1);
 		Vector2 v3 = _spawnPoints.at(2);
 		Vector2 v4 = _spawnPoints.at(3);
+		Player *p1{ new Player(this) };
+		Player *p2{ new Player(this) };
+		Player *p3{ new Player(this) };
+		Player *p4{ new Player(this) };
 		p1->posX = v1.x;
 		p1->posY = v1.y;
 		p2->posX = v2.x;
@@ -118,11 +113,9 @@ void GameLogic::tick() {
 		countdownTimer -= dt;
 		int it;
 		if (countdownTimer > GAME_COUNTDOWN_TIME / 3 * 2) {
-			//_countdownIt = 2;
 			it = 2;
 		}
 		if (countdownTimer > GAME_COUNTDOWN_TIME / 3) {
-			//_countdownIt = 1;
 			it = 1;
 		}
 		if (it != _countdownIt) {
@@ -135,7 +128,6 @@ void GameLogic::tick() {
 		}
 		_countdownIt = it;
 
-		//if (countdownTimer
 		if (countdownTimer <= 0){
 			gameState = GameCurrentState::RUNNING;
 			countdownTimer = 0;
@@ -144,14 +136,12 @@ void GameLogic::tick() {
 		break;
 	case GameCurrentState::RUNNING:
 		dt = StateManager::getInstance().getElapsedTime();
-		printf("GameTick:  DT - %ld\n", dt);
-
+		//printf("GameTick:  DT - %ld\n", dt);
 		frame++;
 		printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
 		_handleEntitiesUpdate(dt);
 		_handleEntitiesCollisions(dt);
 		_handleEntitesEnd();
-		//findEntity(2);
 		break;
 	default:
 		break;
@@ -160,33 +150,23 @@ void GameLogic::tick() {
 }
 
 void GameLogic::pause() {
-
 }
 
-void GameLogic::_handleEntitiesUpdate(int32_t dt)
-{
+void GameLogic::_handleEntitiesUpdate(int32_t dt){
 	printf("Volume of Entities: %d,\n", _entities.size());
 	for (int i = _entities.size() - 1; i >= 0; i--) {
 		Entity *e = _entities.at(i);
-		//_entities.at(i).update(dt);///////Out of Range
 		e->update(dt);
 
 		//Player Cast
 		for (int pOffset = 0; pOffset < _playerIDs.size(); pOffset++) {
 			if (e->getID() == _playerIDs.at(pOffset)) {
-				try
-				{
+				try{
 					Player *p = dynamic_cast<Player *>(e);
-					//p.update(dt);
 					printf("Player id-%d - HP:%d -  x:%3.2f - y:%3.2f | Ammo: %d/%d, %d/%d,\n", p->getID(), p->HP, p->posX, p->posY, p->ammo, PLAYER_MAX_AMMO, p->_ammoRechargeProgress, PLAYER_AMMO_RECHARGE_COOLDOWN);
 					printf(" -- OriX:%3.2f - OriY:%3.2f | velocityX:%3.2f, velocityY:%3.2f\n", p->orientationX, p->orientationY, p->velocityX, p->velocityY);
-					
-					//e = static_cast<Entity &>(p);
 				}
-				catch (const std::bad_cast& cast)
-				{
-					//std::cerr << e.what() << std::endl;
-					//std::cerr << "Cet objet n'est pas de type B" << std::endl;
+				catch (const std::bad_cast& cast){
 				}
 			}
 		}
@@ -197,8 +177,7 @@ void GameLogic::_handleEntitiesUpdate(int32_t dt)
 	}
 }
 
-void GameLogic::_handleEntitiesCollisions(int32_t dt)
-{
+void GameLogic::_handleEntitiesCollisions(int32_t dt){
 	for (int i = _entities.size() - 1; i >= 0; i--) {
 		Entity *e1 = _entities.at(i);
 		for (int j = _entities.size() - 1; j >= 0; j--) {
@@ -212,47 +191,9 @@ void GameLogic::_handleEntitiesCollisions(int32_t dt)
 			}
 		}
 	}
-
-	_handleEntitiesCollisions_Players(dt);
-	_handleEntitiesCollisions_PlayersToProjectiles(dt);
-}
-void GameLogic::_handleEntitiesCollisions_Players(int32_t dt)
-{
-	/*
-	Player &p1{ _players.at(0) };
-	for (int i = _players.size() - 1; i >= 0; i--) {
-		for (int j = _players.size() -1; j >= 0; j--) {
-			Player &p2 = _players.at(j);
-			if (p1.getID() != p2.getID()) {
-				p1.testCollision(p2);
-				if (p1.testCollision(p2)) {
-					printf("Player Collision Detected!!!Distance: %3.3f\n", p1._distanceBetween(p2));
-				}
-
-				for (int k = p1.projectiles.size() - 1; k >= 0; k--) {
-					Projectile &pro1 = p1.projectiles.at(k);
-					
-					//Enemy Projectiles
-					for (int l = p2.projectiles.size() - 1; l >= 0; l--) {
-						Projectile &pro2 = p2.projectiles.at(l);
-						if (pro1.testCollision(pro2)) {
-							printf("Projectile Collision Detected; Distance: %3.3f!!!\n", pro1._distanceBetween(pro2));
-							//printf("P1: x:%3.3f - y:%3.3f ; P2: x:%3.3f - y:%3.3f", pro1.posX, pro1.posY, pro2.posX, pro2.posY);
-						}
-					}
-				}
-			}
-		}
-	}
-	*/
 }
 
-void GameLogic::_handleEntitiesCollisions_PlayersToProjectiles(int32_t dt)
-{
-}
-
-void GameLogic::_handleEntitesEnd()
-{
+void GameLogic::_handleEntitesEnd(){
 	int id;
 	while (!_idsToDestroy.empty()) {
 		id = _idsToDestroy.top();
@@ -265,11 +206,9 @@ void GameLogic::_handleEntitesEnd()
 		}
 		_idsToDestroy.pop();
 	}
-
 }
 
-void GameLogic::addEntityIDToDelete(int id)
-{
+void GameLogic::addEntityIDToDelete(int id){
 	_idsToDestroy.push(id);
 }
 
@@ -288,7 +227,6 @@ void GameLogic::addEntity(Entity *e) {
 }
 
 Entity* GameLogic::findEntity(int id) {
-	
 	for (int i = 0;  i < _entities.size(); i++) {
 		if (_entities.at(i)->getID() == id) {
 			return _entities.at(i);
@@ -308,60 +246,45 @@ Entity& GameLogic::findEntityCopy(int id) {
 }
 
 Player& GameLogic::findPlayer(int id) {
-
 	for (int i = 0; i < _entities.size(); i++) {
 		Entity *e = _entities.at(i);
 		if (e->getID() == id) {
-			try
-			{
+			try{
 				Player *p = dynamic_cast<Player *>(e);
 				return *p;
 			}
-			catch (const std::bad_cast& cast)
-			{
-				//std::cerr << e.what() << std::endl;
-				//std::cerr << "Cet objet n'est pas de type B" << std::endl;
+			catch (const std::bad_cast& cast){
 			}
 		}
 	}
 
 }
 
-Player * GameLogic::getPlayer(int playerNumber)
-{
+Player * GameLogic::getPlayer(int playerNumber){
 	int id = _playerIDs.at(playerNumber - 1);
 	for (int i = 0; i < _entities.size(); i++) {
 		Entity *e = _entities.at(i);
 		if (e->getID() == id) {
-			try
-			{
+			try{
 				Player *p = dynamic_cast<Player *>(e);
 				return p;
 			}
-			catch (const std::bad_cast& cast)
-			{
-				//std::cerr << e.what() << std::endl;
-				//std::cerr << "Cet objet n'est pas de type B" << std::endl;
+			catch (const std::bad_cast& cast){
 			}
 		}
 	}
 }
 
-Player GameLogic::getPlayerCopy(int playerNumber)
-{
+Player GameLogic::getPlayerCopy(int playerNumber){
 	int id = _playerIDs[playerNumber - 1];
 	for (int i = 0; i < _entities.size(); i++) {
 		Entity *e = _entities.at(i);
 		if (e->getID() == id) {
-			try
-			{
+			try{
 				Player *p = dynamic_cast<Player *>(e);
 				return *p;
 			}
-			catch (const std::bad_cast& cast)
-			{
-				//std::cerr << e.what() << std::endl;
-				//std::cerr << "Cet objet n'est pas de type B" << std::endl;
+			catch (const std::bad_cast& cast){
 			}
 		}
 	}

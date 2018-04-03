@@ -1,6 +1,0 @@
-Changes done at home:
-Event Manager Event Collision, Projectile Creation
-Changed Projectile time and alive condition...
-
-
-Changes done in class:

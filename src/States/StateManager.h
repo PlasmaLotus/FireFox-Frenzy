@@ -3,19 +3,15 @@
 Created by PlasmaLotus
 Updated May 17, 2017
 */
-
 #ifndef __StateManager__
 #define __StateManager__
 
 #include <stdint.h>
 #include <string.h>
-//#include "SFML\Graphics.hpp"
 #include "State.h"
-//#include "GameState.h"
 #include "MenuState.h"
 #include "TitleScreen.h"
 #include "../Controller/ControllerConfig.h"
-//#include "../Renderer/GameRenderer.h"
 #include "../Main.h"
 #include "../Event/EventManager.h"
 #include "../Event/AudioEventManager.h"
@@ -31,7 +27,6 @@ public:
 	void run();
 	int32_t getElapsedTime();
 	int getUniqueID();
-	//void play();
 	static const int FPS = 144;
 	int SCREEN_WIDTH = 1080;
 	int SCREEN_HEIGHT = 720;
@@ -55,8 +50,6 @@ protected:
 	bool _switchState;
 	ControllerConfig p1Config;
 	ControllerConfig p2Config;
-	//GameRenderer *renderer;
-	
 };
 
 #endif

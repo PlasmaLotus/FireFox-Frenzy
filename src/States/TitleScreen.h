@@ -15,7 +15,6 @@ public:
 	TitleScreen(sf::RenderWindow *w);
 	void tick();
 	~TitleScreen();
-	//MainMenu menu;
 private:
 	int _idleTicks;
 };

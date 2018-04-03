@@ -21,16 +21,13 @@ public:
 	int _id;
 	float posX;
 	float posY;
-	float posZ;
 	float width;
 	float height;
 	float orientation;
 	float prevPosX;
 	float prevPosY;
-	//float prevPosZ;
 	float velocityX;
 	float velocityY;
-	//Game * _game;
 	Entity();
 	~Entity();
 	virtual void update(int32_t dt);
@@ -40,7 +37,6 @@ public:
 	virtual bool collidableWith(Entity e);
 	virtual bool testCollision(Entity e);
 	virtual void handleCollision();
-	//virtual void handleCollision(Entity e);
 	virtual void handleCollision(Entity *e);
 	float _distanceBetween(float x, float y);
 	float _distanceBetween(Vector2 v);

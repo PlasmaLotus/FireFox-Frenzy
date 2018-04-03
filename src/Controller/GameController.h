@@ -14,25 +14,16 @@ Updated May 13, 2017
 
 class GameController : public Controller {
 public:
-
-	
 	GameController(ControllerConfig* config, Player* entity);
 	GameController(State *state, ControllerConfig* config, Player* entity);
 	~GameController();
-	void handleInput();
+	bool handleInput();
 	void handleJoystickAxis(sf::Joystick::Axis axis);
 	void handleMouseAxis();
-	//void updateConfig();
-	//void handleInput();
 	void setPlayer(Player* e);
-	//void handleInput();
-
-	//void viewDebugJoystick();
-
 private:
 	Player *player;
 	State *state;
-	//ControlMode mode;
 	void handleCommand(ControllerCommand command);
 	float pAngleX;
 	float pAngleY;

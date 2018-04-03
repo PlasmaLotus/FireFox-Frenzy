@@ -88,7 +88,6 @@ void AudioEventManager::handleEvents( int dt ) {
 		catch (const std::out_of_range& oor) {
 			printf("cannot reach the sound in question...,\n");
 		}
-		
 	}
 	printf("Audio Queue ---------- : %d\n", _sounds.size());
 	for (int i = 0; i < SOUNDS_COUNT; i++) {

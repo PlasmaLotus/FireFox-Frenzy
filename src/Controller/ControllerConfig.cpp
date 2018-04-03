@@ -14,8 +14,7 @@ ControllerConfig::ControllerConfig() :
 	joystickNumber(0),
 	joystickDeadZone(15.f),
 	joystickMaxZone(70.f),
-	controlMode(ControlMode::Keyboard)
-{
+	controlMode(ControlMode::Keyboard){
 	loadDefaultConfig();
 }
 
@@ -23,23 +22,17 @@ ControllerConfig::ControllerConfig(std::string iniPath) :
 	joystickNumber(0),
 	joystickDeadZone(15.f),
 	joystickMaxZone(70.f),
-	controlMode(ControlMode::Keyboard)
-{
+	controlMode(ControlMode::Keyboard){
 	loadConfig(iniPath);
 }
 
-ControllerConfig::~ControllerConfig()
-{
-	//ControllerCommand::Up
-	//sf::Keyboard::Key::Delete // 66
+ControllerConfig::~ControllerConfig(){
 	buttonMap.clear();
 	keyMap.clear();
 	axisMap.clear();
 }
 
 bool ControllerConfig::loadConfig(std::string iniPath){
-	//printf("Loading Config");
-
 	std::ifstream file;
 	std::string line;
 	file.open(iniPath);
@@ -48,7 +41,6 @@ bool ControllerConfig::loadConfig(std::string iniPath){
 		while (std::getline(file, line))
 		{
 			printf("%s\n",line);
-
 			if (line.find("Mode") != std::string::npos) {
 				if( line.find("Joystick") != std::string::npos) {
 					controlMode = ControlMode::Joystick;
@@ -68,7 +60,6 @@ bool ControllerConfig::loadConfig(std::string iniPath){
 					std::string s2 = line.substr(line.find("JButton")+ std::strlen("JButton"), 2);
 					assignNb = std::stoi(s2);
 					buttonMap[assignNb] = static_cast<ControllerCommand>(commandNb);
-
 				}
 				else if (line.find("Axis") != std::string::npos) {
 					std::string s2 = line.substr(line.find("Axis")+ std::strlen("Axis"), 2);
@@ -101,8 +92,6 @@ bool ControllerConfig::loadConfig(std::string iniPath){
 					keyMap[static_cast<sf::Keyboard::Key>(assignNb)] = static_cast<ControllerCommand>(commandNb);
 				}
 			}
-
-
 		}
 		file.close();
 	}
@@ -111,7 +100,6 @@ bool ControllerConfig::loadConfig(std::string iniPath){
 		loadDefaultConfig();
 		success = false;
 	}
-
 	return success;
 }
 
@@ -161,22 +149,15 @@ void ControllerConfig::loadDefaultConfig() {
 	axisMap[sf::Joystick::Axis::V] = { ControllerCommand::Dash, ControllerCommand::Shield };
 	//ControllerCommand::D
 	//sf::Keyboard::Key::shi
-	
-	//keyMap.insert(std::pair<sf::Keyboard::Key, ControllerCommand>(sf::Keyboard::Key::Up, ControllerCommand::Up));
 }
 
-bool ControllerConfig::saveConfig()
-{
+bool ControllerConfig::saveConfig(){
 	return saveConfig("esketit.test");
 }
 
-bool ControllerConfig::saveConfig(std::string iniPath)
-{
-
+bool ControllerConfig::saveConfig(std::string iniPath){
 	std::ofstream file;
 	file.open(iniPath);
-	//file << "\n";
-	//file << "Writing this to a file.\n";
 	if (controlMode == ControlMode::Joystick) {
 		file << "Joystick Mode " << "\n";
 	}
@@ -200,9 +181,8 @@ bool ControllerConfig::saveConfig(std::string iniPath)
 	for (std::map<sf::Keyboard::Key, ControllerCommand>::iterator it = keyMap.begin(); it != keyMap.end(); ++it) {
 		file << "Command" << it->second << " : " << "KeyboardKey" << it->first << "\n";
 	}
-
 	file.close();
-	return false;
+	return true;
 }
 
 /*Havent tested Set Key yet*/

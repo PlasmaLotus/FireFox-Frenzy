@@ -251,21 +251,6 @@ void Player::handleDash(int dt)
 		dashHeld = false;
 	}
 	_dashHeld = false;
-	/*
-	_dashAmmoRechargeProgress += dt;
-	if (dashAmmo >= GameLogic::PLAYER_DASH_MAX_AMMO) {
-		dashAmmo = GameLogic::PLAYER_DASH_MAX_AMMO;
-		_dashAmmoRechargeProgress = 0;
-	}
-	else {
-		if (_dashAmmoRechargeProgress >= GameLogic::PLAYER_DASH_RECHARGE_COOLDOWN) {
-			_dashAmmoRechargeProgress -= GameLogic::PLAYER_DASH_RECHARGE_COOLDOWN;
-			if (dashAmmo < GameLogic::PLAYER_DASH_MAX_AMMO) {
-				dashAmmo+=1;
-			}
-		}
-	}
-	*/
 }
 
 void Player::handleAmmo(int dt)
@@ -288,7 +273,6 @@ void Player::handleAmmo(int dt)
 			}
 		}
 	}
-
 }
 
 void Player::handleShooting(int dt)
