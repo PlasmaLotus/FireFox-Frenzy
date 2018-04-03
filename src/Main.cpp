@@ -6,7 +6,6 @@ int main(int argc, char *argv[])
 {
 	StateManager& sm = StateManager::getInstance();
 	sm.run();
-	
 	return 0;
 }
 

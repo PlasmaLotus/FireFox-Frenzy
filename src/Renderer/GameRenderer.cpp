@@ -66,7 +66,7 @@ void GameRenderer::drawProjectiles(){
 			if (p != nullptr) {
 				sf::CircleShape circle;
 				circle.setFillColor(sf::Color::Green);
-				circle.setPosition(p->posX, p->posY);
+				circle.setPosition(p->posX - p->width /2, p->posY - p->width / 2);
 				circle.setRadius(p->width);
 				window->draw(circle);
 			}

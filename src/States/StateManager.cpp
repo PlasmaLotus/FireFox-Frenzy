@@ -62,12 +62,12 @@ void StateManager::run()
 	while (window.isOpen() && _running)
 		{
 			/*Manage Time Beta*/
-			if (frame == 32767) {
+			if (frame >= 32767) {
 				frame = 0;
 			}
 
-			if (frame % 1000 == 0) {
-				system("cls");
+			if (frame % 10000 == 0) {
+				//system("cls");
 			}
 
 			currentTime.restart();
