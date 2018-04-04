@@ -79,14 +79,18 @@ public:
 	static const float ENTITY_MINIMUM_RADIUS;
 	static const float ENTITY_MINIMUM_WIDTH;
 	static const float ENTITY_MINIMUM_HEIGHT;
+
+	static const int ENERGY_MAX_AURA{ 100 };
+	static const int ENERGY_MINIMUM_AURA{ 5 };
+	static const float ENERGY_MAX_RADIUS;
+	static const float ENERGY_MINIMUM_RADIUS;
+	static const int ENERGY_ITEM_COOLDOWN{ 200 };
 private:
 	void init();
 	void _emptyAllEntities();
 	void _handleEntitesEnd();
 	void _handleEntitiesUpdate(int32_t dt);
 	void _handleEntitiesCollisions(int32_t dt);
-	void _handleEntitiesCollisions_Players(int32_t dt);
-	void _handleEntitiesCollisions_PlayersToProjectiles(int32_t dt);
 };
 
 #endif // !_Game_

@@ -7,7 +7,10 @@ Item::Item():
 }
 
 Item::Item(float x, float y, float r):
-CircleEntity(x, y, r){
+CircleEntity(x, y, r),
+state{ ItemState::ItemCooldown },
+_stateCooldown(0) {
+
 }
 Item::~Item(){
 }

@@ -1,5 +1,6 @@
 
 #include "CircleEntity.h"
+enum ItemState{ItemCooldown, ItemActive};
 class Item :
 	public CircleEntity
 {
@@ -12,4 +13,8 @@ public:
 	virtual bool isAlive();
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
+
+	ItemState state;
+	int _stateCooldown;
+	
 };

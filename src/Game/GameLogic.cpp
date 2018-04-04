@@ -17,13 +17,16 @@ const float GameLogic::PLAYER_DASH_VELOCITY(13.54f);
 const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(3.0f);
 const float GameLogic::PLAYER_SHIELD_RADIUS(15.0f);
 
-const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 5 );
-const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20 );
+const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 5.f );
+const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
 const float GameLogic::PROJECTILE_SPEED_MINIMUM( 3.0f );
 const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 9.0f );
 const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
+
+const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
+const float GameLogic::ENERGY_MINIMUM_RADIUS{ 5.f };
 //const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
 
 GameLogic::GameLogic() :
