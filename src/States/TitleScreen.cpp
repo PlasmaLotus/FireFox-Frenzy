@@ -1,13 +1,22 @@
 #include "TitleScreen.h"
 #include "../Main.h"
+#include "StateManager.h"
 
 TitleScreen::TitleScreen(sf::RenderWindow * w):
 	MenuState(w, new MainMenu()){
+	_idleTicks = 0;
 }
 
 void TitleScreen::tick() {
-	p1Controller->handleInput();
+	bool input = false;
+	if (p1Controller->handleInput()) {
+		input = true;
+	}
+	if (p2Controller->handleInput()) {
+		input = true;
+	}
 	p1Controller->updateConfig();
+	p2Controller->updateConfig();
 	renderer->render();
 	menu->tick();
 	printf("NB SELECTIONS: %i\n", menu->items.size());
@@ -17,6 +26,9 @@ void TitleScreen::tick() {
 			printf(">>>");
 		}
 		printf("%s\n", menu->items.at(i).getName());
+	}
+	if (!input) {
+		_idleTicks += StateManager::getInstance().getElapsedTime();
 	}
 }
 

@@ -79,6 +79,8 @@ public:
 	static const float ENTITY_MINIMUM_RADIUS;
 	static const float ENTITY_MINIMUM_WIDTH;
 	static const float ENTITY_MINIMUM_HEIGHT;
+
+	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
 private:
 	void init();
 	void _emptyAllEntities();

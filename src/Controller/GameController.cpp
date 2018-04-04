@@ -41,6 +41,7 @@ bool GameController::handleInput() {
 /*When an input is detected, a command is raised to this function*/
 void GameController::handleCommand(ControllerCommand command){
     /*Apply action on the menu dependant on the command*/
+	Controller::handleCommand(command);
 	if (player != NULL) {
 		switch (command)
 		{
@@ -121,7 +122,7 @@ void GameController::handleCommand(ControllerCommand command){
 }
 
 void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
-	//ControllerCommand command;
+	Controller::handleJoystickAxis(axis);
 	AxisHandler handler = config->getAxisHandlerFromAxis(axis);
 	float value = sf::Joystick::getAxisPosition(config->getJoystickNumber(), axis);
 	//printf("Joystick%d\n", axis);

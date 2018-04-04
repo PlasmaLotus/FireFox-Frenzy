@@ -33,6 +33,7 @@ public:
 	bool buttonUsedThisTick[ControllerCommand::CommandMax] = { false };
 	bool keyboardConnected = true;
 	bool joystickConnected = false;
+	bool commandPressed = false;
 };
 
 #endif // _Controller_H_
