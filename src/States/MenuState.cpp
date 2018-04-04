@@ -2,9 +2,8 @@
 #include "../Main.h"
 #include "StateManager.h"
 
-MenuState::MenuState()
-{
-	
+MenuState::MenuState():
+MenuState(nullptr, nullptr){
 }
 
 MenuState::MenuState(sf::RenderWindow * w, Menu * m):
@@ -14,29 +13,23 @@ menu(m)
 	//currentMenu = new MainMenu(window);
 	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
 	p1Controller = new MenuController(p1KeyConfig, menu);
-	//p1Controller->config = StateManager::getInstance().getControllerConfig(1);
-	//p1Controller = new MenuController(StateManager::getInstance().getControllerConfig(1), menu);
+	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
+	p1Controller = new MenuController(p1KeyConfig, menu);
 	renderer = new MenuRenderer(window, menu);
 }
 
 MenuState::MenuState(sf::RenderWindow * w):
-	window(w)
-{
-	//currentMenu = new MainMenu(window);
-	menu = new Menu();
-	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
-	p1Controller = new MenuController(p1KeyConfig, menu);
-	renderer = new MenuRenderer(window, menu);
-	//renderer = new Renderer(window);
+	MenuState(w, nullptr){
+}
+
+MenuState::MenuState(Menu * m) :
+	MenuState(nullptr, m){
 }
 
 void MenuState::tick()
 {
-	//gotoxy(0, 5);
-	//printf("Menu State Tick \n");
 	p1Controller->handleInput();
 	p1Controller->updateConfig();
-	//p1Controller->viewDebugJoystick();
 	renderer->render();
 	menu->tick();
 }

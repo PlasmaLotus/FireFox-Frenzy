@@ -23,12 +23,15 @@ public:
 	MenuState();
 	MenuState(sf::RenderWindow * w, Menu *m);
 	MenuState(sf::RenderWindow *w);
+	MenuState(Menu * m);
 	virtual void tick();
 	virtual ~MenuState();
 
 	Menu* menu;
 	ControllerConfig* p1KeyConfig;
 	Controller *p1Controller;
+	ControllerConfig* p2KeyConfig;
+	Controller *p2Controller;
 	sf::RenderWindow *window;
 	/**/
 	MenuRenderer *renderer;

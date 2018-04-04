@@ -19,7 +19,6 @@ _collision(false)
 	_stateCooldown = GameLogic::ENERGY_ITEM_COOLDOWN;
 
 	//calc radius
-	
 }
 
 Energy::~Energy()

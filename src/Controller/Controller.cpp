@@ -115,7 +115,7 @@ void Controller::handleInputMouse() {
 
 /*Main input check call -- Checks if any input is pressed and acts accordingly*/
 bool Controller::handleInput() {
-	bool input = false;
+	commandPressed = false;
 	if (config != NULL) {
 		if (_swapConfig) {
 			mode = _nextMode;
@@ -129,16 +129,19 @@ bool Controller::handleInput() {
 			handleInputJoystick();
 		}
 	}
-	return true;
+	return commandPressed;
 }
 
 void Controller::handleCommand(ControllerCommand command) {
+	commandPressed = true;
 	/*Apply action dependant on the command*/
 }
 void Controller::handleJoystickAxis(sf::Joystick::Axis) {
+	commandPressed = true;
 	/*Apply action dependant on the Axis*/
 }
 void Controller::handleMouseAxis(){
+	//commandPressed = true;
 	/*Apply action dependant on the MousePos*/
 }
 void Controller::swapToControlMode(ControlMode m)

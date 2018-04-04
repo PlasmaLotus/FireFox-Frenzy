@@ -84,7 +84,9 @@ public:
 	static const int ENERGY_MINIMUM_AURA{ 5 };
 	static const float ENERGY_MAX_RADIUS;
 	static const float ENERGY_MINIMUM_RADIUS;
-	static const int ENERGY_ITEM_COOLDOWN{ 200 };
+	static const int ENERGY_ITEM_COOLDOWN{ 2000 };
+	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
+
 private:
 	void init();
 	void _emptyAllEntities();
