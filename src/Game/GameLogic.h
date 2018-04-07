@@ -96,6 +96,7 @@ private:
 	void _handleEntitesEnd();
 	void _handleEntitiesUpdate(int32_t dt);
 	void _handleEntitiesCollisions(int32_t dt);
+	void _handleGameEnd();
 	void _spawnItems();
 	void _spawnEnergy();
 	void _spawnPowerUps();

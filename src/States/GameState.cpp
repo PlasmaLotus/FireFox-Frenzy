@@ -46,6 +46,8 @@ void GameState::tick(int dt, bool render){
 		renderer->render();
 		break;
 	case GameCurrentState::ENDED:
+		printf("===== GAME ENDED =====\n");
+		renderer->render();
 		break;
 	default:
 		break;

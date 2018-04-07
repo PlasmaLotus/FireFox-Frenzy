@@ -9,7 +9,7 @@
 //class GameLogic;
 #include "../Game/GameLogic.h"
 #include "AudioEventManager.h"
-enum EventType{NoEvent, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo};
+enum EventType{NoEvent, GameEnd, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo};
 class Event {
 public:
 	Event(EventType et) { type = et;};

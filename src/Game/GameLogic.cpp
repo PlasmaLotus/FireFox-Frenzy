@@ -154,6 +154,7 @@ void GameLogic::tick() {
 		_handleEntitiesUpdate(dt);
 		_handleEntitiesCollisions(dt);
 		_handleEntitesEnd();
+		_handleGameEnd();
 		break;
 	default:
 		break;
@@ -216,6 +217,29 @@ void GameLogic::_handleEntitesEnd(){
 			}
 		}
 		_idsToDestroy.pop();
+	}
+}
+
+void GameLogic::_handleGameEnd() {
+	int pAlive = 0;
+	for (int i = _playerIDs.size() - 1; i >= 0; i--) {
+		for (int j = 0; j < _entities.size(); j++) {
+			Entity *e = _entities.at(j);
+			try {
+				Player *p = dynamic_cast<Player *>(e);
+				if (p != nullptr) {
+					if (p->isAlive() || p->HP > 0) {
+						pAlive++;
+					}
+				}
+			}
+			catch (const std::bad_cast& cast) {
+			}
+		}
+	}
+	if (pAlive <= 1) {
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::GameEnd));
+		gameState = GameCurrentState::ENDED;
 	}
 }
 
