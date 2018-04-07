@@ -13,6 +13,7 @@ Updated May 13, 2017
 #include "Entity.h"
 #include "Player.h"
 #include "Projectile.h"
+#include "Energy.h"
 enum GameCurrentState { RUNNING, PAUSED, ENDED, COUNTDOWN };
 
 class GameLogic{
@@ -43,7 +44,7 @@ public:
 	void addEntityIDToDelete(int id);
 	static const int PLAYER_COLLISION_HITBOX_WIDTH = 20;
 	static const int PLAYER_COLLISION_HITBOX_HEIGHT = 30;
-	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 100 }; //as miliseconds
+	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
 	static int const PLAYER_MAX_AMMO{ 1000 };
 
 	static const int PLAYER_DASH_DURATION{ 150 };
@@ -81,11 +82,13 @@ public:
 	static const float ENTITY_MINIMUM_HEIGHT;
 
 	static const int ENERGY_MAX_AURA{ 100 };
-	static const int ENERGY_MINIMUM_AURA{ 5 };
+	static const int ENERGY_MINIMUM_AURA{ 6 };
 	static const float ENERGY_MAX_RADIUS;
 	static const float ENERGY_MINIMUM_RADIUS;
-	static const int ENERGY_ITEM_COOLDOWN{ 2000 };
+	static const int ENERGY_ITEM_COOLDOWN{ 3000 };
 	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
+	static const int GAME_ENERGY_SPAWN_TIMER{ 20000 };
+	static const int GAME_ENERGY_SPAWN_AURA{ 75 };
 
 private:
 	void init();
@@ -93,6 +96,10 @@ private:
 	void _handleEntitesEnd();
 	void _handleEntitiesUpdate(int32_t dt);
 	void _handleEntitiesCollisions(int32_t dt);
+	void _spawnItems();
+	void _spawnEnergy();
+	void _spawnPowerUps();
+	int _spawnTimer;
 };
 
 #endif // !_Game_

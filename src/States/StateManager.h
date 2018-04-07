@@ -25,15 +25,18 @@ public:
 	void quit();
 	sf::RenderWindow * getWindow();
 	void run();
-	int32_t getElapsedTime();
+	int64_t getElapsedTime();
+	int64_t getRenderElapsedTime();
 	int getUniqueID();
 	static const int FPS = 144;
+	static const int renderFPS = 60;
 	int SCREEN_WIDTH = 1080;
 	int SCREEN_HEIGHT = 720;
 	ControllerConfig *getControllerConfig(int playerNumber);
 	static std::string getControllerConfigPath(int playerNumber);
 	static int getWindowWidth();
 	static int getWindowHeight();
+	//int64_t getBaseElapsedTime();
 	void _run();
 	EventManager eventManager;
 	AudioEventManager audioEventManager;
@@ -47,9 +50,11 @@ protected:
 	State *_newState;
 	sf::Clock currentTime;
 	sf::Time elapsedTime;
+	sf::Time renderElapsedTime;
 	bool _switchState;
 	ControllerConfig p1Config;
 	ControllerConfig p2Config;
+	bool _renderFrame{ true };
 };
 
 #endif

@@ -1,4 +1,5 @@
-
+#ifndef __Energy__
+#define __Energy__
 #include "Item.h"
 class Energy :
 	public Item
@@ -6,6 +7,7 @@ class Energy :
 public:
 	Energy();
 	Energy(int amount);
+	Energy(Vector2 v, int amount);
 	Energy(float x, float y, int amount);
 	~Energy();
 
@@ -13,8 +15,12 @@ public:
 	virtual bool isAlive();
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
-
+	int _stateCooldown;
 
 	int aura;
+	int lifetime;
 	bool _collision;
+	bool _alive;
 };
+
+#endif // !Energy

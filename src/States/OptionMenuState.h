@@ -7,8 +7,8 @@ class OptionMenuState : public MenuState
 {
 public:
 	OptionMenuState(sf::RenderWindow *w);
-	void tick();
-	void goBack();
+	virtual void tick(int dt, bool render = true);
+	virtual void goBack();
 	~OptionMenuState();
 	//Menu _currentMenu;
 };

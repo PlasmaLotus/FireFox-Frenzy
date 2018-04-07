@@ -7,14 +7,16 @@ TitleScreen::TitleScreen(sf::RenderWindow * w):
 	_idleTicks = 0;
 }
 
-void TitleScreen::tick() {
+void TitleScreen::tick(int dt, bool render) {
 	bool input = false;
 	if (p1Controller->handleInput()) {
 		input = true;
 	}
+	
 	if (p2Controller->handleInput()) {
 		input = true;
 	}
+	
 	p1Controller->updateConfig();
 	p2Controller->updateConfig();
 	renderer->render();
@@ -28,7 +30,7 @@ void TitleScreen::tick() {
 		printf("%s\n", menu->items.at(i).getName());
 	}
 	if (!input) {
-		_idleTicks += StateManager::getInstance().getElapsedTime();
+		_idleTicks += dt;
 	}
 }
 

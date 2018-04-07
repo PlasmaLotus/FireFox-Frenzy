@@ -13,8 +13,8 @@ menu(m)
 	//currentMenu = new MainMenu(window);
 	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
 	p1Controller = new MenuController(p1KeyConfig, menu);
-	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
-	p1Controller = new MenuController(p1KeyConfig, menu);
+	p2KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
+	p2Controller = new MenuController(p2KeyConfig, menu);
 	renderer = new MenuRenderer(window, menu);
 }
 
@@ -26,8 +26,7 @@ MenuState::MenuState(Menu * m) :
 	MenuState(nullptr, m){
 }
 
-void MenuState::tick()
-{
+void MenuState::tick(int dt, bool render){
 	p1Controller->handleInput();
 	p1Controller->updateConfig();
 	renderer->render();

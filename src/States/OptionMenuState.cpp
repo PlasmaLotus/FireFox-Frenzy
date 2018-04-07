@@ -7,7 +7,7 @@ OptionMenuState::OptionMenuState(sf::RenderWindow *w):
 {
 }
 
-void OptionMenuState::tick() {
+void OptionMenuState::tick(int dt, bool render) {
 	//gotoxy(0, 5);
 	printf("OPtion Menu State Tick \n");
 	p1Controller->handleInput();

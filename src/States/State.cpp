@@ -4,7 +4,7 @@ State::State(){
 }
 State::~State(){
 }
-void State::tick(){
+void State::tick(int dt, bool render){
 }
 void State::goBack() {
 }

@@ -8,8 +8,7 @@ Item::Item():
 
 Item::Item(float x, float y, float r):
 CircleEntity(x, y, r),
-state{ ItemState::ItemCooldown },
-_stateCooldown(0) {
+state{ ItemState::ItemCooldown } {
 }
 
 Item::~Item(){
@@ -33,9 +32,6 @@ void Item::update(int32_t dt){
 	*/
 }
 
-void Item::update(int dt) {
-
-}
 
 bool Item::isAlive(){
 	return true;

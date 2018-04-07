@@ -13,7 +13,7 @@ class TitleScreen : public MenuState
 {
 public:
 	TitleScreen(sf::RenderWindow *w);
-	void tick();
+	virtual void tick(int dt, bool render = true);
 	~TitleScreen();
 private:
 	int _idleTicks;

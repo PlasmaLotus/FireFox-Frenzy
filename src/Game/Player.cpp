@@ -6,19 +6,21 @@
 #include "../States/StateManager.h"
 
 Player::Player():
-	Player(nullptr) 
-{
+	Player(nullptr){
+}
+
+Player::Player(GameLogic * g, Vector2 v) :
+	Player(g, v.x, v.y) {
 }
 
 Player::Player(GameLogic *g) :
-SquareEntity(0,0,GameLogic::PLAYER_COLLISION_HITBOX_WIDTH, GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT),
-_game(g),
-state(PlayerState::Moving)
+	Player(g, 0, 0) {
+}
 
-{
-	posX = 10.f;
-	posY = 10.f;
-	//posZ = 10.f;
+Player::Player(GameLogic * g, float x, float y):
+	SquareEntity(x, y, GameLogic::PLAYER_COLLISION_HITBOX_WIDTH, GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT),
+	_game(g),
+	state(PlayerState::Moving){
 	velocityX = 0.f;
 	velocityY = 0.f;
 	orientation = 0.f;
@@ -141,6 +143,16 @@ void Player::_handleCollision(Projectile p)
 
 }
 
+void Player::_handleCollision(Energy e)
+{
+	/*Energy Pack hits the player*/
+	ammo += e.aura;
+	if (ammo > GameLogic::PLAYER_MAX_AMMO) {
+		ammo = GameLogic::PLAYER_MAX_AMMO;
+	}
+
+}
+
 void Player::handleCollision(Entity * e)
 {
 	try
@@ -182,6 +194,20 @@ void Player::handleCollision(Entity * e)
 	catch (const std::bad_cast& cast){
 	}
 	
+
+	try
+	{
+		Energy *p = dynamic_cast<Energy *>(e);
+		if (p != nullptr) {
+			//handlecollisoin with player;
+			if (p->state == ItemState::ItemActive) {
+				_handleCollision(*p);
+				p->handleCollision();
+			}
+		}
+	}
+	catch (const std::bad_cast& cast) {
+	}
 }
 
 bool Player::collidableWith(Entity e)
@@ -255,9 +281,11 @@ void Player::handleDash(int dt)
 
 void Player::handleAmmo(int dt)
 {
+	/*
 	if (ammo < 0) {
 		ammo = 0;
 	}
+	*/
 	_ammoRechargeProgress += dt;
 	if (ammo >= GameLogic::PLAYER_MAX_AMMO) {
 		ammo = GameLogic::PLAYER_MAX_AMMO;
@@ -301,7 +329,7 @@ void Player::handleShooting(int dt)
 			}
 			float ratio = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME ;
 			int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
-			if (ammo >= projectilePower) {
+			if (ammo > 0) {
 				_loseAmmo(projectilePower);
 				Projectile *p{ new Projectile(this) };
 				p->durability = 1;
@@ -319,6 +347,7 @@ void Player::handleShooting(int dt)
 				StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, p));
 			}
 			else {
+				shootHeld = false;
 				StateManager::getInstance().eventManager.queueEvent(Event(EventType::OutOfAmmo, this));
 			}
 		}
@@ -326,11 +355,11 @@ void Player::handleShooting(int dt)
 	}
 	_shootHeld = false;
 }
-/*
-void Player::_handleShooting(int dt) {
+
+void Player::_handleShooting(int ammo) {
 
 }
-*/
+
 
 void Player::handleShield(int dt)
 {
@@ -377,6 +406,14 @@ void Player::_gainAmmo(int nb){
 
 void Player::_loseAmmo(int nb){
 	ammo -= nb;
+	if (ammo < 0) {
+		nb += ammo;
+	}
+	double energyConstant = 0.50;
+	if (nb * energyConstant >= GameLogic::ENERGY_MINIMUM_AURA) {
+		Energy *e{ new Energy(posX, posY, nb * energyConstant) };
+		_game->addEntity(e); 
+	}
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::LoseAmmo, this));
 }
 
@@ -423,22 +460,6 @@ void Player::_handleMovement(int dt) {
 		else {
 			velocityY *= GameLogic::PLAYER_FRICTION;
 		}
-
-		/*Friciton 2*/
-		/*
-		if (velocityX <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE && velocityX >= (-1.f * GameLogic::PLAYER_VELOCITY_DEAD_ZONE)) {
-			velocityX = 0.0f;
-		}
-		else {
-			velocityX *= GameLogic::PLAYER_FRICTION;
-		}
-		if (velocityY <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE && velocityY >= (-1.f * GameLogic::PLAYER_VELOCITY_DEAD_ZONE)) {
-			velocityY = 0.0f;
-		}
-		else {
-			velocityY *= GameLogic::PLAYER_FRICTION;
-		}
-		*/
 
 		/// Reduce Velocity when exceeding max ///
 		if (std::abs(velocityX) > GameLogic::PLAYER_DASH_VELOCITY) {

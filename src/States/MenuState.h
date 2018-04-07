@@ -24,7 +24,7 @@ public:
 	MenuState(sf::RenderWindow * w, Menu *m);
 	MenuState(sf::RenderWindow *w);
 	MenuState(Menu * m);
-	virtual void tick();
+	virtual void tick(int dt, bool render = true);
 	virtual ~MenuState();
 
 	Menu* menu;
@@ -38,4 +38,3 @@ public:
 };
 
 #endif
-

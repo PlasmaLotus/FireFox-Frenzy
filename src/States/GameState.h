@@ -14,7 +14,7 @@ class GameState : public State {
 public:
 	GameState(sf::RenderWindow *w);
 	virtual ~GameState();
-	virtual void tick();
+	virtual void tick(int dt, bool render = true);
 	GameLogic *getGame();
 	void pause();
 	void reset();

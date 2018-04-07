@@ -26,7 +26,7 @@ GameState::~GameState(){
 	delete game;
 }
 
-void GameState::tick(){
+void GameState::tick(int dt, bool render){
 	switch (game->gameState)
 	{
 	case::GameCurrentState::COUNTDOWN: 
@@ -37,9 +37,12 @@ void GameState::tick(){
 		p1Controller->handleInput();
 		p2Controller->handleInput();
 		game->tick();
-		renderer->render();
+		if (render) {
+			renderer->render();
+		}
 		break;
 	case GameCurrentState::PAUSED:
+		printf("===== GAME PAUSED =====\n");
 		renderer->render();
 		break;
 	case GameCurrentState::ENDED:
@@ -54,6 +57,14 @@ GameLogic * GameState::getGame(){
 }
 
 void GameState::pause() {
+	/*
+	if (game->gameState != GameCurrentState::PAUSED) {
+		game->gameState = GameCurrentState::PAUSED;
+	}
+	else {
+		game->gameState = GameCurrentState::RUNNING;
+	}
+	*/
 }
 
 void GameState::reset() {

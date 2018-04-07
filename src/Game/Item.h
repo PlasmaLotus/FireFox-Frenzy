@@ -1,3 +1,5 @@
+#ifndef __Item__
+#define __Item__
 
 #include "CircleEntity.h"
 enum ItemState{ ItemSpawn, ItemCooldown, ItemActive };
@@ -13,9 +15,9 @@ public:
 	virtual bool isAlive();
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
-	int _stateCooldown;
 	
 	ItemState state;
 	//int _cooldownTimer;
 
 };
+#endif // !Item

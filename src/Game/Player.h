@@ -5,6 +5,7 @@
 #include <math.h>
 #include "SquareEntity.h"
 #include "Projectile.h"
+#include "Energy.h"
 #include <stdint.h>
 #include <vector>
 #include <cmath>
@@ -14,6 +15,8 @@ class Player: public SquareEntity{
 public:
 	Player();
 	Player(GameLogic *g);
+	Player(GameLogic *g, float x, float y);
+	Player(GameLogic *g, Vector2 v);
 	~Player();
 	GameLogic * _game;
 	void setGame(GameLogic *g);
@@ -43,6 +46,7 @@ public:
 	bool testCollision(CircleEntity e);
 	void handleCollision();
 	void _handleCollision(Projectile p);
+	void _handleCollision(Energy e);
 	void handleCollision(Entity *e);
 	bool collidableWith(Entity e);
 	bool collidableWith(Projectile e);
@@ -80,6 +84,7 @@ public:
 	int32_t _ammoRechargeProgress; //as miliseconds
 	void handleAmmo(int dt);
 	void handleShooting(int dt);
+	void _handleShooting(int ammo);
 	/*Shield*/
 	Projectile _shield;
 	bool shieldActive;

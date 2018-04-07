@@ -1,5 +1,5 @@
 #include "StateManager.h"
-
+#include "GameState.h"
 
 
 StateManager::StateManager():
@@ -57,8 +57,9 @@ void StateManager::run()
 	int frame = 0, milisecond = 0, second = 0, minute = 0;
 	double MS_PER_FRAME = (1000.0) / FPS;//1000 ms per seconds
 	elapsedTime = currentTime.restart();
+	renderElapsedTime = currentTime.restart();
 	window.setFramerateLimit(FPS);//framerate
-
+	float renderElapsedTimeFloat{ 0.f };
 	while (window.isOpen() && _running)
 		{
 			/*Manage Time Beta*/
@@ -69,7 +70,7 @@ void StateManager::run()
 			if (frame % 10000 == 0) {
 				//system("cls");
 			}
-
+			_renderFrame = false;
 			currentTime.restart();
 			sf::Event event;
 			while (window.pollEvent(event))
@@ -79,13 +80,42 @@ void StateManager::run()
 					window.close();
 					_running = false;
 				}
+				else if (event.type == sf::Event::LostFocus) {
+					//sf::Event::
+				}
+				else if (event.type == sf::Event::GainedFocus) {
+					try {
+						GameState * gs = dynamic_cast< GameState*>(_currentState);
+						if (gs != nullptr) {
+							gs->pause();
+						}
+					}
+					catch (const std::bad_cast& cast) {
+					}
+					
+				}
+				else {
+
+				}
 			}
 			elapsedTime = currentTime.getElapsedTime();
+			//renderElapsedTime += currentTime.getElapsedTime();
+
+			if (renderElapsedTimeFloat >= 1000.f / renderFPS) {
+				renderElapsedTimeFloat -= 1000.f / renderFPS;
+				_renderFrame = true;
+			}
+			else {
+				renderElapsedTimeFloat += elapsedTime.asMicroseconds();
+			}
 			_run();
 
 			{
 				gotoxy(0, 0);
-				printf("%d:%d  Frame: %d ", minute, second, frame);
+				printf("DT: %3.3lld, %Id, %I64d ---\n", elapsedTime.asSeconds(), elapsedTime.asMilliseconds(), elapsedTime.asMicroseconds());
+				printf("RenderDT: %3.3f, Elapsed:%I64d  Con: %3.3f ---\n", renderElapsedTimeFloat, elapsedTime.asMicroseconds(),  (1000.f / renderFPS));
+
+				//printf("%d:%d  Frame: %d ", minute, second, frame);
 				printf("NB Frames: %3.8f     Temps: %d    Clocks per Sec: %3.2f\n",
 					(float)elapsedTime.asMilliseconds() * 60, elapsedTime.asMilliseconds(), (float)CLOCKS_PER_SEC);
 			}
@@ -104,12 +134,27 @@ void StateManager::run()
 void StateManager::_run() {
 	eventManager.handleEvents(getElapsedTime());
 	audioEventManager.handleEvents(getElapsedTime());
-	_currentState->tick();
+	_currentState->tick(getElapsedTime(), _renderFrame);
 }
-int32_t StateManager::getElapsedTime() {
-	int i = std::nearbyint(1000.0 / FPS);
+
+
+
+int64_t StateManager::getElapsedTime() {
 	printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
-	return std::nearbyint( 1000.0 / FPS);
+	//return std::nearbyint( 1000.0 / FPS);
+	if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0 / renderFPS)) {
+		return elapsedTime.asMicroseconds();
+	}
+	else {
+		std::nearbyint(1000.0 / renderFPS);
+	}
+	
+}
+
+int64_t StateManager::getRenderElapsedTime() {
+	printf("Render DT -- %d - %d    \n", 1000 / renderFPS, renderElapsedTime.asMicroseconds());
+	//return std::nearbyint( 1000.0 / renderFPS);
+	return renderElapsedTime.asMicroseconds();
 }
 
 int StateManager::getUniqueID() {

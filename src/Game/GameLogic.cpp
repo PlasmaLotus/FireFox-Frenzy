@@ -27,6 +27,7 @@ const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
 
 const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
 const float GameLogic::ENERGY_MINIMUM_RADIUS{ 5.f };
+
 //const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
 
 GameLogic::GameLogic() :
@@ -43,6 +44,7 @@ GameLogic::~GameLogic(){
 
 void GameLogic::init() {
 	_spawnPoints.clear();
+	_spawnTimer = 0;
 	for (int i = 4; i-- >= 0; ) {
 		switch (i) {
 		case 3: {
@@ -71,10 +73,11 @@ void GameLogic::init() {
 		Vector2 v2 = _spawnPoints.at(1);
 		Vector2 v3 = _spawnPoints.at(2);
 		Vector2 v4 = _spawnPoints.at(3);
-		Player *p1{ new Player(this) };
-		Player *p2{ new Player(this) };
-		Player *p3{ new Player(this) };
-		Player *p4{ new Player(this) };
+		Player *p1{ new Player(this, v1)};
+		Player *p2{ new Player(this, v2) };
+		Player *p3{ new Player(this, v3) };
+		Player *p4{ new Player(this, v4) };
+		/*
 		p1->posX = v1.x;
 		p1->posY = v1.y;
 		p2->posX = v2.x;
@@ -83,6 +86,7 @@ void GameLogic::init() {
 		p3->posY = v3.y;
 		p4->posX = v4.x;
 		p4->posY = v4.y;
+		*/
 
 		_playerIDs.push_back(p1->getID());
 		__playerIDs[0] = p1->getID();
@@ -138,9 +142,14 @@ void GameLogic::tick() {
 		}
 		break;
 	case GameCurrentState::RUNNING:
-		dt = StateManager::getInstance().getElapsedTime();
+		//dt = StateManager::getInstance().getElapsedTime();
 		//printf("GameTick:  DT - %ld\n", dt);
 		frame++;
+		_spawnTimer += dt;
+		if (_spawnTimer >= GAME_ENERGY_SPAWN_TIMER) {
+			_spawnTimer -= GAME_ENERGY_SPAWN_TIMER;
+			_spawnEnergy();
+		}
 		printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
 		_handleEntitiesUpdate(dt);
 		_handleEntitiesCollisions(dt);
@@ -188,8 +197,7 @@ void GameLogic::_handleEntitiesCollisions(int32_t dt){
 			if (e1 != e2) {
 				if (e1->testCollision(*e2)) {
 					e1->handleCollision(e2);
-					printf("Collision Detected, ID:%d, ID:%d -  Distance: %3.3f!!!\n", e1->getID(), e2->getID(), e1->_distanceBetween(*e2));
-
+					//printf("Collision Detected, ID:%d, ID:%d -  Distance: %3.3f!!!\n", e1->getID(), e2->getID(), e1->_distanceBetween(*e2));
 				}
 			}
 		}
@@ -291,4 +299,21 @@ Player GameLogic::getPlayerCopy(int playerNumber){
 			}
 		}
 	}
+}
+
+void GameLogic::_spawnItems()
+{
+}
+
+void GameLogic::_spawnEnergy()
+{
+	for (int i = 0; i < _spawnPoints.size(); i++) {
+		Vector2 v = _spawnPoints.at(i);
+		Energy *e{ new Energy(v, GAME_ENERGY_SPAWN_AURA) };
+		addEntity(e);
+	}
+}
+
+void GameLogic::_spawnPowerUps()
+{
 }

@@ -23,7 +23,7 @@ void EventManager::queueEvent(Event e) {
 
 void EventManager::handleEvents(int dt)
 {
-	//int dt = StateManager::getInstance().getElapsedTime();
+
 	/*
 	for (std::vector<Event>::iterator i = _events.begin(); i != _events.end(); i++) {
 		i->lifetime += dt;
