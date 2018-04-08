@@ -145,6 +145,7 @@ void GameLogic::tick() {
 		//dt = StateManager::getInstance().getElapsedTime();
 		//printf("GameTick:  DT - %ld\n", dt);
 		frame++;
+		_totalDT += dt;
 		_spawnTimer += dt;
 		if (_spawnTimer >= GAME_ENERGY_SPAWN_TIMER) {
 			_spawnTimer -= GAME_ENERGY_SPAWN_TIMER;
@@ -239,6 +240,10 @@ void GameLogic::_handleGameEnd() {
 	}
 	if (pAlive <= 1) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::GameEnd));
+		gameState = GameCurrentState::ENDED;
+	}
+
+	if (_totalDT >= GAME_TIME_LIMIT_MAXIMUM) {
 		gameState = GameCurrentState::ENDED;
 	}
 }

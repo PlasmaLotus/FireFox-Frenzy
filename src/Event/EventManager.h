@@ -1,4 +1,8 @@
-#pragma once
+#ifndef __EventManager__
+#define __EventManager__
+
+#endif // !__EventManager__
+
 
 //class Event
 
@@ -43,3 +47,4 @@ private:
 	void __handleEventCoundownTick();
 
 };
+#endif //__EventManager__

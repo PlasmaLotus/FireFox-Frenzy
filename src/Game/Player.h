@@ -1,7 +1,10 @@
-#pragma once
-
+/*
+Created by PlasmaLotus
+Updated May 17, 2017
+*/
 #ifndef __PLAYER__
 #define __PLAYER__
+
 #include <math.h>
 #include "SquareEntity.h"
 #include "Projectile.h"

@@ -1,4 +1,5 @@
-#pragma once
+#ifndef __MenuState__
+#define __MenuState__
 
 /*
 Created by PlasmaLotus
@@ -37,4 +38,4 @@ public:
 	MenuRenderer *renderer;
 };
 
-#endif
+#endif //!__MenuState__

@@ -1,4 +1,3 @@
-#pragma once
 /*
 Created by PlasmaLotus
 Updated May 13, 2017
@@ -58,10 +57,11 @@ public:
 	static float const PLAYER_DASH_VELOCITY;
 	static float const PLAYER_MINIMUM_DASH_VELOCITY;
 	static const float PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE;
+	static const int GAME_TIME_LIMIT_MAXIMUM{ 20000 };
 	static const int GAME_COUNTDOWN_TIME{ 3000 };
 	int countdownTimer = GAME_COUNTDOWN_TIME;
 	int _countdownIt;
-
+	int _totalDT;
 	static const int PROJECTILE_COLLISION_DELAY_GENERAL{ 30 };
 	static const float PROJECTILE_HITBOX_RADIUS_MINIMUM;
 	static const float PROJECTILE_HITBOX_RADIUS_MAXIMUM;
