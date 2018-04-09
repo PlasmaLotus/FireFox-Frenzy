@@ -30,6 +30,13 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 
 		dashOffsetShapes.push_back(r);
 	}
+	/*
+	if (!rTexture.loadFromFile("./Assets/Images/spaceship.png")) {
+		printf("Unable to load Spaceship PNG\n");
+	}
+	sprite.setTexture(rTexture);
+	*/
+	
 
 	// Load the shader
 	/*
@@ -52,6 +59,7 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 	//states.blendMode = sf::BlendAdd;
 	//states.shader = &m_shader;
 	//states.texture = playerShape.getTexture();
+	//target.draw(sprite);
 	target.draw(playerShape);
 	target.draw(cursorShape);
 
@@ -115,7 +123,8 @@ void PlayerDrawable::update()
 	posY = player->posY;
 	playerShape.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
 	cursorShape.setPosition(sf::Vector2f(posX + player->cursorOrientationX, posY + player->cursorOrientationY));
-
+	//sprite.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
+	
 	/*Shader initialisation*/
 	/*
 	sf::Glsl::Ivec3 color{ playerShape.getFillColor().r, playerShape.getFillColor().g, playerShape.getFillColor().b };

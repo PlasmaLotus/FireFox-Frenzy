@@ -4,14 +4,11 @@ Updated Dec 25, 2016
 */
 
 /*Under Construction*/
-
+#ifndef _Menu_
+#define _Menu_
 #include <vector>
 #include "SFML\Graphics.hpp"
 #include "MenuItem.h"
-
-#ifndef _Menu_
-#define _Menu_
-
 
 class Menu {
 public:
@@ -48,7 +45,6 @@ public:
 	void onItemChange();
 
 	void onReturn();
-
 
 };
 

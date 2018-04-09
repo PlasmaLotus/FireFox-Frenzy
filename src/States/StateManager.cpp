@@ -56,6 +56,7 @@ void StateManager::run()
 
 	int frame = 0, milisecond = 0, second = 0, minute = 0;
 	double MS_PER_FRAME = (1000.0) / FPS;//1000 ms per seconds
+	gameTimer.restart();
 	elapsedTime = currentTime.restart();
 	renderElapsedTime = currentTime.restart();
 	window.setFramerateLimit(FPS);//framerate
@@ -142,13 +143,15 @@ void StateManager::_run() {
 int64_t StateManager::getElapsedTime() {
 	printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
 	//return std::nearbyint( 1000.0 / FPS);
+	return std::nearbyint(1000.0 / FPS);
+	
 	if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0 / renderFPS)) {
 		return elapsedTime.asMicroseconds();
 	}
 	else {
-		std::nearbyint(1000.0 / renderFPS);
+		return std::nearbyint(1000.0 / renderFPS);
 	}
-	
+
 }
 
 int64_t StateManager::getRenderElapsedTime() {
@@ -184,4 +187,20 @@ std::string StateManager::getControllerConfigPath(int playerNumber)
 		break;
 	}
 	}
+}
+
+void StateManager::resetGameTimer() {
+	gameTimer.restart();
+}
+
+std::string StateManager::getCurrentGameTimer() {
+	
+	std::string s;
+	char c[26];
+	s = gameTimer.getElapsedTime().asSeconds();
+	s += ":";
+	s += gameTimer.getElapsedTime().asMilliseconds();
+	s += ":";
+	s += gameTimer.getElapsedTime().asMicroseconds();
+	return s;
 }

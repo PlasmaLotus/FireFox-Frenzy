@@ -18,6 +18,7 @@ enum GameCurrentState { RUNNING, PAUSED, ENDED, COUNTDOWN };
 class GameLogic{
 public:
 	int frame = 0;
+	//int timer;
 	int32_t dt;
 	GameCurrentState gameState;
 

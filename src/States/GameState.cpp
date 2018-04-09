@@ -40,6 +40,7 @@ void GameState::tick(int dt, bool render){
 		if (render) {
 			renderer->render();
 		}
+		printf("GAME TIMER == %s\n", StateManager::getInstance().getCurrentGameTimer());
 		break;
 	case GameCurrentState::PAUSED:
 		printf("===== GAME PAUSED =====\n");
