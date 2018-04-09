@@ -30,17 +30,20 @@ void GameState::tick(int dt, bool render){
 	switch (game->gameState)
 	{
 	case::GameCurrentState::COUNTDOWN: 
-		game->tick();
+		game->tick(dt);
 		renderer->render();
 		break;
 	case GameCurrentState::RUNNING:
 		p1Controller->handleInput();
 		p2Controller->handleInput();
-		game->tick();
+		game->tick(dt);
 		if (render) {
 			renderer->render();
 		}
-		printf("GAME TIMER == %s\n", StateManager::getInstance().getCurrentGameTimer());
+		/*
+		renderer->render();
+		*/
+		//printf("GAME TIMER == %s\n", StateManager::getInstance().getCurrentGameTimer());
 		break;
 	case GameCurrentState::PAUSED:
 		printf("===== GAME PAUSED =====\n");

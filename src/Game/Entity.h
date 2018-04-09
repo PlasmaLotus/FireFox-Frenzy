@@ -29,7 +29,7 @@ public:
 	float velocityX;
 	float velocityY;
 	Entity();
-	~Entity();
+	virtual ~Entity();
 	virtual void update(int32_t dt);
 	virtual bool isAlive();
 	int getID();
@@ -42,7 +42,12 @@ public:
 	float _distanceBetween(Vector2 v);
 	float _distanceBetween(Entity e);
 	std::vector<CollisionStack> _collisions;
+	int _collisionDelay;
+	int _hitlagFrames;
+	bool _inHitlag;
+
 protected:
+
 	bool _testVerticalCollision(Entity e);
 	bool _testHorizontalCollision(Entity e);
 

@@ -61,6 +61,7 @@ void StateManager::run()
 	renderElapsedTime = currentTime.restart();
 	window.setFramerateLimit(FPS);//framerate
 	float renderElapsedTimeFloat{ 0.f };
+	renderElapsedTimeFloat += currentTime.getElapsedTime().asMicroseconds();
 	while (window.isOpen() && _running)
 		{
 			/*Manage Time Beta*/
@@ -102,12 +103,13 @@ void StateManager::run()
 			elapsedTime = currentTime.getElapsedTime();
 			//renderElapsedTime += currentTime.getElapsedTime();
 
+			renderElapsedTimeFloat += currentTime.getElapsedTime().asMicroseconds();
 			if (renderElapsedTimeFloat >= 1000.f / renderFPS) {
-				renderElapsedTimeFloat -= 1000.f / renderFPS;
 				_renderFrame = true;
+				renderElapsedTimeFloat -= 1000.f / renderFPS;
 			}
 			else {
-				renderElapsedTimeFloat += elapsedTime.asMicroseconds();
+				//renderElapsedTimeFloat += elapsedTime.asMicroseconds();
 			}
 			_run();
 
@@ -143,14 +145,18 @@ void StateManager::_run() {
 int64_t StateManager::getElapsedTime() {
 	printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
 	//return std::nearbyint( 1000.0 / FPS);
-	return std::nearbyint(1000.0 / FPS);
-	
-	if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0 / renderFPS)) {
-		return elapsedTime.asMicroseconds();
+	if (elapsedTime.asMicroseconds() > 0){
+		if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0 / FPS)) {
+			return elapsedTime.asMicroseconds();
+		}
+		else {
+			return std::nearbyint(1000.0 / FPS);
+		}
 	}
 	else {
-		return std::nearbyint(1000.0 / renderFPS);
+		return 0;
 	}
+	
 
 }
 

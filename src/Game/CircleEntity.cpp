@@ -19,6 +19,7 @@ CircleEntity::~CircleEntity(){
 }
 
 void CircleEntity::update(int32_t dt){
+	Entity::update(dt);
 }
 
 bool CircleEntity::testCollision(Entity e) {

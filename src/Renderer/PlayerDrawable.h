@@ -43,10 +43,10 @@ public:
 	sf::RectangleShape playerShape;
 	sf::CircleShape cursorShape;
 	std::vector<sf::RectangleShape>dashOffsetShapes;
-	/*
+	
 	sf::Texture rTexture;
 	sf::Sprite sprite;
-	*/
+	
 	//sf::Shader m_shader;
 	//bool m_shaderLoaded;
 };

@@ -15,21 +15,7 @@ Item::~Item(){
 }
 
 void Item::update(int32_t dt){
-	/*
-	switch (state) {
-	case ItemState::ItemCooldown: {
-		_cooldownTimer -= dt;
-		if (_cooldownTimer >= 0) {
-			_cooldownTimer = 0;
-			state = ItemState::ItemActive;
-		}
-		break;
-	}
-	case ItemState::ItemActive: {
-		update(dt);
-	}
-	}
-	*/
+	CircleEntity::update(dt);
 }
 
 

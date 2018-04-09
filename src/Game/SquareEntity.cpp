@@ -21,6 +21,7 @@ Entity(){
 }
 
 void SquareEntity::update(int32_t dt){
+	Entity::update(dt);
 }
 
 /*Return false if no collision*/

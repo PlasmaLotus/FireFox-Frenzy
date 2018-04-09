@@ -61,7 +61,7 @@ bool Player::isAlive() {
 }
 void Player::update(int32_t dt)
 {
-	Entity::update(dt);
+	SquareEntity::update(dt);
 	_handleMovement(dt);
 	/*Projectiles*/
 	//handleProjectiles(dt);
@@ -184,7 +184,7 @@ void Player::handleCollision(Entity * e)
 					}
 				}
 				if (handle) {
-					CollisionStack stack{ p->getID(), GameLogic::PROJECTILE_COLLISION_DELAY_GENERAL };
+					CollisionStack stack{ p->getID(), p->_collisionDelay };
 					_collisions.push_back(stack);
 					_handleCollision(*p);
 				}

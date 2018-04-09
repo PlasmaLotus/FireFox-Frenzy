@@ -111,8 +111,8 @@ void GameLogic::reset() {
 	init();
 }
 
-void GameLogic::tick() {
-	dt = StateManager::getInstance().getElapsedTime();
+void GameLogic::tick(int dt) {
+	//dt = StateManager::getInstance().getElapsedTime();
 
 	switch (gameState)
 	{

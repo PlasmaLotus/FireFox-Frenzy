@@ -35,6 +35,7 @@ Energy::~Energy()
 
 void Energy::update(int32_t dt)
 {
+	Item::update(dt);
 	switch (state) {
 	case ItemState::ItemCooldown: {
 		_stateCooldown -= dt;
