@@ -25,17 +25,14 @@ Projectile::~Projectile(){
 
 void Projectile::update(int32_t dt)
 {
+	CircleEntity::update(dt);
 	prevPosX = posX;
 	prevPosY = posY;
-	//prevPosZ = posZ;
-	float speedX = 0.f;
-	float speedY = 0.f;
 	//posX += std::sin(orientation) * dt * velocityX;
 	//posY += std::cos(orientation) * dt * velocityY;
 	posX += std::sin(orientation) * velocityX;
 	posY += std::cos(orientation) * velocityY;
 	lifetime-= dt;
-	Entity::update(dt);
 }
 
 bool Projectile::isAlive() {

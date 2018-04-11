@@ -19,4 +19,4 @@ private:
 	int _idleTicks;
 };
 
-#endif
+#endif //TITLESCREEN

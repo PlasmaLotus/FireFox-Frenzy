@@ -7,7 +7,6 @@ MenuState(w, new PauseMenu()){
 	
 };
 PauseMenuState::~PauseMenuState() {
-
 }
 
 void PauseMenuState::tick(int dt, bool render) {

@@ -4,14 +4,11 @@ Updated Dec 25, 2016
 */
 
 /*Under Construction*/
-
+#ifndef _Menu_
+#define _Menu_
 #include <vector>
 #include "SFML\Graphics.hpp"
 #include "MenuItem.h"
-
-#ifndef _Menu_
-#define _Menu_
-
 
 class Menu {
 public:
@@ -26,7 +23,6 @@ public:
 	virtual void inputDown();
 	virtual void inputSelect();
 	virtual void inputBack();
-	//virtual virtual ~Menu();
 
 	sf::RenderWindow *window;
 	int selection;
@@ -37,17 +33,10 @@ public:
 	void addItem(MenuItem menuItem);
 
 	virtual void onSelection();
-
 	virtual void onItemIncrease();
-
 	virtual void onItemDecrease();
-
-	//void onItemSelect();
-
 	virtual void onItemChange();
-
 	virtual void onReturn();
-
 };
 
 #endif

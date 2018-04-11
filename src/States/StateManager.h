@@ -37,11 +37,11 @@ public:
 	static std::string getControllerConfigPath(int playerNumber);
 	static int getWindowWidth();
 	static int getWindowHeight();
-	//int64_t getBaseElapsedTime();
 	void _run();
 	EventManager eventManager;
 	AudioEventManager audioEventManager;
-
+	std::string getCurrentGameTimer();
+	void resetGameTimer();
 protected:
 	StateManager();
 	int _id{ 0 };
@@ -57,6 +57,6 @@ protected:
 	ControllerConfig p1Config;
 	ControllerConfig p2Config;
 	bool _renderFrame{ true };
+	sf::Clock gameTimer;
 };
-
-#endif
+#endif 

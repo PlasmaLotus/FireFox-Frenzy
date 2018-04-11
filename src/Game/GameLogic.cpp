@@ -111,8 +111,8 @@ void GameLogic::reset() {
 	init();
 }
 
-void GameLogic::tick() {
-	dt = StateManager::getInstance().getElapsedTime();
+void GameLogic::tick(int dt) {
+	//dt = StateManager::getInstance().getElapsedTime();
 
 	switch (gameState)
 	{
@@ -240,12 +240,16 @@ void GameLogic::_handleGameEnd() {
 	}
 	if (pAlive <= 1) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::GameEnd));
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::LastManStanding));
 		gameState = GameCurrentState::ENDED;
 	}
-
+	/*
 	if (_totalDT >= GAME_TIME_LIMIT_MAXIMUM) {
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::GameEnd));
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::TimeLimit));
 		gameState = GameCurrentState::ENDED;
 	}
+	*/
 }
 
 void GameLogic::addEntityIDToDelete(int id){

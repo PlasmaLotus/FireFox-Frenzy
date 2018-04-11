@@ -18,13 +18,14 @@ enum GameCurrentState { RUNNING, PAUSED, ENDED, COUNTDOWN };
 class GameLogic{
 public:
 	int frame = 0;
+	//int timer;
 	int32_t dt;
 	GameCurrentState gameState;
 
 	GameLogic();
 	~GameLogic();
 	void reset();
-	void tick();
+	void tick(int dt);
 	void pause();
 	void addEntity(Entity* e);
 	Entity *findEntity(int id);
@@ -41,8 +42,8 @@ public:
 	std::vector<Entity *> _entities;
 	std::stack<int> _idsToDestroy;
 	void addEntityIDToDelete(int id);
-	static const int PLAYER_COLLISION_HITBOX_WIDTH = 20;
-	static const int PLAYER_COLLISION_HITBOX_HEIGHT = 30;
+	static const int PLAYER_COLLISION_HITBOX_WIDTH =32;
+	static const int PLAYER_COLLISION_HITBOX_HEIGHT = 32;
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
 	static int const PLAYER_MAX_AMMO{ 1000 };
 
@@ -62,7 +63,8 @@ public:
 	int countdownTimer = GAME_COUNTDOWN_TIME;
 	int _countdownIt;
 	int _totalDT;
-	static const int PROJECTILE_COLLISION_DELAY_GENERAL{ 30 };
+	static const int PROJECTILE_COLLISION_DELAY_GENERAL{ 3000 };
+	static const int PROJECTILE_COLLISION_DELAY_AOE{ 300 };
 	static const float PROJECTILE_HITBOX_RADIUS_MINIMUM;
 	static const float PROJECTILE_HITBOX_RADIUS_MAXIMUM;
 	static const float PROJECTILE_SPEED_MINIMUM;
@@ -90,6 +92,7 @@ public:
 	static const int GAME_ENERGY_SPAWN_TIMER{ 20000 };
 	static const int GAME_ENERGY_SPAWN_AURA{ 75 };
 
+	static const int GAME_COLLISION_HITLAG{ 8 };
 private:
 	void init();
 	void _emptyAllEntities();

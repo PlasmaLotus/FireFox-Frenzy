@@ -1,13 +1,17 @@
 #include "Entity.h"
 #include "../States/StateManager.h"
-
+#include "GameLogic.h"
 Entity::Entity() :
 _id(StateManager::getInstance().getUniqueID()),
-orientation(0.f){
+orientation(0.f),
+_collisionDelay(GameLogic::PROJECTILE_COLLISION_DELAY_GENERAL),
+_hitlagFrames(0),
+_inHitlag(false){
 }
 
 Entity::~Entity()
 {
+	_collisions.clear();
 }
 
 
@@ -21,8 +25,13 @@ void Entity::update(int32_t dt)
 		}
 	}
 
-
-	//prevPosX
+	if (_hitlagFrames > 0) {
+		_hitlagFrames -= dt;
+	}
+	else {
+		_hitlagFrames = 0;
+	}
+	/**/
 }
 
 bool Entity::isAlive() {

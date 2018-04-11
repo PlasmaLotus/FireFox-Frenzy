@@ -2,6 +2,7 @@
 #include "../States/StateManager.h"
 #include "../Game/Shield.h"
 #include "../Game/GameLogic.h"
+#include <math.h>
 PlayerDrawable::PlayerDrawable() {
 
 }
@@ -30,6 +31,15 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 
 		dashOffsetShapes.push_back(r);
 	}
+	
+	if (!rTexture.loadFromFile("./Assets/Images/spaceship.png")) {
+		printf("Unable to load Spaceship PNG\n");
+	}
+	float f = 1.0 * GameLogic::PLAYER_COLLISION_HITBOX_WIDTH / rTexture.getSize().x * 1.0;
+	float f2 = 1.0 * GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT / rTexture.getSize().y * 1.0;
+	sprite.setTexture(rTexture);
+	sprite.setScale(sf::Vector2f(1.0* GameLogic::PLAYER_COLLISION_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT / rTexture.getSize().y ));
+	
 
 	// Load the shader
 	/*
@@ -53,6 +63,7 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 	//states.shader = &m_shader;
 	//states.texture = playerShape.getTexture();
 	target.draw(playerShape);
+	target.draw(sprite);
 	target.draw(cursorShape);
 
 	if (player->state == PlayerState::Dashing) {
@@ -115,8 +126,12 @@ void PlayerDrawable::update()
 	posY = player->posY;
 	playerShape.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
 	cursorShape.setPosition(sf::Vector2f(posX + player->cursorOrientationX, posY + player->cursorOrientationY));
-
-	/*Shader initialisation*/
+	sprite.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
+	//sprite.setRotation(std::abs(player->orientation * std::acos(-1) / std::atan(1) * 4));
+	//sprite.setRotation(std::asin(player->orientationX / player->orientationY));
+	//PI = atan(1)*4
+	//180* = atan(1)*4
+	/*Shader initialisatidwaon*/
 	/*
 	sf::Glsl::Ivec3 color{ playerShape.getFillColor().r, playerShape.getFillColor().g, playerShape.getFillColor().b };
 	//m_shader.setUniform();

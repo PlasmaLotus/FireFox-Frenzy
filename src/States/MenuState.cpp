@@ -10,7 +10,6 @@ MenuState::MenuState(sf::RenderWindow * w, Menu * m):
 window(w),
 menu(m)
 {
-	//currentMenu = new MainMenu(window);
 	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
 	p1Controller = new MenuController(p1KeyConfig, menu);
 	p2KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
@@ -32,7 +31,6 @@ void MenuState::tick(int dt, bool render){
 	renderer->render();
 	menu->tick();
 }
-
 
 MenuState::~MenuState()
 {

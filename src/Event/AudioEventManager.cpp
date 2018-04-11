@@ -15,17 +15,17 @@ AudioEventManager::~AudioEventManager() {
 bool AudioEventManager::_initSoundBuffers() {
 	sf::SoundBuffer buffer;
 	bool success = true;
-	if (!buffer.loadFromFile("Assets/Sounds/ding.flac"))
+	if (!buffer.loadFromFile("./Assets/Sounds/ding.flac"))
 		success = false;
 	_soundBufferMap[AudioEvent::DefaultEventAudio] = buffer;
 	
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("Assets/Sounds/countdown.mp3"))
+	if (!buffer.loadFromFile("./Assets/Sounds/countdown.mp3"))
 		success = false;
 	
 	buffer = sf::SoundBuffer();
 	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
-	if (!buffer.loadFromFile("Assets/Sounds/go.mp3"))
+	if (!buffer.loadFromFile("./Assets/Sounds/go.mp3"))
 		success = false;
 
 	_soundBufferMap[AudioEvent::AudioCountdownStart] = buffer;
