@@ -1,6 +1,3 @@
-#ifndef __MenuState__
-#define __MenuState__
-
 /*
 Created by PlasmaLotus
 Updated May 17, 2017

@@ -20,7 +20,6 @@ public:
 	Menu();
 	virtual ~Menu();
 	virtual void tick();
-	virtual void handleInput();
 	virtual void inputLeft();
 	virtual void inputRight();
 	virtual void inputUp();
@@ -37,18 +36,17 @@ public:
 	void setPreviousMenu(Menu* menu);
 	void addItem(MenuItem menuItem);
 
-	void onSelection();
+	virtual void onSelection();
 
-	void onItemIncrease();
+	virtual void onItemIncrease();
 
-	void onItemDecrease();
+	virtual void onItemDecrease();
 
 	//void onItemSelect();
 
-	void onItemChange();
+	virtual void onItemChange();
 
-	void onReturn();
-
+	virtual void onReturn();
 
 };
 

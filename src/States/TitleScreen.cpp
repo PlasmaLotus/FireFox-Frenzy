@@ -27,7 +27,7 @@ void TitleScreen::tick(int dt, bool render) {
 		if (i == menu->selection) {
 			printf(">>>");
 		}
-		printf("%s\n", menu->items.at(i).getName());
+		printf("%s\n", menu->items.at(i).getOptionString().c_str());
 	}
 	if (!input) {
 		_idleTicks += dt;

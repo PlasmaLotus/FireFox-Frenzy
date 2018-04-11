@@ -8,6 +8,7 @@ Updated May 17, 2017
 
 #include <stdint.h>
 #include <string.h>
+#include <stack>
 #include "State.h"
 #include "MenuState.h"
 #include "TitleScreen.h"
@@ -48,6 +49,7 @@ protected:
 	sf::RenderWindow window;
 	State *_currentState;
 	State *_newState;
+	std::stack<State*> _states;
 	sf::Clock currentTime;
 	sf::Time elapsedTime;
 	sf::Time renderElapsedTime;

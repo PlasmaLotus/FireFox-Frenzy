@@ -39,8 +39,8 @@ void StateManager::switchToState(State* state) {
 }
 
 void StateManager::goBack() {
-
-	_currentState->goBack();
+	_states.pop();
+	//_currentState->goBack();
 }
 
 void StateManager::quit() {
@@ -125,6 +125,7 @@ void StateManager::run()
 				_currentState = _newState;
 				_switchState = false;
 				_newState = nullptr;
+				_states.push(_currentState);
 			}
 		}
 
@@ -134,7 +135,8 @@ void StateManager::run()
 void StateManager::_run() {
 	eventManager.handleEvents(getElapsedTime());
 	audioEventManager.handleEvents(getElapsedTime());
-	_currentState->tick(getElapsedTime(), _renderFrame);
+	//_currentState->tick(getElapsedTime(), _renderFrame);
+	_states.top()->tick(getElapsedTime(), _renderFrame);
 }
 
 
