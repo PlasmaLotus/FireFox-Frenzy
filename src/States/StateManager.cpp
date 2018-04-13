@@ -139,7 +139,7 @@ void StateManager::_run() {
 }
 
 int64_t StateManager::getElapsedTime() {
-	printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
+	//printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
 	//return std::nearbyint( 1000.0 / FPS);
 	if (elapsedTime.asMicroseconds() > 0){
 		if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0 / FPS)) {
@@ -155,7 +155,7 @@ int64_t StateManager::getElapsedTime() {
 }
 
 int64_t StateManager::getRenderElapsedTime() {
-	printf("Render DT -- %d - %d    \n", 1000 / renderFPS, renderElapsedTime.asMicroseconds());
+	//printf("Render DT -- %d - %d    \n", 1000 / renderFPS, renderElapsedTime.asMicroseconds());
 	//return std::nearbyint( 1000.0 / renderFPS);
 	return renderElapsedTime.asMicroseconds();
 }

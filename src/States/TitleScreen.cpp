@@ -23,11 +23,12 @@ void TitleScreen::tick(int dt, bool render) {
 	menu->tick();
 	printf("NB SELECTIONS: %i\n", menu->items.size());
 	printf("CurrentSelection: %d\n", menu->selection);
+	printf("-- Menu Options --\n");
 	for (unsigned i = 0; i < menu->items.size(); ++i) {
 		if (i == menu->selection) {
 			printf(">>>");
 		}
-		printf("%s\n", menu->items.at(i).getOptionString().c_str());
+		printf("%s   \n", menu->items.at(i).getOptionString().c_str());
 	}
 	if (!input) {
 		_idleTicks += dt;
