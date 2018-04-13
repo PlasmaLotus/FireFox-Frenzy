@@ -17,14 +17,12 @@ public:
 	Menu();
 	virtual ~Menu();
 	virtual void tick();
-	virtual void handleInput();
 	virtual void inputLeft();
 	virtual void inputRight();
 	virtual void inputUp();
 	virtual void inputDown();
 	virtual void inputSelect();
 	virtual void inputBack();
-	//virtual virtual ~Menu();
 
 	sf::RenderWindow *window;
 	int selection;
@@ -34,18 +32,11 @@ public:
 	void setPreviousMenu(Menu* menu);
 	void addItem(MenuItem menuItem);
 
-	void onSelection();
-
-	void onItemIncrease();
-
-	void onItemDecrease();
-
-	//void onItemSelect();
-
-	void onItemChange();
-
-	void onReturn();
-
+	virtual void onSelection();
+	virtual void onItemIncrease();
+	virtual void onItemDecrease();
+	virtual void onItemChange();
+	virtual void onReturn();
 };
 
 #endif

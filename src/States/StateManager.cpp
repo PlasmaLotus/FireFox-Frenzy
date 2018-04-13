@@ -1,7 +1,6 @@
 #include "StateManager.h"
 #include "GameState.h"
 
-
 StateManager::StateManager():
 	_currentState(NULL),
 	_newState(NULL),
@@ -9,6 +8,7 @@ StateManager::StateManager():
 {
 	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "TACD");
 	_currentState = new TitleScreen(&window);
+	_states.push(_currentState);
 	eventManager.setAudioEventManager(&audioEventManager);
 }
 
@@ -39,8 +39,8 @@ void StateManager::switchToState(State* state) {
 }
 
 void StateManager::goBack() {
-
-	_currentState->goBack();
+	_states.pop();
+	//_currentState->goBack();
 }
 
 void StateManager::quit() {
@@ -53,7 +53,6 @@ sf::RenderWindow *StateManager::getWindow() {
 
 void StateManager::run()
 {
-
 	int frame = 0, milisecond = 0, second = 0, minute = 0;
 	double MS_PER_FRAME = (1000.0) / FPS;//1000 ms per seconds
 	gameTimer.restart();
@@ -102,7 +101,6 @@ void StateManager::run()
 			}
 			elapsedTime = currentTime.getElapsedTime();
 			//renderElapsedTime += currentTime.getElapsedTime();
-
 			renderElapsedTimeFloat += currentTime.getElapsedTime().asMicroseconds();
 			if (renderElapsedTimeFloat >= 1000.f / renderFPS) {
 				_renderFrame = true;
@@ -112,35 +110,33 @@ void StateManager::run()
 				//renderElapsedTimeFloat += elapsedTime.asMicroseconds();
 			}
 			_run();
-
 			{
 				gotoxy(0, 0);
 				printf("DT: %3.3lld, %Id, %I64d ---\n", elapsedTime.asSeconds(), elapsedTime.asMilliseconds(), elapsedTime.asMicroseconds());
 				printf("RenderDT: %3.3f, Elapsed:%I64d  Con: %3.3f ---\n", renderElapsedTimeFloat, elapsedTime.asMicroseconds(),  (1000.f / renderFPS));
-
-				//printf("%d:%d  Frame: %d ", minute, second, frame);
 				printf("NB Frames: %3.8f     Temps: %d    Clocks per Sec: %3.2f\n",
 					(float)elapsedTime.asMilliseconds() * 60, elapsedTime.asMilliseconds(), (float)CLOCKS_PER_SEC);
 			}
 
 			if (_switchState) {
+				_states.push(_newState);
 				delete _currentState;
 				_currentState = _newState;
 				_switchState = false;
 				_newState = nullptr;
 			}
 		}
-
 	return;
 }
 
 void StateManager::_run() {
 	eventManager.handleEvents(getElapsedTime());
 	audioEventManager.handleEvents(getElapsedTime());
-	_currentState->tick(getElapsedTime(), _renderFrame);
+	//_currentState->tick(getElapsedTime(), _renderFrame);
+	if (_states.size() > 0){
+		_states.top()->tick(getElapsedTime(), _renderFrame);
+	}
 }
-
-
 
 int64_t StateManager::getElapsedTime() {
 	printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
@@ -156,8 +152,6 @@ int64_t StateManager::getElapsedTime() {
 	else {
 		return 0;
 	}
-	
-
 }
 
 int64_t StateManager::getRenderElapsedTime() {

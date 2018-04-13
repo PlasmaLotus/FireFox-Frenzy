@@ -1,4 +1,3 @@
-
 /*
 Created by PlasmaLotus
 Updated May 17, 2017
@@ -14,7 +13,6 @@ Updated May 17, 2017
 #include "../Controller/MenuController.h"
 #include "../Controller/ControllerConfig.h"
 #include "../Renderer/MenuRenderer.h"
-//#include "../Main.h"
 
 class MenuState :public State
 {
@@ -32,7 +30,6 @@ public:
 	ControllerConfig* p2KeyConfig;
 	Controller *p2Controller;
 	sf::RenderWindow *window;
-	/**/
 	MenuRenderer *renderer;
 };
 

@@ -26,9 +26,3 @@ MainMenu::MainMenu(){
 
 MainMenu::~MainMenu() {
 }
-/*
-void MainMenu::inputSelect() {
-	nextMenu = new MainMenu(window, this);
-	//next
-}
-*/

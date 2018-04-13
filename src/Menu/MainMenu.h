@@ -15,10 +15,7 @@ Updated May 17, 2017
 class MainMenu : public Menu {
 public:
 	MainMenu();
-	//MainMenu(sf::RenderWindow* w, Menu *pm);
 	~MainMenu();
-	//sf::RenderWindow *window;
-	//void inputSelect();
 };
 
 #endif

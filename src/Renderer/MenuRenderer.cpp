@@ -32,7 +32,7 @@ bool MenuRenderer::initRenderer() {
 	//sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	shape.setRadius(100.f);
 	shape.setFillColor(sf::Color::Red);
-	debugText.setString("Debug Text");
+	//debugText.setString("Debug Text");
 	debugText.setFillColor(sf::Color::Magenta);
 	debugText.setOutlineColor(sf::Color::White);
 	debugText.setPosition(sf::Vector2f(100, 100));
@@ -49,9 +49,9 @@ bool MenuRenderer::initRenderer() {
 		//font.loadFromMemory("", 367112);
 	}
 	debugText.setFont(font);
-	debugText.setString("Hello world");
+	debugText.setString("Sf Text Test");
 	debugText.setCharacterSize(24);
-	debugText.setFillColor(sf::Color::Red);
+	//debugText.setFillColor(sf::Color::Red);
 	debugText.setStyle(sf::Text::Bold | sf::Text::Underlined);
 	debugText.setPosition(50, 50);
 

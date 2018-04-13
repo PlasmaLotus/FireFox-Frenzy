@@ -1,6 +1,6 @@
 /*
 Created by PlasmaLotus
-Updated May 17, 2017
+Updated 8 April, 2018
 */
 #ifndef __PLAYER__
 #define __PLAYER__

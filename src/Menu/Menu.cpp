@@ -18,15 +18,9 @@ Menu::Menu()
 
 void Menu::tick()
 {
-	handleInput();
 	if (selection < 0) {
 		selection = items.size() - 1;
 	}
-}
-
-void Menu::handleInput()
-{
-
 }
 
 void Menu::inputLeft()
