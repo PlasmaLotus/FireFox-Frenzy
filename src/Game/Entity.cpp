@@ -51,6 +51,15 @@ bool Entity::collidableWith(Entity e)
 	return true;
 }
 
+bool Entity::testCollision(Entity* e) {
+	if (e != nullptr) {
+		return (_testVerticalCollision(*e) && _testHorizontalCollision(*e));
+	}
+	else {
+		return false;
+	}
+}
+
 bool Entity::testCollision(Entity e) {
 	return (_testVerticalCollision(e) && _testHorizontalCollision(e));
 }

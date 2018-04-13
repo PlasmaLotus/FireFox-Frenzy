@@ -15,12 +15,9 @@ public:
 	virtual bool isAlive();
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
-	int _stateCooldown;
 
 	int aura;
-	int lifetime;
 	bool _collision;
-	bool _alive;
 };
 
 #endif // !Energy

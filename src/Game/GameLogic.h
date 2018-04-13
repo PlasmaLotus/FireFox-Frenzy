@@ -21,7 +21,6 @@ public:
 	//int timer;
 	int32_t dt;
 	GameCurrentState gameState;
-
 	GameLogic();
 	~GameLogic();
 	void reset();
@@ -53,6 +52,7 @@ public:
 	static float const PLAYER_MAX_VELOCITY;
 	static float const PLAYER_MAX_VELOCITY_DECREASE_RATE;
 	static float const PLAYER_FRICTION;
+	static float const PLAYER_SHIELD_FRICTION;
 	static float const PLAYER_VELOCITY_DEAD_ZONE;
 	static float const PLAYER_ACCELERATION_RATE;
 	static float const PLAYER_DASH_VELOCITY;
@@ -83,16 +83,18 @@ public:
 	static const float ENTITY_MINIMUM_WIDTH;
 	static const float ENTITY_MINIMUM_HEIGHT;
 
-	static const int ENERGY_MAX_AURA{ 100 };
+	static const int ENERGY_MAX_AURA{ 200 };
 	static const int ENERGY_MINIMUM_AURA{ 6 };
 	static const float ENERGY_MAX_RADIUS;
 	static const float ENERGY_MINIMUM_RADIUS;
 	static const int ENERGY_ITEM_COOLDOWN{ 3000 };
 	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
+	static const int ITEM_MINIMUM_LIFETIME{ 10000 };
 	static const int GAME_ENERGY_SPAWN_TIMER{ 20000 };
 	static const int GAME_ENERGY_SPAWN_AURA{ 75 };
 
 	static const int GAME_COLLISION_HITLAG{ 8 };
+	static const float POWERUP_RADIUS;
 private:
 	void init();
 	void _emptyAllEntities();

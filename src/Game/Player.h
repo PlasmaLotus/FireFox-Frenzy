@@ -12,6 +12,8 @@ Updated May 17, 2017
 #include <stdint.h>
 #include <vector>
 #include <cmath>
+#include "Powerup.h"
+#include "PowerUpItem.h"
 class GameLogic;
 enum PlayerState{ ShootWindup, Shooting, ShootCooldown, Moving, Dashing, Shielding};
 class Player: public SquareEntity{
@@ -44,16 +46,16 @@ public:
 	void _loseAmmo(int nb);
 
 	void setCursorOrientationFromMouse(int x, int y);
-	bool testCollision(Entity e);
-	bool testCollision(SquareEntity e);
-	bool testCollision(CircleEntity e);
+	bool testCollision(Entity *e);
+
 	void handleCollision();
 	void _handleCollision(Projectile p);
 	void _handleCollision(Energy e);
+	void _handleCollision(PowerUpItem p);
 	void handleCollision(Entity *e);
-	bool collidableWith(Entity e);
-	bool collidableWith(Projectile e);
-	bool collidableWith(Player e);
+	bool collidableWith(Entity* e);
+	bool collidableWith(Projectile* e);
+	bool collidableWith(Player* e);
 	int HP = 100;
 	bool _moveEngaged = false;
 	/*Shooting*/
@@ -94,5 +96,9 @@ public:
 	bool _shieldActive;
 	int _shieldActiveDuration;
 	void handleShield(int dt);
+
+	/*Powerup*/
+	PowerUp ability;
+	void handleAbility(int dt);
 };
 #endif // !__PLAYER__

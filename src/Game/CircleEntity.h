@@ -12,10 +12,14 @@ public:
 	~CircleEntity();
 	void setRadius(float r);
 	virtual void update(int32_t dt);
+	virtual bool testCollision(Entity* e);
+	virtual void handleCollision(Entity *e);
+	virtual void handleCollision();
+
+protected:
 	virtual bool testCollision(Entity e);
 	virtual bool testCollision(SquareEntity e);
 	virtual bool testCollision(CircleEntity e);
-	virtual void handleCollision();
-	virtual void handleCollision(Entity *e);
+
 };
 #endif

@@ -10,10 +10,12 @@ public:
 	~SquareEntity();
 	SquareEntity(float pX, float pY, float wdth, float hght);
 	virtual void update(int32_t dt);
-	virtual bool testCollision(Entity e);
-	virtual bool testCollision(SquareEntity e);
-	virtual bool testCollision(CircleEntity e);
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
+	virtual bool testCollision(Entity *e);
+protected:
+	virtual bool testCollision(CircleEntity e);
+	virtual bool testCollision(SquareEntity e);
+	virtual bool testCollision(Entity e);
 };
 #endif //

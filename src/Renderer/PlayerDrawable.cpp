@@ -79,39 +79,30 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 			}
 			target.draw(r);
 		}
-		/*
-		sf::RectangleShape dashShape;
-		dashShape.setFillColor(playerColor);
-		dashShape.setSize(sf::Vector2f(10, 20));
-		dashShape.setPosition(sf::Vector2f(player->prevPosX- player->width/2, player->prevPosY- player->height/2));
-		target.draw(dashShape);
-		*/
+
 	} 
 	else{
 		sf::RectangleShape r = dashOffsetShapes.at(0);
 		r.setPosition(posX, posY);
-		/*
-		for (int i = dashOffsetShapes.size() - 1; i >= 0; i--) {
-			sf::RectangleShape r = dashOffsetShapes.at(0);
-			r.setPosition(posX, posY);
-		}
-		*/
+
 	}
 
 	//Shield Display
-	if (player->shieldActive) {
-		//player->
+	//if (player->shieldActive) {
+	if (player->state == PlayerState::Shielding){
+		printf(" --- Player Shield Active ---\n");
 		int shieldHitboxExtension = 10;
 		sf::CircleShape shieldShape;
-		//class Shield &s{ player->_shield };
-		Projectile &sh{ player->_shield };
-		shieldShape.setFillColor(sf::Color(100,100,100,25));
-		shieldShape.setRadius(sh.width + shieldHitboxExtension);
+		//Projectile &sh{ player->_shield };
+		shieldShape.setFillColor(sf::Color(100,200,100,100));
+		shieldShape.setRadius(player->_shield.width);
+		//shieldShape.setPo
 		//shieldShape.setPosition(sf::Vector2f(sh.posX - ((sh.width + shieldHitboxExtension) / 2), sh.posY - ((sh.width + shieldHitboxExtension) / 2)));
-		shieldShape.setPosition(sf::Vector2f(sh.posX - sh.width - player->width/2, sh.posY  - sh.height- player->height/2));
+		//shieldShape.setPosition(sf::Vector2f(sh.posX - sh.width - player->width/2, sh.posY  - sh.height- player->height/2));
+		shieldShape.setPosition(sf::Vector2f(player->_shield.posX - (player->_shield.width ) , 
+			player->_shield.posY - (player->_shield.width ) ));
 
 		target.draw(shieldShape);
-
 	}
 }
 
@@ -125,8 +116,11 @@ void PlayerDrawable::update()
 	posX = player->posX;
 	posY = player->posY;
 	playerShape.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
+
 	cursorShape.setPosition(sf::Vector2f(posX + player->cursorOrientationX, posY + player->cursorOrientationY));
 	sprite.setPosition(sf::Vector2f(posX - player->width / 2, posY - player->height / 2));
+	
+	
 	//sprite.setRotation(std::abs(player->orientation * std::acos(-1) / std::atan(1) * 4));
 	//sprite.setRotation(std::asin(player->orientationX / player->orientationY));
 	//PI = atan(1)*4

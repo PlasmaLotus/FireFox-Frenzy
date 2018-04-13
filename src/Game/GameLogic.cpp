@@ -11,11 +11,12 @@ const float GameLogic::PLAYER_MAX_VELOCITY(9.0f);
 const float GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE(0.06f);
 const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
 const float GameLogic::PLAYER_FRICTION(0.98f);
+const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.92f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.06f);
 const float GameLogic::PLAYER_DASH_VELOCITY(13.54f);
 const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(3.0f);
-const float GameLogic::PLAYER_SHIELD_RADIUS(15.0f);
+const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
 
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 5.f );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
@@ -27,6 +28,7 @@ const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
 
 const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
 const float GameLogic::ENERGY_MINIMUM_RADIUS{ 5.f };
+const float GameLogic::POWERUP_RADIUS{ 5.f };
 
 //const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
 
@@ -197,7 +199,8 @@ void GameLogic::_handleEntitiesCollisions(int32_t dt){
 		for (int j = _entities.size() - 1; j >= 0; j--) {
 			Entity *e2 = _entities.at(j);
 			if (e1 != e2) {
-				if (e1->testCollision(*e2)) {
+				//Test if the 2 entities are even close to each other
+				if (e1->testCollision(e2)) {
 					e1->handleCollision(e2);
 					//printf("Collision Detected, ID:%d, ID:%d -  Distance: %3.3f!!!\n", e1->getID(), e2->getID(), e1->_distanceBetween(*e2));
 				}

@@ -22,6 +22,25 @@ void CircleEntity::update(int32_t dt){
 	Entity::update(dt);
 }
 
+bool CircleEntity::testCollision(Entity * e)
+{
+	if (e != nullptr) {
+		CircleEntity* ce = dynamic_cast<CircleEntity*>(e);
+		SquareEntity* se = dynamic_cast<SquareEntity*>(e);
+		if (ce != nullptr) {
+			return testCollision(*ce);
+		}
+		else if(se != nullptr){
+			return testCollision(*se);
+		}
+		else {
+			return testCollision (*e);
+		}
+	}
+	else
+		return false;
+}
+
 bool CircleEntity::testCollision(Entity e) {
 	return (_testVerticalCollision(e) && _testHorizontalCollision(e));
 }

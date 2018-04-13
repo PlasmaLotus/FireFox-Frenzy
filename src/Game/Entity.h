@@ -35,7 +35,7 @@ public:
 	int getID();
 	bool isID(int id);
 	virtual bool collidableWith(Entity e);
-	virtual bool testCollision(Entity e);
+	virtual bool testCollision(Entity*e);
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
 	float _distanceBetween(float x, float y);
@@ -47,6 +47,7 @@ public:
 	bool _inHitlag;
 
 protected:
+	virtual bool testCollision(Entity e);
 
 	bool _testVerticalCollision(Entity e);
 	bool _testHorizontalCollision(Entity e);

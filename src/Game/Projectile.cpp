@@ -1,24 +1,30 @@
 #include "Projectile.h"
 #include "Player.h"
 #include "../States/StateManager.h"
+#include "GameLogic.h"
 
-Projectile::Projectile(Player* pID) :
-	CircleEntity(0, 0, 10),
-	playerPtr(pID),
-	lifetime{ 3000 },
-	durability{ 1 },
-	orientationX{ 0.f },
-	orientationY{ 0.f },
-	power{1}
+Projectile::Projectile(int pID) :
+	Projectile(pID, 0.f, 0.f)
 {
 }
 	
 
 Projectile::Projectile(): 
-	Projectile(nullptr)
+	Projectile(getID(), 0.f, 0.f)
 {
-
 }
+
+Projectile::Projectile(int pID, float x, float y) :
+	CircleEntity(x, y, GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM),
+	_playerID(pID),
+	lifetime{ 3000 },
+	durability{ 1 },
+	orientationX{ 0.f },
+	orientationY{ 0.f },
+	power{ 1 }
+{
+}
+
 
 Projectile::~Projectile(){
 }
@@ -28,31 +34,34 @@ void Projectile::update(int32_t dt)
 	CircleEntity::update(dt);
 	prevPosX = posX;
 	prevPosY = posY;
-	//posX += std::sin(orientation) * dt * velocityX;
-	//posY += std::cos(orientation) * dt * velocityY;
 	posX += std::sin(orientation) * velocityX;
 	posY += std::cos(orientation) * velocityY;
 	lifetime-= dt;
+	/*
+	static float total_time = 0.00001;
+	total_time += dt * 100;
+	//p->velocityX = p->velocityX * sin(total_time);
+	*/
 }
 
 bool Projectile::isAlive() {
-	//return (durability > 0 && lifetime > 0);
-	return (lifetime > 0);
+	return (durability > 0 && lifetime > 0);
+	//return (lifetime > 0);
 }
 
-bool Projectile::collidableWith(Entity e)
-{
+bool Projectile::collidableWith(Entity* e){
 	return true;
 }
 
-bool Projectile::collidableWith(Projectile e)
-{
-	return (e.getPlayerID() != getPlayerID());
+bool Projectile::collidableWith(Item* e) {
+	return false;
+} 
+bool Projectile::collidableWith(Projectile* e){
+	return (e->getPlayerID() != getPlayerID());
 }
 
-bool Projectile::collidableWith(Player e)
-{
-	return (e.getID() != getPlayerID());
+bool Projectile::collidableWith(Player* e){
+	return (e->getID() != getPlayerID());
 }
 
 void Projectile::handleCollision()
@@ -63,15 +72,65 @@ void Projectile::handleCollision()
 
 void Projectile::handleCollision(Entity *e)
 {
-	handleCollision();
+	try {
+		Player *p = dynamic_cast<Player *>(e);
+		if (p != nullptr) {
+			//handlecollisoin with player;
+			handleCollision();
+		}
+	}
+	catch (const std::bad_cast& cast) {
+	}
+	try {
+		Projectile *p = dynamic_cast<Projectile *>(e);
+		if (p != nullptr) {
+			//handlecollisoin with Projectile;
+			handleCollision();
+		}
+	}
+	catch (const std::bad_cast& cast) {
+	}
+	//else donothing
 }
 
-Player * Projectile::getPlayer()
+bool Projectile::testCollision(Entity * e)
 {
-	return playerPtr;
+	try {
+		if (e != nullptr) {
+			CircleEntity* ce = dynamic_cast<CircleEntity*>(e);
+			SquareEntity* se = dynamic_cast<SquareEntity*>(e);
+			Player* pe = dynamic_cast<Player*>(e);
+			Projectile *pre = dynamic_cast<Projectile*>(e);
+			Item *ie = dynamic_cast<Item*>(e);
+
+			if (pe != nullptr) {
+				return (collidableWith(pe) ? CircleEntity::testCollision(*pe) : false);
+			}
+			else if (pre != nullptr) {
+				return (collidableWith(pre) ? CircleEntity::testCollision(*pre) : false);
+			}
+			else if (ie != nullptr) {
+				return (collidableWith(ie) ? CircleEntity::testCollision(*ie) : false);
+			}
+			else if (ce != nullptr) {
+				return CircleEntity::testCollision(*ce);
+			}
+			else if (se != nullptr) {
+				return CircleEntity::testCollision(*se);
+			}
+			else {
+				return (collidableWith(e) ? CircleEntity::testCollision(*e) : false);
+			}
+		}
+		else
+			return false;
+	}
+	catch (const std::bad_cast& cast) {
+		return false;
+	}
 }
 
 int Projectile::getPlayerID()
 {
-	return playerPtr->getID();
+	return _playerID;
 }

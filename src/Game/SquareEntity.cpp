@@ -47,3 +47,22 @@ void SquareEntity::handleCollision( Entity *e){
 	handleCollision();
 }
 
+bool SquareEntity::testCollision(Entity * e)
+{
+	if (e != nullptr) {
+		CircleEntity* ce = dynamic_cast<CircleEntity*>(e);
+		SquareEntity* se = dynamic_cast<SquareEntity*>(e);
+		if (ce != nullptr) {
+			return testCollision(*ce);
+		}
+		else if (se != nullptr) {
+			return testCollision(*se);
+		}
+		else {
+			return testCollision(*e);
+		}
+	}
+	else
+		return false;
+}
+

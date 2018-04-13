@@ -1,30 +1,38 @@
 #include "Powerup.h"
+#include "GameLogic.h"
 
 
+PowerUp::PowerUp():
+lifetime(100){
+}
 
-PowerUp::PowerUp()
+PowerUp::~PowerUp() {
+}
+
+int PowerUp::onDamageTaken(int damage){
+	return damage;
+}
+
+void PowerUp::onDash()
 {
 }
 
-
-PowerUp::~PowerUp()
+int PowerUp::onShieldDamageTaken(int damage)
 {
+	return damage;
 }
 
-void PowerUp::update(int32_t dt)
-{
-	Item::update(dt);
+void PowerUp::update(int dt){
 }
 
-bool PowerUp::isAlive()
+Projectile * PowerUp::getProjectile(int id, float x, float y)
 {
-	return true;
+	Projectile *p{ new Projectile(id, x, y) };
+	p->durability = 1;
+	p->lifetime = 600;
+	return p;
 }
 
-void PowerUp::handleCollision()
-{
-}
-
-void PowerUp::handleCollision(Entity * e)
-{
+bool PowerUp::isAlive(){
+	return (lifetime >= 0);
 }

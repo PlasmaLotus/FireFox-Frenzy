@@ -21,54 +21,30 @@ Item(x, y, GameLogic::ENERGY_MINIMUM_RADIUS),
 _collision(false),
 aura(amount)
 {
-	state = ItemState::ItemCooldown;
+	//state = ItemState::ItemCooldown;
 	_stateCooldown = GameLogic::ENERGY_ITEM_COOLDOWN;
 	//calc radius
 	setRadius((GameLogic::ENERGY_MAX_RADIUS - GameLogic::ENERGY_MINIMUM_RADIUS) * amount / GameLogic::ENERGY_MAX_AURA + GameLogic::ENERGY_MINIMUM_RADIUS);
-	lifetime = 10000;
+	//lifetime = 10000;
 	_alive = true;
 }
 
-Energy::~Energy()
-{
+Energy::~Energy(){
 }
 
-void Energy::update(int32_t dt)
-{
+void Energy::update(int32_t dt){
 	Item::update(dt);
-	switch (state) {
-	case ItemState::ItemCooldown: {
-		_stateCooldown -= dt;
-		if (_stateCooldown <= 0) {
-			_stateCooldown = 0;
-			state = ItemState::ItemActive;
-		}
-		break;
-	}
-	case ItemState::ItemActive: {
-		lifetime -= dt;
-		if (lifetime < 0) {
-			_alive = false;
-		}
-		break;
-	}
-	default:break;
-	}
-
 }
 
-bool Energy::isAlive()
-{
+bool Energy::isAlive(){
 	return _alive;
 }
 
-void Energy::handleCollision()
-{
+void Energy::handleCollision(){
 	_collision = true;
 	_alive = false;
 }
 
-void Energy::handleCollision(Entity * e)
-{
+void Energy::handleCollision(Entity * e){
 	//handleCollision();
 }

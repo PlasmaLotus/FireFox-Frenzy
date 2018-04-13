@@ -17,7 +17,8 @@ public:
 	virtual void handleCollision(Entity *e);
 	
 	ItemState state;
-	//int _cooldownTimer;
-
+	int lifetime;
+	int _stateCooldown;
+	bool _alive;
 };
 #endif // !Item

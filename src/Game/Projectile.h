@@ -3,6 +3,7 @@
 #ifndef __PROJECTILE__
 #define __PROJECTILE__
 #include "CircleEntity.h"
+#include "Item.h"
 #include <vector>
 class Player;
 //enum PlayerState { ShootWindup, Shooting, ShootCooldown, Moving };
@@ -14,20 +15,26 @@ public:
 	int durability;
 	int lifetime;
 	int power;
-	Projectile(Player* pID);
+	Projectile(int pID);
 	Projectile();
+	Projectile(int pID, float x, float y);
 	virtual ~Projectile();
 	virtual void update(int32_t dt);
 	virtual bool isAlive();
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
-	bool collidableWith(Entity e);
-	bool collidableWith(Projectile e);
-	bool collidableWith(Player e);
-
-
-	Player *playerPtr;
-	Player* getPlayer();
+	virtual bool testCollision(Entity * e);
 	int getPlayerID();
+	int _playerID;
+protected:
+	bool collidableWith(Player* e);
+	bool collidableWith(Projectile* e);
+	bool collidableWith(Entity* e);
+	bool collidableWith(Item* e);
+	/*
+	virtual bool testCollision(CircleEntity e);
+	virtual bool testCollision(SquareEntity e);
+	virtual bool testCollision(Entity e);
+	*/
 };
 #endif // !__PROJECTILE__

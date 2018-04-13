@@ -1,16 +1,21 @@
+#ifndef __PowerUp__
+#define __PowerUp__
 
-#include "Item.h"
+#include "Projectile.h"
+enum PowerUpType { Normal, Fire, Ice, Plasma };
 
-enum PowerUpType{Fire, Ice, Plasma};
-
-class PowerUp :
-	public Item
-{
+class PowerUp {
 public:
 	PowerUp();
 	virtual ~PowerUp();
-	virtual void update(int32_t dt);
-	virtual bool isAlive();
-	virtual void handleCollision();
-	virtual void handleCollision(Entity *e);
-};
+	
+	PowerUpType powerUpType;
+	int onDamageTaken(int damage);
+	void onDash();
+	int onShieldDamageTaken(int damage);
+	void update(int dt);
+	int lifetime;
+	virtual Projectile* getProjectile(int id, float x, float y);
+	bool isAlive();
+}; 
+#endif //PowerUp 
