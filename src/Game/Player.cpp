@@ -20,6 +20,9 @@ Player::Player(GameLogic *g) :
 Player::Player(GameLogic * g, float x, float y):
 	SquareEntity(x, y, GameLogic::PLAYER_COLLISION_HITBOX_WIDTH, GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT),
 	_game(g),
+	HP(GameLogic::PLAYER_BASE_HP),
+	ammo(GameLogic::PLAYER_BASE_AMMO),
+	dashVelocity(GameLogic::PLAYER_DASH_VELOCITY),
 	state(PlayerState::Moving){
 	velocityX = 0.f;
 	velocityY = 0.f;
@@ -30,10 +33,8 @@ Player::Player(GameLogic * g, float x, float y):
 	cursorOrientationX = 0.f;
 	cursorOrientationY = 0.f;
 	shootHeld = false;
-	dashVelocity = 5.0f;
-	dashMaxDuration = 150;
+	//dashVelocity = 5.0f;
 	dashTime = 0;
-	ammo = 500;
 	//dashAmmo = 3;
 	shieldActive = false;
 	_shieldActive = false;
@@ -146,7 +147,7 @@ void Player::_handleCollision(Projectile p){
 	/*Projectile hits the player*/
 	if (shieldActive) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldHit, this));
-		_loseAmmo(p.power / 2);
+		_loseAmmo(p.power *GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER);
 	}
 	else {
 		HP -= p.power;

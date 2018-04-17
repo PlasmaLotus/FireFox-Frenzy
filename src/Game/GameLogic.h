@@ -13,6 +13,7 @@ Updated May 13, 2017
 #include "Player.h"
 #include "Projectile.h"
 #include "Energy.h"
+#include "Map.h"
 enum GameCurrentState { RUNNING, PAUSED, ENDED, COUNTDOWN };
 
 class GameLogic{
@@ -33,7 +34,7 @@ public:
 	static const int NB_PLAYERS{ 2 };
 	Player *getPlayer(int playerNumber);
 	Player getPlayerCopy(int playerNumber);
-
+	Map map;
 	Player __otherPlayers[NB_PLAYERS -1];
 	std::vector<Vector2> _spawnPoints;
 	std::vector<int> _playerIDs;
@@ -45,6 +46,7 @@ public:
 	static const int PLAYER_COLLISION_HITBOX_HEIGHT = 32;
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
 	static int const PLAYER_MAX_AMMO{ 1000 };
+	static int const PLAYER_BASE_AMMO{ 500 };
 
 	static const int PLAYER_DASH_DURATION{ 150 };
 	static const int PLAYER_DASH_RECHARGE_COOLDOWN{ 250 };
@@ -74,6 +76,7 @@ public:
 	static const int PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST{ 100 };
 	static const int PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME{ 2500 };
 
+	static const int PLAYER_BASE_HP{10};
 	static const int PLAYER_SHOOT_COOLDOWN{ 7 };
 	static const int PLAYER_DASH_MAXIMUM_ENERGY_COST{ 100 };
 	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 2000 };
@@ -94,6 +97,7 @@ public:
 	static const int GAME_ENERGY_SPAWN_AURA{ 75 };
 
 	static const int GAME_COLLISION_HITLAG{ 8 };
+	static const float GAME_SHIELD_ENERGY_LOSS_MULTIPLYER;
 	static const float POWERUP_RADIUS;
 private:
 	void init();
@@ -101,6 +105,7 @@ private:
 	void _handleEntitesEnd();
 	void _handleEntitiesUpdate(int32_t dt);
 	void _handleEntitiesCollisions(int32_t dt);
+	void _handleMapCollision(int32_t dt);
 	void _handleGameEnd();
 	void _spawnItems();
 	void _spawnEnergy();

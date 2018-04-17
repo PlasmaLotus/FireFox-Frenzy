@@ -27,8 +27,9 @@ const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
 
 const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
-const float GameLogic::ENERGY_MINIMUM_RADIUS{ 5.f };
+const float GameLogic::ENERGY_MINIMUM_RADIUS{ 3.f };
 const float GameLogic::POWERUP_RADIUS{ 5.f };
+const float GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER{ 0.90f };
 
 //const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
 
@@ -156,6 +157,7 @@ void GameLogic::tick(int dt) {
 		printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
 		_handleEntitiesUpdate(dt);
 		_handleEntitiesCollisions(dt);
+		_handleMapCollision(dt);
 		_handleEntitesEnd();
 		_handleGameEnd();
 		break;
@@ -206,6 +208,13 @@ void GameLogic::_handleEntitiesCollisions(int32_t dt){
 				}
 			}
 		}
+	}
+}
+
+void GameLogic::_handleMapCollision(int32_t dt) {
+	for (int i = _entities.size() - 1; i >= 0; i--) {
+		Entity *e = _entities.at(i);
+		//map.testCollision(e);
 	}
 }
 

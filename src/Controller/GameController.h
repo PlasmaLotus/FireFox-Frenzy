@@ -10,20 +10,22 @@ Updated May 13, 2017
 #include "../Game/Player.h"
 #include "../States/State.h"
 
-//enum MenuCommands{};
 
+//enum MenuCommands{};
+class GameState;
 class GameController : public Controller {
 public:
 	GameController(ControllerConfig* config, Player* entity);
-	GameController(State *state, ControllerConfig* config, Player* entity);
+	GameController(GameState *state, ControllerConfig* config, Player* entity);
 	~GameController();
 	bool handleInput();
 	void handleJoystickAxis(sf::Joystick::Axis axis);
 	void handleMouseAxis();
 	void setPlayer(Player* e);
+	void setState(GameState* s);
 private:
 	Player *player;
-	State *state;
+	GameState *state;
 	void handleCommand(ControllerCommand command);
 	float pAngleX;
 	float pAngleY;

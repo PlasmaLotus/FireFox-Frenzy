@@ -35,6 +35,26 @@ bool GameRenderer::initRenderer() {
 	if (!font.loadFromFile("Assets/Fonts/LemonMilk/LemonMilk.otf"))
 		success = false;
 
+	// player 1 (left side of the screen)
+	p1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
+
+	// player 2 (right side of the screen)
+	p2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
+
+	/*
+	p1View.zoom(2.0f);
+	p2View.zoom(2.0f);
+	*/
+
+	// mini-map (upper-right corner)
+	//minimapView.setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f));
+	/*
+	window->setView(p1View);
+	window->setView(p2View);
+	*/
+	//window->view
+	window->setView(window->getDefaultView());
+	//window->setView(minimapView);
 	return success;
 }
 
@@ -46,6 +66,9 @@ void GameRenderer::draw(){
 	drawPlayers();
 	drawProjectiles();
 	drawItems();
+	drawMap();
+	handleViews();
+	//window->draw();
 }
 
 void GameRenderer::display() {
@@ -54,9 +77,15 @@ void GameRenderer::display() {
 
 void GameRenderer::drawPlayers(){
 	playerDrawable1->update();
-	window->draw(*playerDrawable1);
 	playerDrawable2->update();
+	//window->setView(p1View);
+	window->draw(*playerDrawable1);
 	window->draw(*playerDrawable2);
+	/*
+	window->setView(p2View);
+	window->draw(*playerDrawable1);
+	window->draw(*playerDrawable2);
+	*/
 }
 
 void GameRenderer::drawProjectiles(){
@@ -75,6 +104,11 @@ void GameRenderer::drawProjectiles(){
 		catch (const std::bad_cast& cast){
 		}
 	}
+}
+
+void GameRenderer::drawMap()
+{
+	//Map = game->map;
 }
 
 void GameRenderer::drawItems() {
@@ -105,6 +139,13 @@ void GameRenderer::addGame(GameLogic* g) {
 }
 void GameRenderer::addWindow(sf::RenderWindow* g) {
 	window = g;
+}
+void GameRenderer::handleViews(){
+	//setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f));
+	Player*p = game->getPlayer(1);
+	//p1View.move(p->posX - p->prevPosX, p->posY - p->prevPosY);
+	p1View.setCenter(playerDrawable1->player->posX, playerDrawable1->player->posY);
+	p2View.setCenter(playerDrawable2->player->posX, playerDrawable2->player->posY);
 }
 sf::Texture GameRenderer::getLastFrame() {
 	return lastFrame;

@@ -4,19 +4,18 @@ Updated May 13, 2017
 */
 #include "GameController.h"
 #include "../States/StateManager.h"
+#include "../States/GameState.h"
 
 /*The controller recieves input from a Keyboard or Joystick and outputs Commands to execute on the Board and Game*/
 GameController::GameController(ControllerConfig* c, Player* e) :
-Controller(c),
-player(e)
-{
-	mode = ControlMode::Joystick;
+	GameController(nullptr, c, e){
 }
 
-GameController::GameController(State *s, ControllerConfig * c, Player * e):
+GameController::GameController(GameState *s, ControllerConfig * c, Player * e):
 	Controller(c),
 	player(e),
 	state(s){
+	mode = ControlMode::Joystick;
 }
 
 GameController::~GameController(){
@@ -108,6 +107,9 @@ void GameController::handleCommand(ControllerCommand command){
 		case ControllerCommand::Pause:
 		{
 			//menu->inputSelect();
+			if (state != nullptr) {
+				state->pause();
+			}
 			break;
 		}
 		case ControllerCommand::Cheat:
@@ -211,5 +213,9 @@ void GameController::handleMouseAxis() {
 }
 void GameController::setPlayer(Player* e){
         player = e;
+}
+
+void GameController::setState(GameState * s){
+	state = s;
 }
 

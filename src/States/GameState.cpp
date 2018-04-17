@@ -5,6 +5,7 @@ Updated May 13, 2017
 
 #include "GameState.h"
 #include "../States/StateManager.h"
+#include "../States/PauseMenuState.h"
 
 GameState::GameState(sf::RenderWindow *w):
 	State(){
@@ -63,14 +64,15 @@ GameLogic * GameState::getGame(){
 }
 
 void GameState::pause() {
-	/*
+	
 	if (game->gameState != GameCurrentState::PAUSED) {
 		game->gameState = GameCurrentState::PAUSED;
+		//StateManager::getInstance().switchToState(new PauseMenuState(window));
 	}
 	else {
 		game->gameState = GameCurrentState::RUNNING;
 	}
-	*/
+	
 }
 
 void GameState::reset() {

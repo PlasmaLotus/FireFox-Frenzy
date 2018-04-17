@@ -56,7 +56,7 @@ public:
 	bool collidableWith(Entity* e);
 	bool collidableWith(Projectile* e);
 	bool collidableWith(Player* e);
-	int HP = 100;
+	int HP;
 	bool _moveEngaged = false;
 	/*Shooting*/
 	bool shootHeld{ false };

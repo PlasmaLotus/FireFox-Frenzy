@@ -16,6 +16,7 @@ Updated Dec 25, 2016
 #include "Renderer.h"
 #include "PlayerDrawable.h"
 
+
 class GameRenderer : public Renderer{
 public:
 
@@ -27,9 +28,11 @@ public:
 	void display();
 	void drawPlayers();
 	void drawProjectiles();
+	void drawMap();
 	void drawItems();
 	void addGame(GameLogic * g);
 	void addWindow(sf::RenderWindow * g);
+	void handleViews();
 	sf::Texture getLastFrame();
 
 	GameRenderer();
@@ -49,7 +52,9 @@ public:
 	sf::CircleShape shape;
 	PlayerDrawable * playerDrawable1;
 	PlayerDrawable * playerDrawable2;
-
+	sf::View minimapView;
+	sf::View p1View;
+	sf::View p2View;
 };
 
 #endif // !__Game_Renderer__
