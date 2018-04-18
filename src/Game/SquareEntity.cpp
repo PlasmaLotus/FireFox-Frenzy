@@ -32,12 +32,17 @@ bool SquareEntity::testCollision(SquareEntity e) {
 	return (_testVerticalCollision(e) && _testHorizontalCollision(e));
 }
 bool SquareEntity::testCollision(CircleEntity e) {
+	return (_testHorizontalCollision(e) && _testVerticalCollision(e));
+
+	/*
 	Vector2 v1{ posX - width / 2, posY - height / 2 };
 	Vector2 v2{ posX - width / 2, posY + height / 2 };
 	Vector2 v3{ posX + width / 2, posY + height / 2 };
 	Vector2 v4{ posX + width / 2, posY - height / 2 };
+	
 	return (e._distanceBetween(v1) <= e.width || e._distanceBetween(v2) <= e.width ||
 		e._distanceBetween(v3) <= e.width || e._distanceBetween(v4) <= e.width);
+	*/
 }
 
 void SquareEntity::handleCollision(){

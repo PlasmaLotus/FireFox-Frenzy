@@ -35,6 +35,13 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	if (!rTexture.loadFromFile("./Assets/Images/spaceship.png")) {
 		printf("Unable to load Spaceship PNG\n");
 	}
+
+	if (!m_font.loadFromFile("./Assets/fonts/Minecraft.ttf")) {
+		printf("Unable to load Minecraft Font\n");
+	}
+	m_hpText = sf::Text("HP", m_font, 12);
+	m_hpText.setFillColor(sf::Color::Red);
+
 	float f = 1.0 * GameLogic::PLAYER_COLLISION_HITBOX_WIDTH / rTexture.getSize().x * 1.0;
 	float f2 = 1.0 * GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT / rTexture.getSize().y * 1.0;
 	sprite.setTexture(rTexture);
@@ -104,6 +111,7 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 
 		target.draw(shieldShape);
 	}
+	target.draw(m_hpText);
 }
 
 bool PlayerDrawable::onLoad()
@@ -135,5 +143,14 @@ void PlayerDrawable::update()
 	m_shader.setUniform("frag_LightColor", color);
 	m_shader.setUniform("frag_LightAttenuation", 50);
 	*/
+	if (_hp != player->HP) {
+		_hp = player->HP;
+		std::string s;
+		s += std::to_string(_hp);
+		s += "/";
+		s += std::to_string(GameLogic::PLAYER_BASE_HP);
+		m_hpText.setString(s);
+	}
+	m_hpText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY + player->height + 10);
 
 }

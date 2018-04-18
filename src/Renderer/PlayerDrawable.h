@@ -47,6 +47,9 @@ public:
 	sf::Texture rTexture;
 	sf::Sprite sprite;
 	
+	sf::Font m_font;
+	sf::Text m_hpText;
+	int _hp{ 0 };
 	//sf::Shader m_shader;
 	//bool m_shaderLoaded;
 };
