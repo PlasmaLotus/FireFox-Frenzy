@@ -2,26 +2,24 @@
 Created by PlasmaLotus
 Updated May 13, 2017
 */
-
 #include "GameLogic.h"
-#include "../Main.h"
 #include "../States/StateManager.h"
 
-const float GameLogic::PLAYER_MAX_VELOCITY(9.0f);
+const float GameLogic::PLAYER_MAX_VELOCITY(2.0f);
 const float GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE(0.06f);
 const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
 const float GameLogic::PLAYER_FRICTION(0.98f);
 const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.92f };
-const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.001f);
-const float GameLogic::PLAYER_ACCELERATION_RATE(0.06f);
-const float GameLogic::PLAYER_DASH_VELOCITY(13.54f);
-const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(3.0f);
+const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
+const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
+const float GameLogic::PLAYER_DASH_VELOCITY(7.0f);
+const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(2.30f);
 const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
 
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 5.f );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
-const float GameLogic::PROJECTILE_SPEED_MINIMUM( 3.0f );
-const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 9.0f );
+const float GameLogic::PROJECTILE_SPEED_MINIMUM( 1.0f );
+const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 6.0f );
 const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
@@ -30,8 +28,10 @@ const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
 const float GameLogic::ENERGY_MINIMUM_RADIUS{ 3.f };
 const float GameLogic::POWERUP_RADIUS{ 5.f };
 const float GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER{ 0.90f };
-
-//const float GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME(2500);
+/*
+const float GameLogic::GAME_SHOT_ENERGY_LOSS_MULTIPLYER{ 0.90f };
+const float GameLogic::GAME_DASH_ENERGY_LOSS_MULTIPLYER{ 0.90f };
+*/
 
 GameLogic::GameLogic() :
 	gameState(GameCurrentState::COUNTDOWN){
@@ -80,16 +80,6 @@ void GameLogic::init() {
 		Player *p2{ new Player(this, v2) };
 		Player *p3{ new Player(this, v3) };
 		Player *p4{ new Player(this, v4) };
-		/*
-		p1->posX = v1.x;
-		p1->posY = v1.y;
-		p2->posX = v2.x;
-		p2->posY = v2.y;
-		p3->posX = v3.x;
-		p3->posY = v3.y;
-		p4->posX = v4.x;
-		p4->posY = v4.y;
-		*/
 
 		_playerIDs.push_back(p1->getID());
 		__playerIDs[0] = p1->getID();
@@ -115,7 +105,6 @@ void GameLogic::reset() {
 }
 
 void GameLogic::tick(int dt) {
-	//dt = StateManager::getInstance().getElapsedTime();
 
 	switch (gameState)
 	{
@@ -145,7 +134,6 @@ void GameLogic::tick(int dt) {
 		}
 		break;
 	case GameCurrentState::RUNNING:
-		//dt = StateManager::getInstance().getElapsedTime();
 		//printf("GameTick:  DT - %ld\n", dt);
 		frame++;
 		_totalDT += dt;
@@ -313,7 +301,6 @@ Player& GameLogic::findPlayer(int id) {
 			}
 		}
 	}
-
 }
 
 Player * GameLogic::getPlayer(int playerNumber){
@@ -346,12 +333,10 @@ Player GameLogic::getPlayerCopy(int playerNumber){
 	}
 }
 
-void GameLogic::_spawnItems()
-{
+void GameLogic::_spawnItems(){
 }
 
-void GameLogic::_spawnEnergy()
-{
+void GameLogic::_spawnEnergy(){
 	for (int i = 0; i < _spawnPoints.size(); i++) {
 		Vector2 v = _spawnPoints.at(i);
 		Energy *e{ new Energy(v, GAME_ENERGY_SPAWN_AURA) };
@@ -359,6 +344,5 @@ void GameLogic::_spawnEnergy()
 	}
 }
 
-void GameLogic::_spawnPowerUps()
-{
+void GameLogic::_spawnPowerUps(){
 }

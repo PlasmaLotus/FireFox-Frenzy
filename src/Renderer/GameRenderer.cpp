@@ -58,6 +58,21 @@ bool GameRenderer::initRenderer() {
 	return success;
 }
 
+void GameRenderer::addPlayerAlert(Player * p, std::string text){
+	if (playerDrawable1->player == p) {
+		playerDrawable1->addAlert(text);
+	}
+	else if (playerDrawable2->player == p) {
+		playerDrawable1->addAlert(text);
+	}
+	else{}
+}
+
+void GameRenderer::addPlayerAlert(int playerID, std::string text){
+	Player&p = game->findPlayer(playerID);
+	addPlayerAlert(&p, text);
+}
+
 void GameRenderer::clear() {
 	window->clear();
 }

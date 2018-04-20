@@ -34,8 +34,8 @@ void Projectile::update(int32_t dt)
 	CircleEntity::update(dt);
 	prevPosX = posX;
 	prevPosY = posY;
-	posX += std::sin(orientation) * velocityX;
-	posY += std::cos(orientation) * velocityY;
+	posX += std::sin(orientation) * velocityX * dt;
+	posY += std::cos(orientation) * velocityY * dt;
 	lifetime-= dt;
 	/*
 	static float total_time = 0.00001;

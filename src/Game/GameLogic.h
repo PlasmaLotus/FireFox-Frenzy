@@ -16,7 +16,7 @@ Updated May 13, 2017
 #include "Map.h"
 enum GameCurrentState { RUNNING, PAUSED, ENDED, COUNTDOWN };
 
-class GameLogic{
+class GameLogic {
 public:
 	int frame = 0;
 	//int timer;
@@ -35,15 +35,17 @@ public:
 	Player *getPlayer(int playerNumber);
 	Player getPlayerCopy(int playerNumber);
 	Map map;
-	Player __otherPlayers[NB_PLAYERS -1];
+	Player __otherPlayers[NB_PLAYERS - 1];
 	std::vector<Vector2> _spawnPoints;
 	std::vector<int> _playerIDs;
 	int __playerIDs[4]{ -1 };
 	std::vector<Entity *> _entities;
 	std::stack<int> _idsToDestroy;
 	void addEntityIDToDelete(int id);
-	static const int PLAYER_COLLISION_HITBOX_WIDTH =32;
-	static const int PLAYER_COLLISION_HITBOX_HEIGHT = 32;
+	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 32 };
+	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 32 };
+	static const int PLAYER_DISPLAY_HITBOX_WIDTH{ 48 };
+	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 48 };
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
 	static int const PLAYER_MAX_AMMO{ 1000 };
 	static int const PLAYER_BASE_AMMO{ 500 };
@@ -74,9 +76,10 @@ public:
 	static const float PLAYER_SHIELD_RADIUS;
 
 	static const int PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST{ 100 };
+	static const int PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME{ 3 };
 	static const int PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME{ 2500 };
 
-	static const int PLAYER_BASE_HP{10};
+	static const int PLAYER_BASE_HP{100};
 	static const int PLAYER_SHOOT_COOLDOWN{ 7 };
 	static const int PLAYER_DASH_MAXIMUM_ENERGY_COST{ 100 };
 	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 2000 };
@@ -87,7 +90,7 @@ public:
 	static const float ENTITY_MINIMUM_HEIGHT;
 
 	static const int ENERGY_MAX_AURA{ 200 };
-	static const int ENERGY_MINIMUM_AURA{ 6 };
+	static const int ENERGY_MINIMUM_AURA{ 7 };
 	static const float ENERGY_MAX_RADIUS;
 	static const float ENERGY_MINIMUM_RADIUS;
 	static const int ENERGY_ITEM_COOLDOWN{ 3000 };
@@ -99,6 +102,9 @@ public:
 	static const int GAME_COLLISION_HITLAG{ 8 };
 	static const float GAME_SHIELD_ENERGY_LOSS_MULTIPLYER;
 	static const float POWERUP_RADIUS;
+
+	static const int MAP_DEFAULT_WIDTH{ 1920 };
+	static const int MAP_DEFAULT_HEIGHT{ 1080 };
 private:
 	void init();
 	void _emptyAllEntities();

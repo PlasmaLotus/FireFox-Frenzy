@@ -4,7 +4,7 @@
 #include "Map.h"
 
 Map::Map() :
-	Map(GameLogic::ENTITY_MINIMUM_WIDTH, GameLogic::ENTITY_MINIMUM_HEIGHT)
+	Map(GameLogic::MAP_DEFAULT_WIDTH, GameLogic::MAP_DEFAULT_HEIGHT)
 {
 }
 

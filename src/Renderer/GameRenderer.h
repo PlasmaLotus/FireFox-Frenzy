@@ -55,6 +55,9 @@ public:
 	sf::View minimapView;
 	sf::View p1View;
 	sf::View p2View;
+
+	void addPlayerAlert(Player *p, std::string text);
+	void addPlayerAlert(int playerID, std::string text);
 };
 
 #endif // !__Game_Renderer__

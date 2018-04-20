@@ -18,14 +18,13 @@ Updated Feb 11, 2018
 #include <string>
 #include "../Game/Player.h"
 #include <vector>
+class PlayerDrawableAlert;
 class PlayerDrawable : public sf::Drawable {
 public:
-
 
 	PlayerDrawable();
 	PlayerDrawable(Player *player);
 	~PlayerDrawable();
-
 
 	// Hérité via Drawable
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
@@ -43,15 +42,32 @@ public:
 	sf::RectangleShape playerShape;
 	sf::CircleShape cursorShape;
 	std::vector<sf::RectangleShape>dashOffsetShapes;
-	
+
 	sf::Texture rTexture;
 	sf::Sprite sprite;
-	
+
 	sf::Font m_font;
 	sf::Text m_hpText;
+	sf::Text m_dashText;
+	sf::Text m_shotText;
 	int _hp{ 0 };
+	bool isChargingDash{ false };
+	bool isChargingShot{ false };
+	float angleDeg;
 	//sf::Shader m_shader;
 	//bool m_shaderLoaded;
+	std::vector<PlayerDrawableAlert> m_alerts;
+	void addAlert(std::string text);
 };
+
+
+class PlayerDrawableAlert : public sf::Text {
+public:
+	PlayerDrawableAlert(const std::string& text, const sf::Font& font, float fontSize);
+	~PlayerDrawableAlert() = default;
+	int timer;
+private:
+};
+
 
 #endif // !__Player_Renderer__

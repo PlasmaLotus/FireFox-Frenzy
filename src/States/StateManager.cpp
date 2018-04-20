@@ -85,6 +85,7 @@ void StateManager::run()
 					//sf::Event::
 				}
 				else if (event.type == sf::Event::GainedFocus) {
+						/*
 					try {
 						GameState * gs = dynamic_cast< GameState*>(_currentState);
 						if (gs != nullptr) {
@@ -93,10 +94,9 @@ void StateManager::run()
 					}
 					catch (const std::bad_cast& cast) {
 					}
-					
+						*/
 				}
 				else {
-
 				}
 			}
 			elapsedTime = currentTime.getElapsedTime();
@@ -164,8 +164,7 @@ int StateManager::getUniqueID() {
 	return _id++;
 }
 
-ControllerConfig *StateManager::getControllerConfig(int playerNumber)
-{
+ControllerConfig *StateManager::getControllerConfig(int playerNumber){
 	if (playerNumber == 1) {
 		return &p1Config;
 	}
@@ -174,8 +173,7 @@ ControllerConfig *StateManager::getControllerConfig(int playerNumber)
 	}
 }
 
-std::string StateManager::getControllerConfigPath(int playerNumber)
-{
+std::string StateManager::getControllerConfigPath(int playerNumber){
 	switch (playerNumber) {
 	case 1: {
 		return "p1Controls.ctl";

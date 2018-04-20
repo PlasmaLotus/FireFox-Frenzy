@@ -232,14 +232,7 @@ bool Player::collidableWith(Player* e){
 void Player::handleDash(int dt)
 {
 	dashHeld = _dashHeld;
-	/*
-	if (_dashHeld) {
-		dashHeld = true;
-	}
-	else {
-		dashHeld = false;
-	}
-	*/
+
 	dashCooldownTime -= dt;
 	if (dashCooldownTime <= 0) {
 		canDash = true;
@@ -409,7 +402,6 @@ void Player::dash() {
 }
 
 void Player::shield(){
-	printf("SHIELD PRESSED!\n");
 	_shieldActive = true;
 }
 
@@ -450,6 +442,12 @@ void Player::_handleMovement(int dt) {
 			velocityX += orienX * GameLogic::PLAYER_ACCELERATION_RATE;
 			velocityY += orienY * GameLogic::PLAYER_ACCELERATION_RATE;
 		}
+		else {
+			/*Redeploy orientation*/
+			orientation = std::atan2(velocityX, velocityY);
+			orientationX = velocityX;
+			orientationY = velocityY;
+		}
 		bool vXPositif = true;
 		bool vYPositif = true;
 		if (velocityX < 0.0f) {
@@ -465,6 +463,7 @@ void Player::_handleMovement(int dt) {
 		}
 		else {
 			velocityX *= GameLogic::PLAYER_FRICTION;
+			//velocityX *= std::pow(GameLogic::PLAYER_FRICTION, 1/dt);
 		}
 
 		if (std::abs(velocityY) <= GameLogic::PLAYER_VELOCITY_DEAD_ZONE) {
@@ -472,25 +471,31 @@ void Player::_handleMovement(int dt) {
 		}
 		else {
 			velocityY *= GameLogic::PLAYER_FRICTION;
+			//velocityY *= std::pow(GameLogic::PLAYER_FRICTION, 1/dt);
 		}
 
 		/// Reduce Velocity when exceeding max ///
 		if (std::abs(velocityX) > GameLogic::PLAYER_DASH_VELOCITY) {
 			velocityX += orienX * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
 		}
+		/*
 		if (std::abs(velocityX) > GameLogic::PLAYER_MAX_VELOCITY) {
 			velocityX += orienX * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE ;
 		}
+		*/
 
 		if (std::abs(velocityY) > GameLogic::PLAYER_DASH_VELOCITY) {
 			velocityY += orienY * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE;
 		}
+		/*
 		if (std::abs(velocityY) > GameLogic::PLAYER_MAX_VELOCITY) {
 			velocityY += orienY * -1.0f * GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE ;
 		}
-
+		*/
+		/*
 		posX += velocityX;
 		posY += velocityY;
+		*/
 		break;
 	}
 	case::PlayerState::Dashing: {
@@ -511,8 +516,10 @@ void Player::_handleMovement(int dt) {
 		if (dashTime <= 0) {
 			state = PlayerState::Moving;
 		}
+		/*
 		posX += velocityX;
 		posY += velocityY;
+		*/
 		break;
 	}
 	case::PlayerState::Shielding: {
@@ -530,13 +537,18 @@ void Player::_handleMovement(int dt) {
 		else {
 			velocityY *= GameLogic::PLAYER_SHIELD_FRICTION;
 		}
+		/*
 		posX += velocityX;
 		posY += velocityY;
+		*/
+		break;
 	}
 	default:break;
 	}
-	//posX += std::sin(orientation) *std::abs(orientationX) / 10 * velocityX;
-	//posY += std::cos(orientation)  *std::abs(orientationY) / 10 * velocityY;
+	posX += dt * velocityX;
+	posY += dt * velocityY;
+
+
 
 	_moveEngaged = false;
 }
