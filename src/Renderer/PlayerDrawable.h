@@ -50,6 +50,7 @@ public:
 	sf::Text m_hpText;
 	sf::Text m_dashText;
 	sf::Text m_shotText;
+	sf::Text m_ammoText;
 	int _hp{ 0 };
 	bool isChargingDash{ false };
 	bool isChargingShot{ false };

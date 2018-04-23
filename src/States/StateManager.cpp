@@ -142,11 +142,11 @@ int64_t StateManager::getElapsedTime() {
 	//printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
 	//return std::nearbyint( 1000.0 / FPS);
 	if (elapsedTime.asMicroseconds() > 0){
-		if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0 / FPS)) {
+		if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0f / FPS)) {
 			return elapsedTime.asMicroseconds();
 		}
 		else {
-			return std::nearbyint(1000.0 / FPS);
+			return std::nearbyint(1000.0f / FPS);
 		}
 	}
 	else {

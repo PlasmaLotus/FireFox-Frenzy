@@ -1,6 +1,6 @@
 
 Keyboard Mode 
-Joystick Number0
+Joystick Number1
 
 Command15 : JButton0
 Command16 : JButton1
