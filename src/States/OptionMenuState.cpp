@@ -11,7 +11,7 @@ void OptionMenuState::tick(int dt, bool render) {
 	//gotoxy(0, 5);
 	printf("OPtion Menu State Tick \n");
 	p1Controller->handleInput();
-	p1Controller->updateConfig();
+	//p1Controller->updateConfig();
 	renderer->render();
 	menu->tick();
 
@@ -20,6 +20,11 @@ void OptionMenuState::tick(int dt, bool render) {
 void OptionMenuState::goBack() {
 	StateManager::getInstance().switchToState(new TitleScreen(StateManager::getInstance().getWindow()));
 }
-OptionMenuState::~OptionMenuState()
-{
+OptionMenuState::~OptionMenuState(){
+	delete menu;
+	delete renderer;
+	/*
+	delete p1Controller;
+	delete p2Controller;
+	*/
 }

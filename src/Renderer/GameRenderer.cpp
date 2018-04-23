@@ -3,6 +3,7 @@ Created by PlasmaLotus
 Updated May 13, 2017
 */
 #include "GameRenderer.h"
+#include "../States/StateManager.h"
 
 GameRenderer::GameRenderer(){
 }
@@ -32,14 +33,15 @@ bool GameRenderer::initRenderer() {
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2));
 	playerDrawable2->playerColor = sf::Color::Magenta;
 	
-	if (!font.loadFromFile("Assets/Fonts/LemonMilk/LemonMilk.otf"))
+	if (!font.loadFromFile("Assets/Fonts/Minecraft.ttf"))
 		success = false;
-
+	/*
 	// player 1 (left side of the screen)
 	p1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
 
 	// player 2 (right side of the screen)
 	p2View.setViewport(sf::FloatRect(0.5f, 0, 0.5f, 1));
+	*/
 
 	/*
 	p1View.zoom(2.0f);
@@ -53,7 +55,8 @@ bool GameRenderer::initRenderer() {
 	window->setView(p2View);
 	*/
 	//window->view
-	window->setView(window->getDefaultView());
+	mainView = sf::View(sf::Vector2f(1080 / 2, 720 / 2), sf::Vector2f(1080, 720));
+	window->setView(mainView);
 	//window->setView(minimapView);
 	return success;
 }
@@ -78,10 +81,10 @@ void GameRenderer::clear() {
 }
 
 void GameRenderer::draw(){
-	drawPlayers();
+	drawMap();
 	drawProjectiles();
 	drawItems();
-	drawMap();
+	drawPlayers();
 	handleViews();
 	//window->draw();
 }
@@ -101,6 +104,17 @@ void GameRenderer::drawPlayers(){
 	window->draw(*playerDrawable1);
 	window->draw(*playerDrawable2);
 	*/
+	sf::Text playerText1("", playerDrawable1->m_font, 18);
+	playerText1.setFillColor(sf::Color::Magenta);
+	playerText1.setString("P1 - X: " + std::to_string((int)playerDrawable1->player->posX) + " Y: " + std::to_string((int)playerDrawable1->player->posY));
+	playerText1.setPosition(1, 0);
+	window->draw(playerText1);
+
+	sf::Text playerText2("", playerDrawable2->m_font, 18);
+	playerText2.setFillColor(sf::Color::Magenta);
+	playerText2.setString("P2 - X: " + std::to_string((int)playerDrawable2->player->posX) + " Y: " + std::to_string((int)playerDrawable2->player->posY));
+	playerText2.setPosition(1, 20);
+	window->draw(playerText2);
 }
 
 void GameRenderer::drawProjectiles(){
@@ -123,7 +137,16 @@ void GameRenderer::drawProjectiles(){
 
 void GameRenderer::drawMap()
 {
-	//Map = game->map;
+	Map map = game->map;
+	sf::RectangleShape mapOutline;
+	mapOutline.setSize(sf::Vector2f(map.width, map.height));
+	mapOutline.setPosition(0, 0);
+	mapOutline.setOutlineColor(sf::Color::White);
+	//mapOutline.setFillColor(sf::Color(200, 200, 200, 150));
+	mapOutline.setFillColor(sf::Color(0, 0, 0, 0));
+	mapOutline.setOutlineThickness(5.0f);
+	window->draw(mapOutline);
+	
 }
 
 void GameRenderer::drawItems() {
@@ -157,10 +180,75 @@ void GameRenderer::addWindow(sf::RenderWindow* g) {
 }
 void GameRenderer::handleViews(){
 	//setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f));
-	Player*p = game->getPlayer(1);
+	Player*p1 = game->getPlayer(1);
+	Player*p2 = game->getPlayer(2);
+
+	float minX, minY, maxX, maxY, distX, distY;
+	maxX = std::max(p1->posX, p2->posX);
+	maxY = std::max(p1->posY, p2->posY);
+	minX = std::min(p1->posX, p2->posX);
+	minY = std::min(p1->posY, p2->posY);
+	distX = abs(p1->posX - p2->posX);
+	distY = abs(p1->posY - p2->posY);
+	/*
 	//p1View.move(p->posX - p->prevPosX, p->posY - p->prevPosY);
 	p1View.setCenter(playerDrawable1->player->posX, playerDrawable1->player->posY);
 	p2View.setCenter(playerDrawable2->player->posX, playerDrawable2->player->posY);
+	*/
+
+	//mainView.setViewport(sf::FloatRect(minX, minY, maxX - minX + 100, maxY - minY + 100));
+	float some = 1280.f * 9.f / 16.f;
+	float extraRoom = 240.f;
+	//if (distX > window->getSize().x * 0.8f || distY > window->getSize().y  * 0.8f) {
+		float newDistX = distX;
+		float newDistY =  distY;
+		if (distY * 16.f / 9.f > distX) {
+			newDistX = distY * 16.f / 9.f;
+			newDistY = newDistX * 9.f / 16.f;
+		}
+		if (distX * 9.f / 16.f > distY) {
+			newDistY = distX * 9.f / 16.f;
+			newDistX = newDistY * 16.f / 9.f;
+		}
+	
+		//if (newDistX < 1280 && newDistY < 720) {
+		if (newDistX < StateManager::getWindowWidth() && newDistY < StateManager::getWindowHeight()) {
+			newDistX = 1.0f * StateManager::getWindowWidth();
+			newDistY = 1.0f * StateManager::getWindowHeight();
+		}
+		sf::Vector2f viewSize(newDistX + extraRoom * 16.f / 9.f, newDistY + extraRoom * 9.f / 16.f);
+		mainView.setSize(viewSize);
+		//mainView.setSize(sf::Vector2f(newDistX + extraRoom * 16.f / 9.f , newDistY + extraRoom * 9.f / 16.f));
+		
+		///TODO Limit 
+		///Limit camera dependant of  map;
+		sf::Vector2f viewCenter(1.0f * distX / 2.f + minX, 1.0f * distY / 2.f + minY);
+		if (viewCenter.x < window->getSize().x /2.f || viewCenter.y < window->getSize().y /2.f) {
+			if (viewCenter.x < window->getSize().x /2.f) {
+				viewCenter.x = window->getSize().x / 2.f;
+			}
+			if (viewCenter.y < window->getSize().y /2.f) {
+				viewCenter.y = window->getSize().y / 2.f;
+			}
+		}
+		
+		mainView.setCenter(viewCenter);
+		//mainView.setCenter(sf::Vector2f(1.0f * distX / 2.f + minX, 1.0f * distY / 2.f + minY));
+		//mainView.setCenter(sf::Vector2f(1.0f * newDistX / 2.f + minX, 1.0f * newDistY / 2.f + minY));
+	//}
+
+	/*
+	else {
+		//mainView.setSize(sf::Vector2f(window->getSize().x, distY > window->getSize().y));
+		mainView.setSize(sf::Vector2f(1280.f, 720.f));
+		//mainView.setCenter(sf::Vector2f(540, 360));
+		//mainView.set
+		mainView.setCenter(sf::Vector2f(1.0f * distX / 2.f + minX, 1.0f * distY / 2.f + minY));	
+	}
+	*/
+	
+	//mainView.setCenter(p1->posX, p1->posY);
+	window->setView(mainView);
 }
 sf::Texture GameRenderer::getLastFrame() {
 	return lastFrame;

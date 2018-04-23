@@ -36,4 +36,10 @@ void TitleScreen::tick(int dt, bool render) {
 }
 
 TitleScreen::~TitleScreen(){
+	delete menu;
+	delete renderer;
+	/*
+	delete p1Controller;
+	delete p2Controller;
+	*/
 }

@@ -25,24 +25,31 @@ void Menu::tick()
 
 void Menu::inputLeft()
 {
+	if (items.size() >= selection) {
+
 	printf("Input left\n");
 	if (items.at(selection).menuItemType == MenuItemType::RANGE) {
 		items.at(selection).decrease();
 	}
 	onItemDecrease();
+	}
 }
 
 void Menu::inputRight()
 {
+	if (items.size() >= selection) {
+
 	printf("Input right\n");
 	if (items.at(selection).menuItemType == MenuItemType::RANGE) {
 		items.at(selection).increase();
 	}
 	onItemIncrease();
+	}
 }
 
 void Menu::inputUp()
 {
+
 	printf("Input up\n");
 	selection-= 1;
 	if (selection < 0) {
@@ -66,10 +73,6 @@ void Menu::inputDown()
 void Menu::inputSelect()
 {
 	printf("Input select\n");
-	printf("Input select\n");
-	printf("Input select\n");
-	printf("Input select\n");
-	printf("Input select\n");
 	if (selection >= 0 && selection < items.size()) {
 		items.at(selection).getOptionString();
 		items.at(selection).getFn()();
@@ -85,11 +88,9 @@ void Menu::inputBack() {
 	printf("Input back\n");
 	onReturn();
 	StateManager::getInstance().goBack();
-	
 }
 
-void Menu::setPreviousMenu(Menu* menu)
-{
+void Menu::setPreviousMenu(Menu* menu){
 	previousMenu = menu;
 }
 

@@ -12,11 +12,11 @@ const float GameLogic::PLAYER_FRICTION(0.98f);
 const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.92f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
-const float GameLogic::PLAYER_DASH_VELOCITY(7.0f);
-const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(2.30f);
+const float GameLogic::PLAYER_DASH_VELOCITY(5.0f);
+const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(2.1f);
 const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
 
-const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 5.f );
+const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 3.f );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
 const float GameLogic::PROJECTILE_SPEED_MINIMUM( 1.0f );
 const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 6.0f );
@@ -34,7 +34,7 @@ const float GameLogic::GAME_DASH_ENERGY_LOSS_MULTIPLYER{ 0.90f };
 */
 
 GameLogic::GameLogic() :
-	gameState(GameCurrentState::COUNTDOWN){
+	gameState(GameCurrentState::RUNNING){
 	init();
 }
 

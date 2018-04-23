@@ -87,6 +87,15 @@ void Player::setPlayerOrienation(float x, float y)
 	orientationY = y;
 }
 
+void Player::setDashOrientation(float x, float y)
+{
+	if (abs(x) > 10 && abs(y) > 10) {
+		dashOrientation = std::atan2(x, y);
+		dashOrientationX = x;
+		dashOrientationY = y;
+	}
+}
+
 void Player::setCursorOrientation(float x, float y)
 {
 	cursorOrientation = std::atan2(x, y);
@@ -229,6 +238,8 @@ bool Player::collidableWith(Player* e){
 	return (e->getID() != getID());
 }
 
+
+
 void Player::handleDash(int dt)
 {
 	dashHeld = _dashHeld;
@@ -258,9 +269,21 @@ void Player::handleDash(int dt)
 					int dashPower = 1.0f * _dashChargeHeldTime / GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_DASH_MAXIMUM_ENERGY_COST;
 					_loseAmmo(dashPower);
 					state = PlayerState::Dashing;
-					dashOrientation = orientation;
-					dashOrientationX = orientationX;
-					dashOrientationY = orientationY;
+					
+					if (orientation == 0.f) {
+						dashOrientation = orientation;
+						dashOrientationX = orientationX;
+						dashOrientationY = orientationY;
+					}
+					else {
+						//dashOrientation = dashAngle ;
+						dashOrientationX = sin(dashAngle) * 100;
+						dashOrientationY = cos(dashAngle) * 100;
+					}
+					
+					
+
+
 					dashTime = GameLogic::PLAYER_DASH_DURATION;
 					dashVelocity = GameLogic::PLAYER_DASH_VELOCITY * _dashChargeHeldTime / GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME + GameLogic::PLAYER_MINIMUM_DASH_VELOCITY;
 				}
@@ -432,6 +455,12 @@ void Player::_handleMovement(int dt) {
 	/*Movement*/
 	prevPosX = posX;
 	prevPosY = posY;
+	if (orientation == 0.f) {
+		if (std::abs(velocityX) > GameLogic::PLAYER_VELOCITY_DEAD_ZONE && std::abs(velocityY) > GameLogic::PLAYER_VELOCITY_DEAD_ZONE) {
+
+			dashAngle = std::atan2(velocityX, velocityY) ;
+		}
+	}
 	float orienX = orientationX / 100;
 	float orienY = orientationY / 100;
 	//printf("PLAYER STATE:: %d\n", state);

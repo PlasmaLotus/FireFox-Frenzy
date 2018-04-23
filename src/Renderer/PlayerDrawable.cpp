@@ -10,7 +10,6 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	player(pl)
 	//m_shaderLoaded(false)
 {
-
 	playerShape.setFillColor(sf::Color::Blue);
 	int width = GameLogic::PLAYER_COLLISION_HITBOX_WIDTH;
 	int height = GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT;
@@ -48,8 +47,8 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	m_ammoText.setFillColor(sf::Color::Cyan);
 
 	sprite.setTexture(rTexture);
-	sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y ));
 	sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width/2, 1.0f * sprite.getGlobalBounds().height / 2));
+	sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y ));
 	// Load the shader
 	/*
 	if (m_shader.loadFromFile("Assets/Shaders/bloom.frag", sf::Shader::Fragment)) {
@@ -162,6 +161,8 @@ void PlayerDrawable::update()
 	else {
 		angleDeg = std::atan2(player->orientationX, -player->orientationY) * 180 / (atan(1) * 4);
 	}
+	//sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x, 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y));
+	//sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width / 2, 1.0f * sprite.getGlobalBounds().height / 2));
 	sprite.setRotation(angleDeg);
 	/*Shader initialisatidwaon*/
 	/*

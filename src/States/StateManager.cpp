@@ -4,7 +4,8 @@
 StateManager::StateManager():
 	_currentState(NULL),
 	_newState(NULL),
-	_switchState(false)
+	_switchState(false),
+	_deletedState(false)
 {
 	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "TACD");
 	_currentState = new TitleScreen(&window);
@@ -39,8 +40,10 @@ void StateManager::switchToState(State* state) {
 }
 
 void StateManager::goBack() {
-	_states.pop();
-	//_currentState->goBack();
+	_deletedState = true;
+	/*
+
+	*/
 }
 
 void StateManager::quit() {
@@ -109,7 +112,21 @@ void StateManager::run()
 			else {
 				//renderElapsedTimeFloat += elapsedTime.asMicroseconds();
 			}
-			_run();
+			if (_deletedState) {
+				if (_states.size() > 1) {
+					State * s = _states.top();
+					delete s;
+					_states.pop();
+					_currentState = _states.top();
+				}
+				else {
+					//Quit?
+				}
+				_deletedState = false;
+			}
+			else {
+				_run();
+			}
 			{
 				gotoxy(0, 0);
 				printf("DT: %3.3lld, %Id, %I64d ---\n", elapsedTime.asSeconds(), elapsedTime.asMilliseconds(), elapsedTime.asMicroseconds());
@@ -120,11 +137,12 @@ void StateManager::run()
 
 			if (_switchState) {
 				_states.push(_newState);
-				delete _currentState;
+				//delete _currentState;
 				_currentState = _newState;
 				_switchState = false;
 				_newState = nullptr;
 			}
+			
 		}
 	return;
 }
@@ -132,9 +150,11 @@ void StateManager::run()
 void StateManager::_run() {
 	eventManager.handleEvents(getElapsedTime());
 	audioEventManager.handleEvents(getElapsedTime());
+	//window.draw(m_alertManager);
 	//_currentState->tick(getElapsedTime(), _renderFrame);
 	if (_states.size() > 0){
-		_states.top()->tick(getElapsedTime(), _renderFrame);
+		_states.top()->tick(getElapsedTime(), true);
+		//_states.top()->tick(getElapsedTime(), _renderFrame);
 	}
 }
 
