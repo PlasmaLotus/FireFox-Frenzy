@@ -74,6 +74,15 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 	target.draw(cursorShape);
 
 	if (player->state == PlayerState::Dashing) {
+		for (const PlayerDrawableDashPosition& dashPos : m_dashPositions) {
+			sf::RectangleShape rect;
+			rect.setPosition(dashPos.posX, dashPos.posY);
+			rect.setPosition(player->width, player->height);
+			rect.setFillColor(sf::Color::Cyan);
+			target.draw(rect);
+		}
+			//target.draw(alert, states);
+		/*
 		for (int i = dashOffsetShapes.size() - 1; i >= 0; i--) {
 			sf::RectangleShape r = dashOffsetShapes.at(i);
 			if (i == dashOffsetShapes.size() - 1){
@@ -86,6 +95,7 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 			}
 			target.draw(r);
 		}
+		*/
 
 	} 
 	else{
@@ -147,6 +157,18 @@ void PlayerDrawable::update()
 		if (alert.timer < 0) {
 			m_alerts.erase(m_alerts.begin() + i);
 			//updateAlertsPlacement();
+		}
+	}
+
+	/*Updating Dash*/
+	if (player->state == PlayerState::Dashing) {
+		m_dashPositions.push_back(PlayerDrawableDashPosition(posX, posY));
+	}
+	for (int i = m_dashPositions.size() - 1; i >= 0; --i) {
+		PlayerDrawableDashPosition& d{ m_dashPositions.at(i) };
+		--(d.timer);
+		if (d.timer < 0) {
+			m_dashPositions.erase(m_dashPositions.begin() + i);
 		}
 	}
 	
@@ -222,4 +244,10 @@ PlayerDrawableAlert::PlayerDrawableAlert(const std::string & text, const sf::Fon
 sf::Text(text, font, fontSize),
 timer(250){
 	setFillColor(sf::Color::Magenta);
+}
+
+PlayerDrawableDashPosition::PlayerDrawableDashPosition(float x, float y):
+posX(x),
+posY(y),
+timer(250){
 }
