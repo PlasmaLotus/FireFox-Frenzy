@@ -42,10 +42,10 @@ public:
 	std::vector<Entity *> _entities;
 	std::stack<int> _idsToDestroy;
 	void addEntityIDToDelete(int id);
-	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 32 };
-	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 32 };
-	static const int PLAYER_DISPLAY_HITBOX_WIDTH{ 48 };
-	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 48 };
+	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 16 };
+	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 16 };
+	static const int PLAYER_DISPLAY_HITBOX_WIDTH{ 24 };
+	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 24 };
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
 	static int const PLAYER_MAX_AMMO{ 1000 };
 	static int const PLAYER_BASE_AMMO{ 500 };

@@ -53,8 +53,7 @@ public:
 	PlayerDrawable * playerDrawable1;
 	PlayerDrawable * playerDrawable2;
 	sf::View minimapView;
-	sf::View p1View;
-	sf::View p2View;
+	sf::View mainView;
 
 	void addPlayerAlert(Player *p, std::string text);
 	void addPlayerAlert(int playerID, std::string text);

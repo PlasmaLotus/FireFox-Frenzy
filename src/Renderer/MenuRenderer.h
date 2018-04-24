@@ -17,7 +17,7 @@ Updated Dec 25, 2016
 #include "../Menu/Menu.h"
 #include "Renderer.h"
 #include "MenuItemDrawable.h"
-
+#include <vector>
 class MenuRenderer : public Renderer{
 public:
 	void render();
@@ -39,14 +39,14 @@ public:
 	Menu* menu;
 
 	sf::Texture lastFrame;//not implemented
-	sf::Text debugText;
-	sf::Font font;
+	//sf::Text debugText;
+	//sf::Font font;
 	bool texturesLoaded = false;
 	const float ok = 100.f;
 	//sf::CircleShape shape(ok);
 	sf::CircleShape shape;
 	sf::RectangleShape menuItems[10];
-	MenuItemDrawable _menuItems[10];
+	std::vector<MenuItemDrawable> _menuItems;
 	int nbMenuItems;
 	bool fontLoaded{ true };
 	//MenuItemDrawable test;

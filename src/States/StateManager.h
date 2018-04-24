@@ -16,6 +16,7 @@ Updated May 17, 2017
 #include "../Main.h"
 #include "../Event/EventManager.h"
 #include "../Event/AudioEventManager.h"
+#include "../Renderer/Alert.h"
 
 class StateManager {
 public:
@@ -31,8 +32,8 @@ public:
 	int getUniqueID();
 	static const int FPS = 144;
 	static const int renderFPS = 60;
-	int SCREEN_WIDTH = 1080;
-	int SCREEN_HEIGHT = 720;
+	int SCREEN_WIDTH{ 1280 };
+	int SCREEN_HEIGHT{ 720 };
 	ControllerConfig *getControllerConfig(int playerNumber);
 	static std::string getControllerConfigPath(int playerNumber);
 	static int getWindowWidth();
@@ -54,9 +55,12 @@ protected:
 	sf::Time elapsedTime;
 	sf::Time renderElapsedTime;
 	bool _switchState;
+	bool _deletedState;
 	ControllerConfig p1Config;
 	ControllerConfig p2Config;
 	bool _renderFrame{ true };
 	sf::Clock gameTimer;
+	//Alerts m_alertManager;
+	
 };
 #endif 

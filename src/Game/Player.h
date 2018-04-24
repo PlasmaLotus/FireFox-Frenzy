@@ -74,6 +74,12 @@ public:
 	float dashOrientation;
 	float dashOrientationX;
 	float dashOrientationY;
+	
+	float dashAngle;
+	float angleOrientation;
+	float angleOrientationX;
+	float angleOrientationY;
+	void setDashOrientation(float x, float y);
 
 	int const DASH_COOLDOWN{ 10 };
 	bool canDash{ true };

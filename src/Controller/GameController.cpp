@@ -34,6 +34,7 @@ bool GameController::handleInput() {
 		player->move(pAngleX, pAngleY);
 	}
 	player->setCursorOrientation(cAngleX, cAngleY);
+	player->setDashOrientation(pAngleX, pAngleY);
 	return true;
 }
 

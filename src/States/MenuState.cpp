@@ -36,4 +36,6 @@ MenuState::~MenuState()
 {
 	delete p1KeyConfig;
 	delete p1Controller;
+	delete p2KeyConfig;
+	delete p2Controller;
 }

@@ -10,7 +10,6 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	player(pl)
 	//m_shaderLoaded(false)
 {
-
 	playerShape.setFillColor(sf::Color::Blue);
 	int width = GameLogic::PLAYER_COLLISION_HITBOX_WIDTH;
 	int height = GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT;
@@ -39,15 +38,17 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 		printf("Unable to load Minecraft Font\n");
 	}
 	m_hpText = sf::Text("HP", m_font, 12);
-	m_dashText = sf::Text("HP", m_font, 12);
-	m_shotText = sf::Text("HP", m_font, 12);
+	m_dashText = sf::Text("Dash", m_font, 12);
+	m_ammoText = sf::Text("Ammo", m_font, 12);
+	m_shotText = sf::Text("Shot", m_font, 12);
 	m_hpText.setFillColor(sf::Color::Red);
 	m_dashText.setFillColor(sf::Color::Cyan);
 	m_shotText.setFillColor(sf::Color::Green);
+	m_ammoText.setFillColor(sf::Color::Cyan);
 
 	sprite.setTexture(rTexture);
-	sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y ));
 	sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width/2, 1.0f * sprite.getGlobalBounds().height / 2));
+	sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y ));
 	// Load the shader
 	/*
 	if (m_shader.loadFromFile("Assets/Shaders/bloom.frag", sf::Shader::Fragment)) {
@@ -122,6 +123,7 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 		target.draw(shieldShape);
 	}
 	target.draw(m_hpText);
+	target.draw(m_ammoText);
 	if (isChargingShot) {
 		target.draw(m_shotText);
 	}
@@ -181,6 +183,8 @@ void PlayerDrawable::update()
 	else {
 		angleDeg = std::atan2(player->orientationX, -player->orientationY) * 180 / (atan(1) * 4);
 	}
+	//sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x, 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y));
+	//sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width / 2, 1.0f * sprite.getGlobalBounds().height / 2));
 	sprite.setRotation(angleDeg);
 	/*Shader initialisatidwaon*/
 	/*
@@ -192,38 +196,49 @@ void PlayerDrawable::update()
 	m_shader.setUniform("frag_LightColor", color);
 	m_shader.setUniform("frag_LightAttenuation", 50);
 	*/
-	if (_hp != player->HP) {
-		_hp = player->HP;
-		std::string s;
-		s += std::to_string(_hp);
-		s += "/";
-		s += std::to_string(GameLogic::PLAYER_BASE_HP);
-		m_hpText.setString(s);
-	}
-	if (player->_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
-		isChargingShot - true;
-		std::string s;
-		s += std::to_string(player->_shotChargeHeldTime);
-		s += "/";
-		s += std::to_string(GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME);
-		m_shotText.setString(s);
-	}
-	else {
-		isChargingShot = false;
-	}
-	if (player->_dashChargeHeldTime >= GameLogic::PLAYER_DASH_MINIMUM_CHARGE_TIME) {
-		isChargingDash = true;
-		std::string s;
-		s += std::to_string(player->_dashChargeHeldTime);
-		s += "/";
-		s += std::to_string(GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME);
-		m_dashText.setString(s);
-	}
-	else {
-		isChargingDash = false;
-	}
+	if (player != nullptr) {
+		/*Ammo*/
+		std::string ammoS = "Ammo: ";
+		ammoS += std::to_string(player->ammo);
+		m_ammoText.setString(ammoS);
 
+		/*HP*/
+		if (_hp != player->HP) {
+			_hp = player->HP;
+			std::string s = "HP: ";
+			s += std::to_string(_hp);
+			s += "/";
+			s += std::to_string(GameLogic::PLAYER_BASE_HP);
+			m_hpText.setString(s);
+		}
+		/*Shooting*/
+		if (player->_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
+			isChargingShot = true;
+			std::string s;
+			s += std::to_string(player->_shotChargeHeldTime);
+			s += "/";
+			s += std::to_string(GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME);
+			m_shotText.setString(s);
+		}
+		else {
+			isChargingShot = false;
+		}
+		/*Dashing*/
+		if (player->_dashChargeHeldTime >= GameLogic::PLAYER_DASH_MINIMUM_CHARGE_TIME) {
+			isChargingDash = true;
+			std::string s;
+			s += std::to_string(player->_dashChargeHeldTime);
+			s += "/";
+			s += std::to_string(GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME);
+			m_dashText.setString(s);
+		}
+		else {
+			isChargingDash = false;
+		}
+	}
+	
 	m_hpText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY - player->height - 10);
+	m_ammoText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY - player->height - 20);
 	m_dashText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY + player->height + 10);
 	m_shotText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY + player->height + 20);
 }

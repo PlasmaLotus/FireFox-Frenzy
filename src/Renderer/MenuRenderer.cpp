@@ -33,13 +33,16 @@ bool MenuRenderer::initRenderer() {
 	shape.setRadius(100.f);
 	shape.setFillColor(sf::Color::Red);
 	//debugText.setString("Debug Text");
+	/*
 	debugText.setFillColor(sf::Color::Magenta);
 	debugText.setOutlineColor(sf::Color::White);
 	debugText.setPosition(sf::Vector2f(100, 100));
 	debugText.setCharacterSize(64);
+	*/
 	nbMenuItems = menu->items.size();
 
 	//if (!font.loadFromFile("Assets\fonts\LemonMilk.LemonMilk.otf")) {
+	/*
 	if (!font.loadFromFile("Assets/Fonts/LemonMilk/LemonMilk.otf")){
 		fontLoaded = false;
 		//return EXIT_FAILURE;
@@ -54,12 +57,13 @@ bool MenuRenderer::initRenderer() {
 	//debugText.setFillColor(sf::Color::Red);
 	debugText.setStyle(sf::Text::Bold | sf::Text::Underlined);
 	debugText.setPosition(50, 50);
+	*/
 
 	for (int i = 0; i < menu->items.size(); i++) {
 		menuItems[i] = sf::RectangleShape(sf::Vector2f(100, 50));
 		menuItems[i].setPosition(50, i * 100);
 		//menuItems[i].setFillColor(sf::Color::Magenta);
-		_menuItems[i] = MenuItemDrawable(&menu->items.at(i), 50, i*100);
+		_menuItems.push_back(MenuItemDrawable(&menu->items.at(i), 50, i*100));
 		//_menuItems[i].setFont(font);
 	}
 	bool success = false;
@@ -75,31 +79,35 @@ void MenuRenderer::clear() {
 void MenuRenderer::update() {
 	for (int i = 0; i < menu->items.size(); i++) {
 		if (menu->selection == i) {
-			_menuItems[i].isSelected(true);
+			_menuItems.at(i).isSelected(true);
 		}
 		else {
-			_menuItems[i].isSelected(false);
+			_menuItems.at(i).isSelected(false);
 		}
-		_menuItems[i].update();
+		_menuItems.at(i).update();
 	}
 }
 void MenuRenderer::draw()
 {
 	//window->draw(shape);
+	/*
 	sf::Font font;
+	*/
 	int y = 100;
 
 	for (unsigned i = 0; i < menu->items.size(); ++i) {
 		y += 18;
+		/*
 		std::string text = "XDXDXDXD";
 		sf::Text textDrawable;
 		textDrawable.setString("XDXDXDXD");
 		textDrawable.setFillColor(sf::Color::Magenta);
 		textDrawable.setPosition(sf::Vector2f(20, y));
 		window->draw(textDrawable);
+		*/
 	}
 
-	window->draw(debugText);
+	//window->draw(debugText);
 	for (int i = 0; i < menu->items.size(); i++) {
 		if (menu->selection == i){
 			menuItems[i].setFillColor(sf::Color::Cyan);
@@ -107,7 +115,7 @@ void MenuRenderer::draw()
 		else {
 			menuItems[i].setFillColor(sf::Color::Magenta);
 		}
-		window->draw(_menuItems[i]);
+		window->draw(_menuItems.at(i));
 	}
 
 }
