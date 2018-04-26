@@ -35,7 +35,8 @@ void ProjectileFire::update(int32_t dt)
 }
 
 bool ProjectileFire::isAlive(){
-	return true;
+	//return true;
+	return (m_projectiles.size() > 0 || durability > 0 || lifetime > 0);
 }
 
 void ProjectileFire::handleCollision()

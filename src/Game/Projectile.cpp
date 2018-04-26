@@ -17,7 +17,7 @@ Projectile::Projectile():
 Projectile::Projectile(int pID, float x, float y) :
 	CircleEntity(x, y, GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM),
 	_playerID(pID),
-	lifetime{ 3000 },
+	lifetime{ 8000 },
 	durability{ 1 },
 	orientationX{ 0.f },
 	orientationY{ 0.f },
@@ -85,7 +85,7 @@ void Projectile::handleCollision(Entity *e)
 		Projectile *p = dynamic_cast<Projectile *>(e);
 		if (p != nullptr) {
 			//handlecollisoin with Projectile;
-			handleCollision();
+			//handleCollision();
 		}
 	}
 	catch (const std::bad_cast& cast) {

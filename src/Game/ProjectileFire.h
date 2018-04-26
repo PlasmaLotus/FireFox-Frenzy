@@ -14,7 +14,7 @@ public:
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
 	void _spawnNewAOE();
-	std::vector<Projectile*> m_projectiles;
+	std::vector<Projectile> m_projectiles;
 	int m_AOEProjectileSpawnTimer;
 	int m_AOEProjectileSpawnCounter;
 };

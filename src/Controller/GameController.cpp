@@ -36,6 +36,7 @@ bool GameController::handleInput() {
 	player->setCursorOrientation(cAngleX, cAngleY);
 	player->setDashOrientation(pAngleX, pAngleY);
 	return true;
+
 }
 
 /*When an input is detected, a command is raised to this function*/
@@ -131,6 +132,8 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	//printf("Joystick%d\n", axis);
 	//arbitrary dead zone of 7
 	
+	//Z AXIS, LEFT AND RIGHT TRIGGERS
+
 		//printf("Joystick%d - in switch\n", axis);
 		ControllerCommand command;
 		if (value > 0) {
@@ -139,6 +142,12 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 		else {
 			command = handler.negatif;
 		}
+
+		if (axis == sf::Joystick::Axis::Z) {
+
+		}
+		
+
 		switch (command) {
 			case ControllerCommand::Up:
 			case ControllerCommand::Down:
@@ -164,9 +173,12 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 			case ControllerCommand::CVertical:
 			{
 				//if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+				cAngleY = value;
+				/*
 				if (value >= 20.f || value <= -20.f) {
 					cAngleY = value;
 				}
+				 */
 				break;
 			}
 
@@ -174,9 +186,12 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 			case ControllerCommand::CursorRight:
 			case ControllerCommand::CHorizontal:
 			{
+				cAngleX = value;
+				/*
 				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
 					cAngleX = value;
 				}
+				*/
 				break;
 			}
 			case ControllerCommand::Shoot:
