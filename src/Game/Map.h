@@ -26,5 +26,6 @@ protected:
 	bool _testCollisionWalls(Entity* e);
 	void _handleCollisionOuterWall(Entity*e, MapCollisionAngle angle);
 	void _handleCollisionWall(Entity*e, Entity wall, MapCollisionAngle angle);
+	void generateMap(int generationID = 0);
 };
 #endif //Map

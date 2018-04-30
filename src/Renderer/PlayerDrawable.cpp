@@ -49,6 +49,7 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	sprite.setTexture(rTexture);
 	sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width/2, 1.0f * sprite.getGlobalBounds().height / 2));
 	sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y ));
+	//sprite.setColor(sf::Color::Magenta);
 	// Load the shader
 	/*
 	if (m_shader.loadFromFile("Assets/Shaders/bloom.frag", sf::Shader::Fragment)) {

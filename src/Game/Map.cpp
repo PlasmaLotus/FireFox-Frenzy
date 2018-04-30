@@ -15,6 +15,7 @@ Map::Map(float wdth, float hght):
 Entity(){
 	width = wdth;
 	height = hght;
+	generateMap(1);
 }
 
 void Map::update(int32_t dt){
@@ -115,8 +116,13 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 	}
 	case MapCollisionAngle::WallRight:
 	{
+		offset = this->width - e->posX - e->width /2;
+		e->posX += offset;
+		/*
+		//Warps to opposite wall
 		offset = e->width / 2 - this->width - e->posX;
-		e->posX -= offset;
+		e->posX += offset;
+		*/
 		break;
 	}
 	case MapCollisionAngle::WallUp:
@@ -127,8 +133,13 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 	}
 	case MapCollisionAngle::WallDown:
 	{
+		offset = this->height - e->posY - e->height / 2;
+		e->posY += offset;
+		/*
+		//Warps to opposite wall
 		offset = e->height / 2 - this->height - e->posY;
-		e->posY -= offset;
+		e->posY += offset;
+		*/
 		break;
 	}
 	default:break;
@@ -165,4 +176,9 @@ void Map::_handleCollisionWall(Entity * e, Entity wall, MapCollisionAngle angle)
 	}
 	default:break;
 	}
+}
+
+
+void Map::generateMap(int generationID) {
+	/*Generate map dimensions and obstacles*/;
 }
