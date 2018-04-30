@@ -105,6 +105,12 @@ public:
 
 	static const int MAP_DEFAULT_WIDTH{ 1920 };
 	static const int MAP_DEFAULT_HEIGHT{ 1080 };
+
+
+	/*Special Projectiles*/
+	static const int PROJECTILE_FIRE_AOE_SPAWN_INTERVAL{ 50 };
+
+
 private:
 	void init();
 	void _emptyAllEntities();

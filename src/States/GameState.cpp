@@ -6,6 +6,7 @@ Updated May 13, 2017
 #include "GameState.h"
 #include "../States/StateManager.h"
 #include "../States/PauseMenuState.h"
+#include "../Menu/PauseMenu.h"
 
 GameState::GameState(sf::RenderWindow *w):
 	State(){
@@ -33,17 +34,16 @@ void GameState::tick(int dt, bool render){
 	case::GameCurrentState::COUNTDOWN: 
 		game->tick(dt);
 		renderer->render();
+		
 		break;
 	case GameCurrentState::RUNNING:
 		p1Controller->handleInput();
 		p2Controller->handleInput();
+		p2Controller->viewDebugJoystick();
 		game->tick(dt);
 		if (render) {
 			renderer->render();
 		}
-		/*
-		renderer->render();
-		*/
 		//printf("GAME TIMER == %s\n", StateManager::getInstance().getCurrentGameTimer());
 		break;
 	case GameCurrentState::PAUSED:
@@ -52,6 +52,7 @@ void GameState::tick(int dt, bool render){
 		break;
 	case GameCurrentState::ENDED:
 		printf("===== GAME ENDED =====\n");
+		game->tick(dt);
 		renderer->render();
 		break;
 	default:
@@ -72,7 +73,7 @@ void GameState::pause() {
 	else {
 		game->gameState = GameCurrentState::RUNNING;
 	}
-	
+	//StateManager::getInstance().switchToState(new PauseMenuState(window, new PauseMenu()));
 }
 
 void GameState::reset() {

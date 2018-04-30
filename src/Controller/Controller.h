@@ -9,6 +9,10 @@ Updated August 06, 2017
 #include "SFML\Window.hpp"
 #include "ControllerConfig.h"
 
+/*Xinput Support*/
+#include <Windows.h>
+#include <Xinput.h>
+
 class Controller {
 public:
 	Controller(ControllerConfig* c);
@@ -34,6 +38,8 @@ public:
 	bool keyboardConnected = true;
 	bool joystickConnected = false;
 	bool commandPressed = false;
+
+	XINPUT_STATE xInputState;
 };
 
 #endif // _Controller_H_

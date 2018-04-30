@@ -14,6 +14,7 @@ config(c)
 	if (config != NULL) {
 		//config->loadConfig("controllerConfig.ini");
 	}
+	ZeroMemory(&xInputState, sizeof(XINPUT_STATE));
 }
 
 Controller::~Controller(){
@@ -29,6 +30,13 @@ void Controller::updateConfig(){
 	else {
 		joystickConnected = false;
 	}
+	/*
+	if (XInputGetState(config->getJoystickNumber(), &xInputState) == ERROR_SUCCESS)
+		controllerId = i;
+	*/
+	DWORD d = config->getJoystickNumber();
+	//XInputGetState((DWORD)config->getJoystickNumber(), &xInputState);
+
 }
 
 void Controller::setControlMode(ControlMode cm) {
@@ -93,6 +101,11 @@ void Controller::viewDebugJoystick() {
 		printf("U Axis: %f3.2\n", sf::Joystick::getAxisPosition(config->getJoystickNumber(), sf::Joystick::Axis::U));
 		printf("V Axis: %f3.2\n", sf::Joystick::getAxisPosition(config->getJoystickNumber(), sf::Joystick::Axis::V));
 		printf("Z Axis: %f3.2\n", sf::Joystick::getAxisPosition(config->getJoystickNumber(), sf::Joystick::Axis::Z));
+
+		float leftTrigger = (float)xInputState.Gamepad.bLeftTrigger / 255 ;
+		float rightTrigger = (float)xInputState.Gamepad.bRightTrigger / 255;
+		printf("Z AxisSplit Left %f3.2\n", leftTrigger);
+		printf("Z AxisSplit Right %f3.2\n", rightTrigger);
 	//}
 }
 

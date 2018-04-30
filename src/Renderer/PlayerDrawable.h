@@ -14,6 +14,7 @@ Updated Feb 11, 2018
 #include "../Game/Player.h"
 #include <vector>
 class PlayerDrawableAlert;
+class PlayerDrawableDashPosition;
 class PlayerDrawable : public sf::Drawable {
 public:
 
@@ -53,6 +54,7 @@ public:
 	//sf::Shader m_shader;
 	//bool m_shaderLoaded;
 	std::vector<PlayerDrawableAlert> m_alerts;
+	std::vector<PlayerDrawableDashPosition> m_dashPositions;
 	void addAlert(std::string text);
 };
 
@@ -65,5 +67,14 @@ public:
 private:
 };
 
+
+class PlayerDrawableDashPosition {
+public:
+	PlayerDrawableDashPosition(float x, float y);
+	~PlayerDrawableDashPosition() = default;
+	int timer;
+	float posX;
+	float posY;
+};
 
 #endif // !__Player_Renderer__
