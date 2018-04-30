@@ -84,6 +84,35 @@ bool EventManager::__handleEvent(Event event){
 		__handleEventCoundownStart();
 		break;
 	}
+
+
+	case EventType::PlayerShotChargeStart: {
+		audio->queueAudioEvent(AudioEvent::AudioShotCharge, event.entity, true);
+		break;
+	}
+	case EventType::PlayerShotChargeStartMid: {
+		audio->stopAudioEvent(AudioEvent::AudioShotCharge, event.entity);
+		if (!audio->hasAudioEvent(AudioEvent::AudioShotChargeMid, event.entity)) {
+			audio->queueAudioEvent(AudioEvent::AudioShotChargeMid, event.entity, true);
+		}
+		break;
+	}
+	case EventType::PlayerShotChargeStartMax: {
+		audio->stopAudioEvent(AudioEvent::AudioShotCharge, event.entity);
+		audio->stopAudioEvent(AudioEvent::AudioShotChargeMid, event.entity);
+		if (!audio->hasAudioEvent(AudioEvent::AudioShotChargeMax, event.entity)) {
+			audio->queueAudioEvent(AudioEvent::AudioShotChargeMax, event.entity, true);
+		}
+		break;
+	}
+	case EventType::PlayerShotChargeEnd: {
+		audio->stopAudioEvent(AudioEvent::AudioShotCharge, event.entity);
+		audio->stopAudioEvent(AudioEvent::AudioShotChargeMid, event.entity);
+		audio->stopAudioEvent(AudioEvent::AudioShotChargeMax, event.entity);
+		break;
+	}
+
+
 	case EventType::NoEvent:
 	default: {	
 		printf("Event, NOEVENT!!!\n : ID: %d", event._id);
@@ -100,17 +129,17 @@ void EventManager::__handleEventProjectileSpawn(Projectile* projectile) {
 	//sound.setVolume(100.f);
 	//sound.play();
 	//sound.getSta
-	audio->queueAudioEvent(AudioEvent::DefaultEventAudio, false);
+	audio->queueAudioEvent(AudioEvent::TestEventAudio, projectile, false);
 }
 
 void EventManager::__handleEventCoundownStart()
 {
-	audio->queueAudioEvent(AudioEvent::AudioCountdownTick, false);
+	audio->queueAudioEvent(AudioEvent::AudioCountdownTick, nullptr, false);
 }
 
 void EventManager::__handleEventCoundownTick()
 {
-	audio->queueAudioEvent(AudioEvent::AudioCountdownStart, false);
+	audio->queueAudioEvent(AudioEvent::AudioCountdownStart, nullptr, false);
 }
 
 

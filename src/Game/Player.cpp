@@ -334,6 +334,20 @@ void Player::handleShooting(int dt)
 		shootCooldownTime = 0;
 	}
 	if (shootHeld && canShoot) {
+		if (_shotChargeHeldTime <= 0) {
+			StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
+		}
+		
+		else if(_shotChargeHeldTime >= (GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME / 2)) {
+			if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMax, this));
+			}
+			else {
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMid, this));
+			}
+		}
+		
+
 		_shotChargeHeldTime += dt;
 		if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
 			_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
@@ -366,12 +380,16 @@ void Player::handleShooting(int dt)
 
 				/*Spawn*/
 				_game->addEntity(p);
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, p));
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn, p));
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
+
 			}
 			else {
 				shootHeld = false;
 				StateManager::getInstance().eventManager.queueEvent(Event(EventType::OutOfAmmo, this));
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
 			}
+
 		}
 		shootHeld = false;
 	}
