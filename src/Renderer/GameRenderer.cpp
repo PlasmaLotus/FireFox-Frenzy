@@ -33,6 +33,10 @@ bool GameRenderer::initRenderer() {
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2));
 	playerDrawable2->playerColor = sf::Color::Magenta;
 	
+	_displayFPS = true;
+	_displayPositions = true;
+	_displayHitboxes = true;
+
 	if (!font.loadFromFile("Assets/Fonts/Minecraft.ttf"))
 		success = false;
 	/*
@@ -76,6 +80,18 @@ void GameRenderer::addPlayerAlert(int playerID, std::string text){
 	addPlayerAlert(&p, text);
 }
 
+void GameRenderer::setDisplayHitboxes(bool value){
+	_displayHitboxes = value;
+}
+
+void GameRenderer::setDisplayPositions(bool value){
+	_displayPositions = value;
+}
+
+void GameRenderer::setDisplayFPS(bool value){
+	_displayFPS = value;
+}
+
 void GameRenderer::clear() {
 	window->clear();
 }
@@ -85,7 +101,10 @@ void GameRenderer::draw(){
 	drawProjectiles();
 	drawItems();
 	drawPlayers();
+	
 	handleViews();
+	__showFPS();
+	__showPlayerPositions();
 	//window->draw();
 }
 
@@ -104,17 +123,7 @@ void GameRenderer::drawPlayers(){
 	window->draw(*playerDrawable1);
 	window->draw(*playerDrawable2);
 	*/
-	sf::Text playerText1("", playerDrawable1->m_font, 18);
-	playerText1.setFillColor(sf::Color::Magenta);
-	playerText1.setString("P1 - X: " + std::to_string((int)playerDrawable1->player->posX) + " Y: " + std::to_string((int)playerDrawable1->player->posY));
-	playerText1.setPosition(1, 0);
-	window->draw(playerText1);
 
-	sf::Text playerText2("", playerDrawable2->m_font, 18);
-	playerText2.setFillColor(sf::Color::Magenta);
-	playerText2.setString("P2 - X: " + std::to_string((int)playerDrawable2->player->posX) + " Y: " + std::to_string((int)playerDrawable2->player->posY));
-	playerText2.setPosition(1, 20);
-	window->draw(playerText2);
 }
 
 void GameRenderer::drawProjectiles(){
@@ -151,7 +160,6 @@ void GameRenderer::drawMap()
 
 	mapDrawable->update();
 	window->draw(*mapDrawable);
-	
 }
 
 void GameRenderer::drawItems() {
@@ -203,7 +211,7 @@ void GameRenderer::handleViews(){
 
 	//mainView.setViewport(sf::FloatRect(minX, minY, maxX - minX + 100, maxY - minY + 100));
 	float some = 1280.f * 9.f / 16.f;
-	float extraRoom = 240.f;
+	float extraRoom = 360.f;
 	//if (distX > window->getSize().x * 0.8f || distY > window->getSize().y  * 0.8f) {
 		float newDistX = distX;
 		float newDistY =  distY;
@@ -257,4 +265,51 @@ void GameRenderer::handleViews(){
 }
 sf::Texture GameRenderer::getLastFrame() {
 	return lastFrame;
+}
+
+void GameRenderer::__showFPS() {
+	if (_displayFPS) {
+		int windowY = window->getView().getCenter().y - window->getView().getSize().y / 2;
+		int windowX = window->getView().getCenter().x - window->getView().getSize().x / 2;
+		int fontSize = window->getView().getSize().x / 100;
+
+		sf::Text fpsText("", playerDrawable1->m_font, fontSize);
+		std::string fpsstring = "FPS: ";
+		fpsstring += std::to_string(StateManager::getInstance().getFrameRate());
+		fpsstring += " / ";
+		fpsstring += std::to_string(StateManager::getInstance().FPS);
+		fpsText.setString(fpsstring);
+		//playerText1.setFont()
+		fpsText.setFillColor(sf::Color::Magenta);
+		fpsText.setPosition(windowX + 2, windowY + 2);
+		window->draw(fpsText);
+	}
+}
+
+void GameRenderer::__showPlayerPositions() {
+	if (_displayPositions) {
+
+		/*
+		int windowY = window->getView().getViewport().top;
+		int windowX = window->getView().getViewport().left;
+		*/
+
+		int windowY = window->getView().getCenter().y - window->getView().getSize().y / 2;
+		int windowX = window->getView().getCenter().x - window->getView().getSize().x / 2;
+		int fontSize = window->getView().getSize().x / 100;
+
+		sf::Text playerText1("", playerDrawable1->m_font, fontSize);
+		//playerText1.setFont()
+		playerText1.setFillColor(sf::Color::Magenta);
+		playerText1.setString("P1 - X: " + std::to_string((int)playerDrawable1->player->posX) + " Y: " + std::to_string((int)playerDrawable1->player->posY));
+		playerText1.setPosition(windowX + 2, windowY + fontSize*2 + 2);
+		window->draw(playerText1);
+
+
+		sf::Text playerText2("", playerDrawable2->m_font, fontSize);
+		playerText2.setFillColor(sf::Color::Magenta);
+		playerText2.setString("P2 - X: " + std::to_string((int)playerDrawable2->player->posX) + " Y: " + std::to_string((int)playerDrawable2->player->posY));
+		playerText2.setPosition(windowX + 2, windowY + fontSize*3 + 2);
+		window->draw(playerText2);
+	}
 }

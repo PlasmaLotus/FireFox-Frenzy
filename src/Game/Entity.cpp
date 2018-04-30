@@ -9,8 +9,7 @@ _hitlagFrames(0),
 _inHitlag(false){
 }
 
-Entity::~Entity()
-{
+Entity::~Entity(){
 	_collisions.clear();
 }
 
@@ -81,13 +80,10 @@ bool Entity::_testVerticalCollision(Entity e)
 	float p1 = e.posY - e.height / 2;
 	float p2 = e.posY + e.height / 2;
 
-
 	return ((p1 >= tp1 && p1 <= tp2) || (p2 >= tp1 && p2 <= tp2));
-	//return false;
 }
 
-bool Entity::_testHorizontalCollision(Entity e)
-{
+bool Entity::_testHorizontalCollision(Entity e){
 
 	float tp1 = posX - width / 2;
 	float tp2 = posX + width / 2;
@@ -95,9 +91,7 @@ bool Entity::_testHorizontalCollision(Entity e)
 	float p1 = e.posX - e.width / 2;
 	float p2 = e.posX + e.width / 2;
 
-
 	return ((p1 >= tp1 && p1 <= tp2) || (p2 >= tp1 && p2 <= tp2));
-	//return false;
 }
 
 float Entity::_distanceBetween(Entity e) {
@@ -108,4 +102,14 @@ float Entity::_distanceBetween(Vector2 v) {
 }
 float Entity::_distanceBetween(float x, float y) {
 	return std::pow(std::pow(std::abs(posX - x),2) + std::pow(std::abs(posY - y),2), 0.5);
+}
+
+float Entity::_angleBetween(Entity e) {
+	return _angleBetween(e.posX, e.posY);
+}
+float Entity::_angleBetween(Vector2 v) {
+	return _angleBetween(v.x, v.y);
+}
+float Entity::_angleBetween(float x, float y) {
+	return std::atan2(posY - y, posX - x);
 }

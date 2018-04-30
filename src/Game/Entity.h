@@ -41,6 +41,10 @@ public:
 	float _distanceBetween(float x, float y);
 	float _distanceBetween(Vector2 v);
 	float _distanceBetween(Entity e);
+
+	float _angleBetween(float x, float y);
+	float _angleBetween(Vector2 v);
+	float _angleBetween(Entity e);
 	std::vector<CollisionStack> _collisions;
 	int _collisionDelay;
 	int _hitlagFrames;

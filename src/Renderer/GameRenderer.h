@@ -58,6 +58,15 @@ public:
 
 	void addPlayerAlert(Player *p, std::string text);
 	void addPlayerAlert(int playerID, std::string text);
+	void setDisplayHitboxes(bool value);
+	void setDisplayPositions(bool value);
+	void setDisplayFPS(bool value);
+	void __showFPS();
+	void __showPlayerPositions();
+
+	bool _displayHitboxes;
+	bool _displayPositions;
+	bool _displayFPS;
 };
 
 #endif // !__Game_Renderer__

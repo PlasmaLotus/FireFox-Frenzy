@@ -43,6 +43,8 @@ public:
 	AudioEventManager audioEventManager;
 	std::string getCurrentGameTimer();
 	void resetGameTimer();
+	int getFrameRate();
+	int getAbsoluteFrameRate();
 protected:
 	StateManager();
 	int _id{ 0 };

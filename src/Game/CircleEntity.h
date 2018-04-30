@@ -15,6 +15,13 @@ public:
 	virtual bool testCollision(Entity* e);
 	virtual void handleCollision(Entity *e);
 	virtual void handleCollision();
+	
+	/*
+	Vector2 _distanceBetweenVec(Entity e);
+	Vector2 _distanceBetweenVec(Vector2 v);
+	Vector2 _distanceBetweenVec(float x, float y);
+	*/
+
 
 protected:
 	virtual bool testCollision(Entity e);

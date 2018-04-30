@@ -75,3 +75,18 @@ void CircleEntity::setRadius(float r){
 	width = r;
 	height = r;
 }
+
+/*
+Vector2 CircleEntity::_distanceBetweenVec(Entity e) {
+	return _distanceBetweenVec(e.posX, e.posY);
+}
+Vector2 CircleEntity::_distanceBetweenVec(Vector2 v) {
+	return _distanceBetweenVec(v.x, v.y);
+}
+Vector2 CircleEntity::_distanceBetweenVec(float x, float y) {
+	Vector2 v;
+	v.x = this->posX - x;
+	v.y = this->pos
+	return std::pow(std::pow(std::abs(posX - x), 2) + std::pow(std::abs(posY - y), 2), 0.5);
+}
+*/

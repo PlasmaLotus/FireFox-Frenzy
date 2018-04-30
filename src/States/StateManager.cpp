@@ -161,7 +161,7 @@ void StateManager::_run() {
 int64_t StateManager::getElapsedTime() {
 	//printf("DT -- %d - %d    \n", 1000 / FPS, elapsedTime.asMicroseconds());
 	//return std::nearbyint( 1000.0 / FPS);
-	if (elapsedTime.asMicroseconds() > 0){
+	if (elapsedTime.asMicroseconds() >= 0){
 		if (elapsedTime.asMicroseconds() <= std::nearbyint(1000.0f / FPS)) {
 			return elapsedTime.asMicroseconds();
 		}
@@ -209,6 +209,14 @@ std::string StateManager::getControllerConfigPath(int playerNumber){
 
 void StateManager::resetGameTimer() {
 	gameTimer.restart();
+}
+
+int StateManager::getFrameRate(){
+	return std::nearbyint(1000.0 / elapsedTime.asMicroseconds());
+}
+
+int StateManager::getAbsoluteFrameRate(){
+	return FPS;
 }
 
 std::string StateManager::getCurrentGameTimer() {

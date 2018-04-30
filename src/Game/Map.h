@@ -16,7 +16,7 @@ public:
 	virtual void handleCollision(Entity *e);
 	*/
 	virtual bool testCollision(Entity *e);
-	std::vector<Entity> _walls;
+	std::vector<Entity*> _walls;
 
 protected:
 	/*
