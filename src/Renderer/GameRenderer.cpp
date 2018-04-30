@@ -28,7 +28,7 @@ bool GameRenderer::initRenderer() {
 	shape.setFillColor(sf::Color::Blue);
 	shape.setPosition(100, 100);
 	shape.setRadius(size);
-
+	mapDrawable = new MapDrawable(&game->map);
 	playerDrawable1 = new PlayerDrawable(game->getPlayer(1));
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2));
 	playerDrawable2->playerColor = sf::Color::Magenta;
@@ -137,6 +137,7 @@ void GameRenderer::drawProjectiles(){
 
 void GameRenderer::drawMap()
 {
+	/*
 	Map map = game->map;
 	sf::RectangleShape mapOutline;
 	mapOutline.setSize(sf::Vector2f(map.width, map.height));
@@ -146,6 +147,10 @@ void GameRenderer::drawMap()
 	mapOutline.setFillColor(sf::Color(0, 0, 0, 0));
 	mapOutline.setOutlineThickness(5.0f);
 	window->draw(mapOutline);
+	*/
+
+	mapDrawable->update();
+	window->draw(*mapDrawable);
 	
 }
 

@@ -1,18 +1,13 @@
-#pragma once
-
-
 /*
 Created by PlasmaLotus
 Updated Feb 11, 2018
 */
 
-#include <SFML\Graphics.hpp>
 
-//#include "Renderer.h"
 
 #ifndef __Player_Drawable__
 #define __Player_Drawable__
-
+#include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
 #include <string.h>
 #include <string>

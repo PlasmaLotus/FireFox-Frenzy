@@ -22,27 +22,6 @@ void Map::update(int32_t dt){
 	//Entity::update(dt);
 }
 
-/*Return false if no collision*/
-bool Map::_testCollision(Entity* e) {
-	return false;
-	//return (_testVerticalCollision(e) && _testHorizontalCollision(e));
-}
-
-bool Map::_testCollision(SquareEntity* e) {
-	return false;
-	//return (_testVerticalCollision(e) && _testHorizontalCollision(e));
-}
-bool Map::_testCollision(CircleEntity* e) {
-	return false;
-	/*
-	Vector2 v1{ posX - width / 2, posY - height / 2 };
-	Vector2 v2{ posX - width / 2, posY + height / 2 };
-	Vector2 v3{ posX + width / 2, posY + height / 2 };
-	Vector2 v4{ posX + width / 2, posY - height / 2 };
-	return (e._distanceBetween(v1) <= e.width || e._distanceBetween(v2) <= e.width ||
-		e._distanceBetween(v3) <= e.width || e._distanceBetween(v4) <= e.width);
-	*/
-}
 
 bool Map::testCollision(Entity * e)
 {
@@ -101,8 +80,51 @@ bool Map::_testCollisionOuterWalls(Entity * e){
 }
 
 bool Map::_testCollisionWalls(Entity * e){
-	return false;
 	//_handleCollisionWall()
+	bool collision = false;
+	/*
+	for (int i = _walls.size() - 1; i >= 0; --i) {
+		Entity &w{ _walls.at(i) };
+		if (w.testCollision(e)) {
+			//Determine where the collision should be handled//
+			collision = true;
+
+			//Test in X axis
+			if (e->posX <= w.posX) {
+				_handleCollisionWall(e, w, MapCollisionAngle::WallLeft);
+			}
+		}
+	}
+	*/
+	if (e != nullptr) {
+		for (int i = _walls.size() - 1; i >= 0; --i) {
+			Entity &w{ _walls.at(i) };
+			if (w.testCollision(e)) {
+				/*Collision with wall*/
+
+				if (e->posX - e->width / 2 < w.posX + w.width / 2) {
+					collision = true;
+					_handleCollisionWall(e, w, MapCollisionAngle::WallRight);
+				}
+				if (e->posX + e->width / 2 > w.posX - w.width / 2) {
+					collision = true;
+					_handleCollisionWall(e, w, MapCollisionAngle::WallLeft);
+				}
+
+				if (e->posY - e->height / 2 < w.posY + w.height / 2) {
+					collision = true;
+					_handleCollisionWall(e, w, MapCollisionAngle::WallDown);
+				}
+				if (e->posY + e->height / 2 > w.posY - w.height / 2) {
+					collision = true;
+					_handleCollisionWall(e, w, MapCollisionAngle::WallUp);
+				}
+			}
+		}
+	}
+
+
+	return collision;
 }
 
 void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
@@ -181,4 +203,16 @@ void Map::_handleCollisionWall(Entity * e, Entity wall, MapCollisionAngle angle)
 
 void Map::generateMap(int generationID) {
 	/*Generate map dimensions and obstacles*/;
+
+	switch (generationID) {
+	case 1: {
+		/*
+		SquareEntity* s{ new SquareEntity(700, 700, 100, 100) };
+		_walls.push_back(dynamic_cast<Entity*>(s));
+		*/
+		_walls.push_back(SquareEntity(700, 700, 100, 100));
+		break;
+		}
+	default: break;
+	}
 }

@@ -19,9 +19,11 @@ public:
 	std::vector<Entity> _walls;
 
 protected:
+	/*
 	virtual bool _testCollision(CircleEntity* e);
 	virtual bool _testCollision(SquareEntity* e);
 	virtual bool _testCollision(Entity* e);
+	*/
 	bool _testCollisionOuterWalls(Entity* e);
 	bool _testCollisionWalls(Entity* e);
 	void _handleCollisionOuterWall(Entity*e, MapCollisionAngle angle);

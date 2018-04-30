@@ -15,7 +15,7 @@ Updated Dec 25, 2016
 #include "../Game/GameLogic.h"
 #include "Renderer.h"
 #include "PlayerDrawable.h"
-
+#include "MapDrawable.h"
 
 class GameRenderer : public Renderer{
 public:
@@ -50,6 +50,7 @@ public:
 	const float size = 100.f;
 	//sf::CircleShape shape(size);
 	sf::CircleShape shape;
+	MapDrawable* mapDrawable;
 	PlayerDrawable * playerDrawable1;
 	PlayerDrawable * playerDrawable2;
 	sf::View minimapView;
