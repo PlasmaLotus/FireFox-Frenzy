@@ -136,11 +136,16 @@ void GameRenderer::drawProjectiles(){
 		try {
 			Projectile * p = dynamic_cast<Projectile *> (vec.at(i));
 			if (p != nullptr) {
+				/*
 				sf::CircleShape circle;
 				circle.setFillColor(sf::Color::Green);
 				circle.setPosition(p->posX - p->width /2, p->posY - p->width / 2);
 				circle.setRadius(p->width);
 				window->draw(circle);
+				*/
+				ProjectileDrawable pro(p);
+				pro.update();
+				window->draw(pro);
 			}
 		}
 		catch (const std::bad_cast& cast){

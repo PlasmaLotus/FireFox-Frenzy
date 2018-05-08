@@ -17,6 +17,7 @@ Updated Dec 25, 2016
 #include "PlayerDrawable.h"
 #include "MapDrawable.h"
 #include "ParticleSystem.h"
+#include "ProjectileDrawable.h"
 
 class GameRenderer : public Renderer{
 public:

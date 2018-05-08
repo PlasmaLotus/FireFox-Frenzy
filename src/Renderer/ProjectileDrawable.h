@@ -41,6 +41,8 @@ public:
 	sf::Font m_font;
 	sf::Text m_text;
 	float angleDeg;
+	void setDisplayHitboxes(bool display);
+	bool _displayHitboxes{ true };
 	//sf::Shader m_shader;
 	//bool m_shaderLoaded;
 	//std::vector<PlayerDrawableAlert> m_alerts;

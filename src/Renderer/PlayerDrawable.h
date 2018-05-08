@@ -56,6 +56,8 @@ public:
 	std::vector<PlayerDrawableAlert> m_alerts;
 	std::vector<PlayerDrawableDashPosition> m_dashPositions;
 	void addAlert(std::string text);
+	void setDisplayHitboxes(bool display);
+	bool _displayHitboxes{ true };
 };
 
 

@@ -10,7 +10,9 @@ ProjectileDrawable::ProjectileDrawable(Projectile * pj)
 	projectile(pj)
 	//m_shaderLoaded(false)
 {
-	projectileHitboxShape.setFillColor(sf::Color::Green);
+	projectileHitboxShape.setFillColor(sf::Color(0, 255, 0, 150));
+	projectileHitboxShape.setOutlineColor(sf::Color::Green);
+	projectileHitboxShape.setOutlineThickness(2);
 	float width = GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM;
 	projectileHitboxShape.setRadius(width);
 
@@ -38,6 +40,17 @@ ProjectileDrawable::ProjectileDrawable(Projectile * pj)
 
 ProjectileDrawable::~ProjectileDrawable()
 {
+}
+
+void PlayerDrawable::setDisplayHitboxes(bool display)
+{
+	_displayHitboxes = display;
+}
+
+void ProjectileDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) const
+{
+	target.draw(m_sprite);
+	target.draw(projectileHitboxShape);
 }
 
 bool ProjectileDrawable::onLoad()
