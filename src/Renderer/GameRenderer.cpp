@@ -18,6 +18,7 @@ GameRenderer::~GameRenderer(){
 }
 
 void GameRenderer::render(){
+	//update();
 	clear();
 	draw();
 	display();
@@ -122,6 +123,9 @@ void GameRenderer::clear() {
 
 void GameRenderer::draw(){
 	drawMap();
+	updateParticleSystems(StateManager::getInstance().getElapsedTime());
+	drawParticleSystems();
+
 	drawProjectiles();
 	drawItems();
 	drawPlayers();
@@ -156,11 +160,16 @@ void GameRenderer::drawProjectiles(){
 		try {
 			Projectile * p = dynamic_cast<Projectile *> (vec.at(i));
 			if (p != nullptr) {
+				/*
 				sf::CircleShape circle;
 				circle.setFillColor(sf::Color::Green);
 				circle.setPosition(p->posX - p->width /2, p->posY - p->width / 2);
 				circle.setRadius(p->width);
 				window->draw(circle);
+				*/
+				ProjectileDrawable pro(p);
+				pro.update();
+				window->draw(pro);
 			}
 		}
 		catch (const std::bad_cast& cast){
@@ -287,6 +296,25 @@ void GameRenderer::handleViews(){
 	//mainView.setCenter(p1->posX, p1->posY);
 	window->setView(mainView);
 }
+void GameRenderer::updateParticleSystems(int dt)
+{
+	for (int i = _particleSystems.size() - 1; i >= 0; --i) {
+		ParticleSystem *p{ _particleSystems.at(i) };
+		p->update(dt);
+		if (!p->isAlive()) {
+			delete p;
+			_particleSystems.erase(_particleSystems.begin() + i);
+		}
+	}
+}
+void GameRenderer::drawParticleSystems()
+{
+	for (int i = _particleSystems.size() - 1; i >= 0; --i) {
+		ParticleSystem *p{ _particleSystems.at(i) };
+		window->draw(*p);
+	}
+}
+
 sf::Texture GameRenderer::getLastFrame() {
 	return lastFrame;
 }
@@ -336,4 +364,11 @@ void GameRenderer::__showPlayerPositions() {
 		playerText2.setPosition(windowX + 2, windowY + fontSize*3 + 2);
 		window->draw(playerText2);
 	}
+}
+
+void GameRenderer::playerHitDisplay(float x, float y)
+{
+	ParticleSystem * p{ new ParticleSystem(50) };
+	p->setEmitter(sf::Vector2f(x, y));
+	_particleSystems.push_back(p);
 }

@@ -111,6 +111,13 @@ bool EventManager::__handleEvent(Event event){
 		audio->stopAudioEvent(AudioEvent::AudioShotChargeMax, event.entity);
 		break;
 	}
+	case EventType::PlayerHit: {
+		GameRenderer* gr{ dynamic_cast<GameRenderer*>(renderer) };
+		if (gr != nullptr) {
+			gr->playerHitDisplay(event.entity->posX, event.entity->posY);
+		}
+		break;
+	}
 
 
 	case EventType::NoEvent:

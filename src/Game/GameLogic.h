@@ -42,8 +42,8 @@ public:
 	std::vector<Entity *> _entities;
 	std::stack<int> _idsToDestroy;
 	void addEntityIDToDelete(int id);
-	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 16 };
-	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 16 };
+	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 32 };
+	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 32 };
 	static const int PLAYER_DISPLAY_HITBOX_WIDTH{ 24 };
 	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 24 };
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
@@ -76,11 +76,11 @@ public:
 	static const float PLAYER_SHIELD_RADIUS;
 
 	static const int PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST{ 100 };
-	static const int PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME{ 3 };
+	static const int PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME{ 10 };
 	static const int PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME{ 2500 };
 
 	static const int PLAYER_BASE_HP{100};
-	static const int PLAYER_SHOOT_COOLDOWN{ 7 };
+	static const int PLAYER_SHOOT_COOLDOWN{ 75 };
 	static const int PLAYER_DASH_MAXIMUM_ENERGY_COST{ 100 };
 	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 2000 };
 	static const int PLAYER_DASH_MINIMUM_CHARGE_TIME{ 10 };

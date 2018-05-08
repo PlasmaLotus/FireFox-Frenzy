@@ -16,11 +16,14 @@ Updated Dec 25, 2016
 #include "Renderer.h"
 #include "PlayerDrawable.h"
 #include "MapDrawable.h"
+#include "ParticleSystem.h"
+#include "ProjectileDrawable.h"
 
 class GameRenderer : public Renderer{
 public:
 
 	void render();
+	//void render(int dt);
 	//sf::Image render();
 	void clear();
 	void draw();
@@ -33,6 +36,8 @@ public:
 	void addGame(GameLogic * g);
 	void addWindow(sf::RenderWindow * g);
 	void handleViews();
+	void drawParticleSystems();
+	void updateParticleSystems(int dt);
 	sf::Texture getLastFrame();
 
 	GameRenderer();
@@ -55,7 +60,7 @@ public:
 	PlayerDrawable * playerDrawable2;
 	sf::View minimapView;
 	sf::View mainView;
-
+	std::vector<ParticleSystem*> _particleSystems;
 	void addPlayerAlert(Player *p, std::string text);
 	void addPlayerAlert(int playerID, std::string text);
 	void setDisplayHitboxes(bool value);
@@ -66,7 +71,7 @@ public:
 	void toggleFPS();
 	void __showFPS();
 	void __showPlayerPositions();
-
+	void playerHitDisplay(float x, float y);
 	bool _displayHitboxes;
 	bool _displayPositions;
 	bool _displayFPS;

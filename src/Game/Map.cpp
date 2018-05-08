@@ -68,6 +68,14 @@ bool Map::_testCollisionOuterWalls(Entity * e){
 		}
 	}
 
+	Projectile * p = dynamic_cast<Projectile*>(e);
+	if (p != nullptr) {
+		if (collision) {
+			p->handleCollisionMap();
+
+		}
+	}
+
 	return collision;
 }
 
@@ -89,148 +97,134 @@ bool Map::_testCollisionWalls(Entity * e){
 	}
 	*/
 	if (e != nullptr) {
+		int e_x = e->posX / 100;
+		int e_y = e->posY / 100;
+
 		for (int i = _walls.size() - 1; i >= 0; --i) {
 			Entity* w{ _walls.at(i) };
-			if (w->testCollision(e)) {
-				collision = true;
-				/*Collision with wall*/
-				/*
-				///Great integration, however, the object colliding with the wall is much smaller
-				///Colliding in the middle of it results in a warp in the opposite axis as the direction colliding from
-				float insertX = 0.f;
-				float insertY = 0.f;
+			if (w != nullptr) {
+				int w_x = w->posX / 100;
+				int w_y = w->posY / 100;
+				int w_wid = w->width / 100;
+				int w_hei = w->height / 100;
+				if (std::abs(e_x - w_x) < w_wid + 2 && std::abs(e_y - w_y) < w_hei + 2 ) {
+					if (w->testCollision(e)) {
+						collision = true;
+				
+						CircleEntity * cw = dynamic_cast<CircleEntity*>(w);
+						SquareEntity * sw = dynamic_cast<SquareEntity*>(w);
+				
 
-				if (e->posX >= w.posX) {
-					//From the Right
-					insertX = (e->width / 2 + w.width / 2) - (e->posX - w.posX);
-				}
-				else {
-					//From the LEFT
-					insertX = ( w.posX - e->posX) - (e->width / 2 + w.width / 2);
-				}
+						if (sw != nullptr) {
+							/*Testing with square walls*/
+							//Testing if the object entered from the right
+							float widthSum = e->width / 2 + w->width / 2;
+							float heightSum = e->height / 2 + w->height / 2;
+							float arbitraryPixel = 0.001f; //Small unit of msure to make sure the object isnt still colliding with the wall the next frame
+							if (e->posX >= w->posX) {
+								//On the right of the wall
+								if (e->prevPosX - w->posX > widthSum) {
+									//The entity was not already within the projected X axis
+									if (e->posX - w->posX < widthSum) {
+										float insertX = widthSum - (e->posX - w->posX);
+										e->posX += insertX + arbitraryPixel;
+									}
+								}
+							}
+							else {
+								//On the left of the wall
+								/**/
+								if (w->posX - e->prevPosX > widthSum) {
+									//The entity was not already within the projected X axis
+									if (w->posX - e->posX < widthSum) {
+										float insertX = (w->posX - e->posX) - widthSum;
+										e->posX += insertX - arbitraryPixel;
+									}
+								}
+							}
 
-				if (e->posY >= w.posY) {
-					//From the Bottom
-					insertY = (e->height / 2 + w.height / 2) - (e->posY - w.posY);
-				}
-				else {
-					//From the TOP
-					insertY = (w.posY - e->posY) - (e->height / 2 + w.height / 2);
-				}
-
-				if (std::abs(insertX) > std::abs(insertY)) {
-					//X is higher
-					e->posX += insertX;
-				}
-				else if (std::abs(insertX) < std::abs(insertY)) {
-					//X is higher
-					e->posY += insertY;
-				}
-				else {
-					e->posX += insertX;
-					e->posY += insertY;
-				}
-				*/
-				CircleEntity * cw = dynamic_cast<CircleEntity*>(w);
-				SquareEntity * sw = dynamic_cast<SquareEntity*>(w);
-
-				if (sw != nullptr) {
-					/*Testing with square walls*/
-					//Testing if the object entered from the right
-					float widthSum = e->width / 2 + w->width / 2;
-					float heightSum = e->height / 2 + w->height / 2;
-					float arbitraryPixel = 0.001f; //Small unit of msure to make sure the object isnt still colliding with the wall the next frame
-					if (e->posX >= w->posX) {
-						//On the right of the wall
-						if (e->prevPosX - w->posX > widthSum) {
-							//The entity was not already within the projected X axis
-							if (e->posX - w->posX < widthSum) {
-								float insertX = widthSum - (e->posX - w->posX);
-								e->posX += insertX + arbitraryPixel;
+							//Testing if the object entered from the bottom
+							if (e->posY >= w->posY) {
+								//On the bottom of the wall
+								if (e->prevPosY - w->posY > heightSum) {
+									//The entity was not already within the projected X axis
+									if (e->posY - w->posY < heightSum) {
+										float insertY = heightSum - (e->posY - w->posY);
+										e->posY += insertY + arbitraryPixel;
+									}
+								}
+							}
+							else {
+								//On the top of the wall
+								if (w->posY - e->prevPosY > heightSum) {
+									//The entity was not already within the projected X axis
+									if (w->posY - e->posY < heightSum) {
+										float insertY = (w->posY - e->posY) - heightSum;
+										e->posY += insertY - arbitraryPixel;
+									}
+								}
 							}
 						}
-					}
-					else {
-						//On the left of the wall
-						/**/
-						if (w->posX - e->prevPosX > widthSum) {
-							//The entity was not already within the projected X axis
-							if (w->posX - e->posX < widthSum) {
-								float insertX = (w->posX - e->posX) - widthSum;
-								e->posX += insertX - arbitraryPixel;
-							}
-						}
-					}
+						else if (cw != nullptr) {
+							/*Testing with a Circle Obstacle*/
+							/*X: cos, y = sin*/
+							//float angleBetween = std::atan2(e->posY - cw->posY, e->posX - cw->posX);//rad
+							float angleBetween = e->_angleBetween(cw->posX, cw->posY);
+							float widthWall = std::abs(cw->width / 2 * cos(angleBetween));
+							float heightWall = std::abs(cw->height / 2 * sin(angleBetween));
+							float widthEntity = std::abs(e->width / 2 * cos(angleBetween));
+							float heightEntity = std::abs(e->height / 2 * sin(angleBetween));
 
-					//Testing if the object entered from the bottom
-					if (e->posY >= w->posY) {
-						//On the bottom of the wall
-						if (e->prevPosY - w->posY > heightSum) {
-							//The entity was not already within the projected X axis
-							if (e->posY - w->posY < heightSum) {
-								float insertY = heightSum - (e->posY - w->posY);
-								e->posY += insertY + arbitraryPixel;
-							}
-						}
-					}
-					else {
-						//On the top of the wall
-						if (w->posY - e->prevPosY > heightSum) {
-							//The entity was not already within the projected X axis
-							if (w->posY - e->posY < heightSum) {
-								float insertY = (w->posY - e->posY) - heightSum;
-								e->posY += insertY - arbitraryPixel;
-							}
-						}
-					}
-				}
-				else if (cw != nullptr) {
-					/*Testing with a Circle Obstacle*/
-					/*X: cos, y = sin*/
-					//float angleBetween = std::atan2(e->posY - cw->posY, e->posX - cw->posX);//rad
-					float angleBetween = e->_angleBetween(cw->posX, cw->posY);
-					float widthWall = std::abs(cw->width / 2 * cos(angleBetween));
-					float heightWall = std::abs(cw->height / 2 * sin(angleBetween));
-					float widthEntity = std::abs(e->width / 2 * cos(angleBetween));
-					float heightEntity = std::abs(e->height / 2 * sin(angleBetween));
+							float totalWidth = std::abs(e->width/2 * cos(angleBetween)) + std::abs(cw->width/2 * cos(angleBetween));
+							float totalHeight = std::abs(e->height/2 * sin(angleBetween)) + std::abs(cw->height/2 * sin(angleBetween));
 
-					float totalWidth = std::abs(e->width/2 * cos(angleBetween)) + std::abs(cw->width/2 * cos(angleBetween));
-					float totalHeight = std::abs(e->height/2 * sin(angleBetween)) + std::abs(cw->height/2 * sin(angleBetween));
+							float widthBetween = std::pow(std::pow(std::abs(totalWidth), 2) + std::pow(std::abs(totalHeight), 2), 0.5);
+							float arbitraryPixel = 0.001f; //Small unit of msure to make sure the object isnt still colliding with the wall the next frame
+							if (widthBetween > e->_distanceBetween(w->posX, w->posY)) {
+								//circle collision = true;
+								if (e->posX >= w->posX) {
+									//On the right of the wall
+									float insertX = (widthWall+ widthEntity) - (e->posX - w->posX);
+									e->posX += insertX + arbitraryPixel;
+								}
+								else {
+									//On the left of the wall
+									float insertX = (w->posX - e->posX) - (widthWall + widthEntity);
+									e->posX += insertX - arbitraryPixel;
+								}
+								//Testing if the object entered from the bottom
+								if (e->posY >= w->posY) {
+									//On the bottom of the wall
+									float insertY = (heightWall + heightEntity) - (e->posY - w->posY);
+									e->posY += insertY + arbitraryPixel;
+								}
+								else {
+									//On the top of the wall
+									float insertY = (w->posY - e->posY) - (heightWall + heightEntity);
+									e->posY += insertY - arbitraryPixel;
+								}
 
-					float widthBetween = std::pow(std::pow(std::abs(totalWidth), 2) + std::pow(std::abs(totalHeight), 2), 0.5);
-					float arbitraryPixel = 0.001f; //Small unit of msure to make sure the object isnt still colliding with the wall the next frame
-					if (widthBetween > e->_distanceBetween(w->posX, w->posY)) {
-						//circle collision = true;
-						if (e->posX >= w->posX) {
-							//On the right of the wall
-							float insertX = (widthWall+ widthEntity) - (e->posX - w->posX);
-							e->posX += insertX + arbitraryPixel;
+							}
 						}
 						else {
-							//On the left of the wall
-							float insertX = (w->posX - e->posX) - (widthWall + widthEntity);
-							e->posX += insertX - arbitraryPixel;
+							/*If the wall isnt a square or circle entity...*/
 						}
-						//Testing if the object entered from the bottom
-						if (e->posY >= w->posY) {
-							//On the bottom of the wall
-							float insertY = (heightWall + heightEntity) - (e->posY - w->posY);
-							e->posY += insertY + arbitraryPixel;
-						}
-						else {
-							//On the top of the wall
-							float insertY = (w->posY - e->posY) - (heightWall + heightEntity);
-							e->posY += insertY - arbitraryPixel;
-						}
+
+				
 
 					}
 				}
-				else {
-					/*If the wall isnt a square or circle entity...*/
-				}
+			}
+		}
+
+		Projectile * p = dynamic_cast<Projectile*>(e);
+		if (p != nullptr) {
+			if (collision) {
+				p->handleCollisionMap();
 
 			}
 		}
+
 	}
 
 
@@ -244,23 +238,35 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 	{
 		offset = e->width/2 - e->posX;
 		e->posX += offset;
+		if (e->velocityX < 0) {
+			e->velocityX = 0;
+		}
 		break;
 	}
 	case MapCollisionAngle::WallRight:
 	{
 		offset = this->width - e->posX - e->width /2;
 		e->posX += offset;
+		if (e->velocityX > 0) {
+			e->velocityX = 0;
+		}
+		
 		/*
 		//Warps to opposite wall
 		offset = e->width / 2 - this->width - e->posX;
 		e->posX += offset;
 		*/
+
 		break;
 	}
 	case MapCollisionAngle::WallUp:
 	{
 		offset = e->height / 2 - e->posY;
 		e->posY += offset;
+
+		if (e->velocityY < 0) {
+			e->velocityY = 0;
+		}
 		break;
 	}
 	case MapCollisionAngle::WallDown:
@@ -272,6 +278,9 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 		offset = e->height / 2 - this->height - e->posY;
 		e->posY += offset;
 		*/
+		if (e->velocityY > 0) {
+			e->velocityY = 0;
+		}
 		break;
 	}
 	default:break;
@@ -327,4 +336,9 @@ void Map::generateMap(int generationID) {
 		}
 	default: break;
 	}
+}
+
+Vector2 Map::getRandomSpawnPoint(float width, float height)
+{
+	return Vector2();
 }

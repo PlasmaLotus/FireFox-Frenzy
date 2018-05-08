@@ -67,11 +67,15 @@ void Player::update(int32_t dt)
 	/*Projectiles*/
 	//handleProjectiles(dt);
 	shootHeld = false;
+	shootHeldAlt = false;
+	/*
 	shootCooldownTime--;
 	if (shootCooldownTime <= 0) {
 		canShoot = true;
 	}
+	*/
 	handleShooting(dt);
+	handleShootingAlt(dt);
 	/*Recharging ammo*/
 	handleAmmo(dt);
 	/*Shield*/
@@ -96,11 +100,19 @@ void Player::setDashOrientation(float x, float y)
 	}
 }
 
+/*Enables autoFire*/
 void Player::setCursorOrientation(float x, float y)
 {
 	cursorOrientation = std::atan2(x, y);
 	cursorOrientationX = x;
 	cursorOrientationY = y;
+
+	if ( std::abs(x) > 50 || std::abs(y) > 50) {
+		_shootHeld = true;
+	}
+	else {
+		_shootHeld = false;
+	}
 }
 
 void Player::setCursorOrientationFromMouse(int x, int y)
@@ -154,6 +166,7 @@ void Player::_handleCollision(PowerUpItem p) {
 
 void Player::_handleCollision(Projectile p){
 	/*Projectile hits the player*/
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerHit, this));
 	if (shieldActive) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldHit, this));
 		_loseAmmo(p.power *GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER);
@@ -171,8 +184,6 @@ void Player::_handleCollision(Energy e){
 		ammo = GameLogic::PLAYER_MAX_AMMO;
 	}
 }
-
-
 
 void Player::handleCollision(Entity * e){
 	try{
@@ -333,70 +344,184 @@ void Player::handleShooting(int dt)
 		canShoot = true; 
 		shootCooldownTime = 0;
 	}
-	if (shootHeld && canShoot) {
-		if (_shotChargeHeldTime <= 0) {
-			StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
-		}
-		
-		else if(_shotChargeHeldTime >= (GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME / 2)) {
-			if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMax, this));
-			}
-			else {
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMid, this));
-			}
-		}
-		
 
-		_shotChargeHeldTime += dt;
-		if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
-			_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
-		}
+	/*AutoFire*/
+	/*
+	if (_autoFire && _shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
+		shootHeld = false;
 	}
-	else {
-		if (_shotChargeHeldTime > 0) {
-			//shootHeld = false;
-			canShoot = false;
-			shootCooldownTime = GameLogic::PLAYER_SHOOT_COOLDOWN;
+	*/
+
+	if (ammo > 0) {
+		if (shootHeld && canShoot) {
+			if (_shotChargeHeldTime <= 0) {
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
+			}
+
+			else if (_shotChargeHeldTime >= (GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME / 2)) {
+				if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMax, this));
+				}
+				else {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMid, this));
+				}
+			}
+
+
+			_shotChargeHeldTime += dt;
 			if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
 				_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
 			}
-			float ratio = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME ;
-			int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
-			if (ammo > 0) {
-				_loseAmmo(projectilePower);
-				//Create Projectile
-				Projectile *p = ability.getProjectile(getID(), posX, posY);
-				p->orientation = cursorOrientation;
-				//p->orientationX = cursorOrientationX;
-				//p->orientationY = cursorOrientationY;
-				p->velocityX = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
-				p->velocityY = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
-				p->setRadius((GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM - GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM) * ratio + GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM);
-				p->power = projectilePower;
-				
-				_shotChargeHeldTime = 0;
-				shootHeld = false;
-
-				/*Spawn*/
-				_game->addEntity(p);
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn, p));
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
-
-			}
-			else {
-				shootHeld = false;
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::OutOfAmmo, this));
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
-			}
-
 		}
-		shootHeld = false;
+			if (_shootHeld) {
+				if (_shotChargeHeldTime > 0 && _shotChargeHeldTime >= GameLogic::PLAYER_DASH_MINIMUM_CHARGE_TIME) {
+					//shootHeld = false;
+					canShoot = false;
+					shootCooldownTime = GameLogic::PLAYER_SHOOT_COOLDOWN;
+					if (_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+						_shotChargeHeldTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+					}
+					//float ratio = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+					int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
+
+					if (ammo > 0) {
+						_handleShooting(projectilePower);//spanws projectile with properties
+
+					}
+					else {
+						shootHeld = false;
+						StateManager::getInstance().eventManager.queueEvent(Event(EventType::OutOfAmmo, this));
+						StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
+					}
+
+				}
+			}
+		
 	}
+		shootHeld = false;
+	
 	_shootHeld = false;
 }
 
-void Player::_handleShooting(int ammo) {
+void Player::handleShootingAlt(int dt)
+{
+
+	if (_shootHeldAlt) {
+		shootHeldAlt = true;
+	}
+	shootCooldownTimeAlt -= dt;
+	if (shootCooldownTimeAlt <= 0) {
+		canShootAlt = true;
+		shootCooldownTimeAlt = 0;
+	}
+
+	if (canShootAlt) {
+		if (shootHeldAlt) {
+			if (_shotChargeHeldTimeAlt <= 0) {
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
+				//change event
+			}
+			else if (_shotChargeHeldTimeAlt >= (GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME / 2)) {
+				if (_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMax, this));
+				}
+				else {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMid, this));
+				}
+			}
+
+			_shotChargeHeldTimeAlt += dt;
+			if (_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+				_shotChargeHeldTimeAlt = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+			}
+		}
+		else {
+			if (_shotChargeHeldTimeAlt > 0 && _shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
+				canShootAlt = false;
+				shootCooldownTimeAlt = GameLogic::PLAYER_SHOOT_COOLDOWN;
+				if (_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
+					_shotChargeHeldTimeAlt = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+				}
+
+				//float ratio = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+				int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
+
+				if (ammo > 0) {
+					_handleShootingAlt(projectilePower);//spanws projectile with properties
+
+				}
+				else {
+					shootHeldAlt = false;
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::OutOfAmmo, this));
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
+				}
+
+			}
+			shootHeldAlt = false;
+		}
+	}
+
+	
+	_shootHeldAlt = false;
+}
+
+
+
+void Player::_handleShooting(int power) {
+	float ratio = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+	//int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
+	
+	if (power <= 0) {
+		power = 1;
+	}
+	_loseAmmo(power);
+	for (int i = 0; i < ability._projectilesToSpawnThisTick; ++i) {
+		//Create Projectile
+		Projectile *p = ability.getProjectile(getID(), posX, posY, cursorOrientation);
+		//p->orientation = cursorOrientation;
+		//p->orientationX = cursorOrientationX;
+		//p->orientationY = cursorOrientationY;
+		p->velocityX = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
+		p->velocityY = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
+		p->setRadius((GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM - GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM) * ratio + GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM);
+		p->power = power;
+		_game->addEntity(p);
+
+		/*Spawn*/
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn, p));
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
+	}
+
+	shootHeld = false;
+	_shotChargeHeldTime = 0;
+}
+
+void Player::_handleShootingAlt(int power) {
+	float ratio = 1.0f * _shotChargeHeldTimeAlt / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
+	//int projectilePower = 1.0f * _shotChargeHeldTimeAlt / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
+	
+	if (power <= 0) {
+		power = 1;
+	}
+	_loseAmmo(power);
+	//Create Projectile
+	Projectile *p = ability.getProjectileAlt(getID(), posX, posY, cursorOrientation);
+	//p->orientation = cursorOrientation;
+	//p->orientationX = cursorOrientationX;
+	//p->orientationY = cursorOrientationY;
+	p->velocityX = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
+	p->velocityY = (GameLogic::PROJECTILE_SPEED_MAXIMUM - GameLogic::PROJECTILE_SPEED_MINIMUM) * ratio + GameLogic::PROJECTILE_SPEED_MINIMUM;
+	p->setRadius((GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM - GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM) * ratio + GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM);
+	p->power = power;
+
+	_shotChargeHeldTimeAlt = 0;
+	shootHeldAlt = false;
+
+	/*Spawn*/
+	_game->addEntity(p);
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn, p));
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
+	//change events
 }
 
 void Player::handleAbility(int dt){
@@ -431,18 +556,19 @@ void Player::handleShield(int dt)
 
 
 /*Handle when Player presses the Shoot command*/
-void Player::shoot() {
-	_shootHeld = true;
+void Player::commandShootAlt() {
+
+	_shootHeldAlt = true;
 }
 
-void Player::dash() {
+void Player::commandDash() {
 	_dashHeld = true;
 	dashOrientation = orientation;
 	dashOrientationX = orientationX;
 	dashOrientationY = orientationY;
 }
 
-void Player::shield(){
+void Player::commandShield(){
 	_shieldActive = true;
 }
 
@@ -465,7 +591,7 @@ void Player::_loseAmmo(int nb){
 }
 
 //move the 
-void Player::move(float x, float y) {
+void Player::commandMove(float x, float y) {
 	_moveEngaged = true;
 }
 

@@ -186,14 +186,26 @@ void GameLogic::_handleEntitiesUpdate(int32_t dt){
 void GameLogic::_handleEntitiesCollisions(int32_t dt){
 	for (int i = _entities.size() - 1; i >= 0; i--) {
 		Entity *e1 = _entities.at(i);
-		for (int j = _entities.size() - 1; j >= 0; j--) {
-			Entity *e2 = _entities.at(j);
-			if (e1 != e2) {
-				//Test if the 2 entities are even close to each other
-				if (e1->testCollision(e2)) {
-					e1->handleCollision(e2);
-					//printf("Collision Detected, ID:%d, ID:%d -  Distance: %3.3f!!!\n", e1->getID(), e2->getID(), e1->_distanceBetween(*e2));
+		if (e1 != nullptr) {
+			int e1_x = e1->posX / 100;
+			int e1_y = e1->posY / 100;
+		
+			for (int j = _entities.size() - 1; j >= 0; j--) {
+				Entity *e2 = _entities.at(j);
+				if (e2 != nullptr) {
+					if (e1 != e2) {
+						int e2_x = e2->posX / 100;
+						int e2_y = e2->posY / 100;
+						//Test if the 2 entities are even close to each other
+						if ( std::abs(e1_x - e2_x) < 2 && std::abs(e1_y - e2_y) < 2) {
+							if (e1->testCollision(e2)) {
+								e1->handleCollision(e2);
+								//printf("Collision Detected, ID:%d, ID:%d -  Distance: %3.3f!!!\n", e1->getID(), e2->getID(), e1->_distanceBetween(*e2));
+							}
+						}
+					}
 				}
+			
 			}
 		}
 	}

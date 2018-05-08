@@ -22,6 +22,7 @@ public:
 	virtual void update(int32_t dt);
 	virtual bool isAlive();
 	virtual void handleCollision();
+	virtual void handleCollisionMap();
 	virtual void handleCollision(Entity *e);
 	virtual bool testCollision(Entity * e);
 	int getPlayerID();

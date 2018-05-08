@@ -31,7 +31,7 @@ bool GameController::handleInput() {
 	player->setPlayerOrienation(pAngleX, pAngleY);
 	if ((pAngleX >= config->joystickDeadZone || pAngleX <= -config->joystickDeadZone)||
 		(pAngleY >= config->joystickDeadZone || pAngleY <= -config->joystickDeadZone)) {
-		player->move(pAngleX, pAngleY);
+		player->commandMove(pAngleX, pAngleY);
 	}
 	player->setCursorOrientation(cAngleX, cAngleY);
 	player->setDashOrientation(pAngleX, pAngleY);
@@ -88,22 +88,22 @@ void GameController::handleCommand(ControllerCommand command){
 		}
 		case ControllerCommand::Shoot:
 		{
-			player->shoot();
+			player->commandShootAlt();
 			break;
 		}
 		case ControllerCommand::ShootAlt:
 		{
-			player->shoot();
+			player->commandShootAlt();
 			break;
 		}
 		case ControllerCommand::Shield:
 		{
-			player->shield();
+			player->commandShield();
 			break;
 		}
 		case ControllerCommand::Dash:
 		{
-			player->dash();
+			player->commandDash();
 			break;
 		}
 		case ControllerCommand::Pause:
@@ -197,19 +197,19 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 			case ControllerCommand::Shoot:
 			case ControllerCommand::ShootAlt: {
 				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
-					player->shoot();
+					player->commandShootAlt();
 				}
 				break;
 			}
 			case ControllerCommand::Dash: {
 				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
-					player->dash();
+					player->commandDash();
 				}
 				break;
 			}
 			case ControllerCommand::Shield: {
 				if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
-					player->shield();
+					player->commandShield();
 				}
 				break;
 			}
@@ -223,7 +223,7 @@ void GameController::handleMouseAxis() {
 	//printf("HandleMouseAxis - MousePos: %d, %d\n", mousePos.x, mousePos.y);
 	if (mode == ControlMode::Keyboard) {
 		//printf("ControllerModeKeyboardMouse\n");
-		player->setCursorOrientationFromMouse(mousePos.x, mousePos.y);
+		//player->setCursorOrientationFromMouse(mousePos.x, mousePos.y);
 		//sf::Mouse::setPosition(sf::Vector2i(100, 100));
 	}
 }

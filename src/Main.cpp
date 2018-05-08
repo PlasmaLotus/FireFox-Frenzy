@@ -1,7 +1,8 @@
-//#include "SFML\Graphics.hpp"
+
 //#include <SFML/Graphics.hpp>
-#include"States\StateManager.h"
 #include "Main.h"
+#include"States\StateManager.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -20,6 +21,7 @@ void gotoxy(int x, int y)
 }
 
 /*
+#include <SFML\Graphics.hpp>
 class ParticleSystem : public sf::Drawable, public sf::Transformable
 {
 public:
@@ -99,6 +101,7 @@ private:
 };
 
 
+//#include "Renderer\ParticleSystem.h"
 int main(int argc, char *argv[])
 {
 	// create the window
@@ -127,7 +130,7 @@ int main(int argc, char *argv[])
 
 		// update it
 		sf::Time elapsed = clock.restart();
-		particles.update(elapsed);
+		particles.update(elapsed.asMilliseconds());
 
 		// draw it
 		window.clear();

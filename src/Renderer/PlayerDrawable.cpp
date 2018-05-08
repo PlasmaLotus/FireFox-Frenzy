@@ -10,7 +10,9 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	player(pl)
 	//m_shaderLoaded(false)
 {
-	playerShape.setFillColor(sf::Color::Blue);
+	playerShape.setFillColor(sf::Color(0,0,255,150));
+	playerShape.setOutlineColor(sf::Color::Blue);
+	playerShape.setOutlineThickness(2);
 	int width = GameLogic::PLAYER_COLLISION_HITBOX_WIDTH;
 	int height = GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT;
 	playerShape.setSize(sf::Vector2f(width, height));
@@ -213,10 +215,10 @@ void PlayerDrawable::update()
 			m_hpText.setString(s);
 		}
 		/*Shooting*/
-		if (player->_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
+		if (player->_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
 			isChargingShot = true;
 			std::string s;
-			s += std::to_string(player->_shotChargeHeldTime);
+			s += std::to_string(player->_shotChargeHeldTimeAlt);
 			s += "/";
 			s += std::to_string(GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME);
 			m_shotText.setString(s);
@@ -254,6 +256,11 @@ void PlayerDrawable::addAlert(std::string text){
 	m_alerts.push_back(a);
 	//updateAlertsPlacement();
 	
+}
+
+void PlayerDrawable::setDisplayHitboxes(bool display)
+{
+	_displayHitboxes = display;
 }
 
 PlayerDrawableAlert::PlayerDrawableAlert(const std::string & text, const sf::Font & font, float fontSize):
