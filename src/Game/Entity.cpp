@@ -30,7 +30,10 @@ void Entity::update(int32_t dt)
 	else {
 		_hitlagFrames = 0;
 	}
-	/**/
+	/*
+	_gridPosX = posX / 100;
+	_gridPosX = posY / 100;
+	*/
 }
 
 bool Entity::isAlive() {

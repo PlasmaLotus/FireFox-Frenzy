@@ -17,6 +17,7 @@ GameState::GameState(sf::RenderWindow *w):
 	p1Controller = new GameController(this, p1KeyConfig, game->getPlayer(1));
 	p2KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(2));
 	p2Controller = new GameController(this, p2KeyConfig, game->getPlayer(2));
+	StateManager::getInstance().eventManager.setRenderer(renderer);
 }
 
 GameState::~GameState(){

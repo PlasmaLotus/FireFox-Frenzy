@@ -29,5 +29,6 @@ protected:
 	void _handleCollisionOuterWall(Entity*e, MapCollisionAngle angle);
 	void _handleCollisionWall(Entity*e, Entity wall, MapCollisionAngle angle);
 	void generateMap(int generationID = 0);
+	Vector2 getRandomSpawnPoint(float width, float height);
 };
 #endif //Map

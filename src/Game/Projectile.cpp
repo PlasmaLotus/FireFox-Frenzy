@@ -17,7 +17,7 @@ Projectile::Projectile():
 Projectile::Projectile(int pID, float x, float y) :
 	CircleEntity(x, y, GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM),
 	_playerID(pID),
-	lifetime{ 8000 },
+	lifetime{ 6000 },
 	durability{ 1 },
 	orientationX{ 0.f },
 	orientationY{ 0.f },
@@ -68,6 +68,12 @@ void Projectile::handleCollision()
 {
 	--durability;
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, getID()));
+}
+
+void Projectile::handleCollisionMap()
+{
+	--durability;
+	//StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, getID()));
 }
 
 void Projectile::handleCollision(Entity *e)

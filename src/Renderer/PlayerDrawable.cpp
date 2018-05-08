@@ -213,10 +213,10 @@ void PlayerDrawable::update()
 			m_hpText.setString(s);
 		}
 		/*Shooting*/
-		if (player->_shotChargeHeldTime >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
+		if (player->_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
 			isChargingShot = true;
 			std::string s;
-			s += std::to_string(player->_shotChargeHeldTime);
+			s += std::to_string(player->_shotChargeHeldTimeAlt);
 			s += "/";
 			s += std::to_string(GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME);
 			m_shotText.setString(s);

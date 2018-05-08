@@ -49,6 +49,10 @@ public:
 	int _collisionDelay;
 	int _hitlagFrames;
 	bool _inHitlag;
+	/*
+	int _gridPosX;
+	int _gridPosY;
+	*/
 
 protected:
 	virtual bool testCollision(Entity e);

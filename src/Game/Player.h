@@ -36,10 +36,10 @@ public:
 	bool isAlive();
 	void update(int32_t dt);
 	PlayerState state;
-	void shoot();
-	void dash();
-	void shield();
-	void move(float x, float y);
+	void commandShootAlt();
+	void commandDash();
+	void commandShield();
+	void commandMove(float x, float y);
 	void setPlayerOrienation(float x, float y);
 	void setCursorOrientation(float x, float y);
 	void _gainAmmo(int nb);
@@ -59,12 +59,21 @@ public:
 	int HP;
 	bool _moveEngaged = false;
 	/*Shooting*/
+	bool _autoFire{ true };
 	bool shootHeld{ false };
 	bool _shootHeld{ false };
 	int shootCooldownTime{ 0 };
 	bool canShoot{ true };
 	int _shotChargeHeldTime{ 0 };
-	int __shotChargeInitialCooldown{ 5 };
+
+	//alt
+	bool shootHeldAlt{ false };
+	bool _shootHeldAlt{ false };
+	int shootCooldownTimeAlt{ 0 };
+	bool canShootAlt{ true };
+	int _shotChargeHeldTimeAlt{ 0 };
+
+	//int __shotChargeInitialCooldown{ 5 };
 	void _handleMovement(int dt);
 	
 	/*Dash*/
@@ -95,7 +104,9 @@ public:
 	int32_t _ammoRechargeProgress; //as miliseconds
 	void handleAmmo(int dt);
 	void handleShooting(int dt);
-	void _handleShooting(int ammo);
+	void handleShootingAlt(int dt);
+	void _handleShooting(int power);
+	void _handleShootingAlt(int power);
 	/*Shield*/
 	Projectile _shield;
 	bool shieldActive;

@@ -30,7 +30,7 @@ public:
 	int64_t getElapsedTime();
 	int64_t getRenderElapsedTime();
 	int getUniqueID();
-	static const int FPS = 144;
+	static const int FPS = 60;
 	static const int renderFPS = 60;
 	int SCREEN_WIDTH{ 1280 };
 	int SCREEN_HEIGHT{ 720 };

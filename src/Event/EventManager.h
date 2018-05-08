@@ -5,7 +5,7 @@
 #include "../Renderer/GameRenderer.h"
 #include "../Game/GameLogic.h"
 #include "AudioEventManager.h"
-enum EventType{NoEvent, GameEnd, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo, TimeLimit, LastManStanding,
+enum EventType{NoEvent, GameEnd, ProjectileSpawn, PlayerHit, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo, TimeLimit, LastManStanding,
 MenuItemIncrease, MenuItemDecrease, MenuSelection, MenuItemChange, PlayerLowHP, PlayerShotChargeStart, PlayerShotChargeStartMid, PlayerShotChargeStartMax, PlayerShotChargeEnd};
 class Event {
 public:
