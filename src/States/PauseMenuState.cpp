@@ -1,6 +1,7 @@
 #include "PauseMenuState.h"
 #include "../Menu/PauseMenu.h"
 #include "../States/StateManager.h"
+#include "../States/GameState.h"
 
 PauseMenuState::PauseMenuState():
 	PauseMenuState(nullptr, nullptr){
@@ -13,9 +14,14 @@ PauseMenuState::PauseMenuState(sf::RenderWindow *w) :
 PauseMenuState::PauseMenuState(Menu * m) :
 	PauseMenuState(nullptr, m) {
 }
+
 PauseMenuState::PauseMenuState(sf::RenderWindow * w, Menu * m) :
+	PauseMenuState(nullptr, w, m){
+}
+
+PauseMenuState::PauseMenuState(GameState* gs, sf::RenderWindow * w, Menu * m) :
 	//MenuState()
-	MenuState(w, new PauseMenu())
+	MenuState(w, new PauseMenu(gs))
 {
 	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
 	p1Controller = new MenuController(p1KeyConfig, menu);

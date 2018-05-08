@@ -92,6 +92,30 @@ void GameRenderer::setDisplayFPS(bool value){
 	_displayFPS = value;
 }
 
+void GameRenderer::toggleHitboxes()
+{
+	if (_displayHitboxes)
+		setDisplayHitboxes(false);
+	else
+		setDisplayHitboxes(true);
+}
+
+void GameRenderer::togglePositions()
+{
+	if (_displayPositions)
+		setDisplayPositions(false);
+	else
+		setDisplayPositions(true);
+}
+
+void GameRenderer::toggleFPS()
+{
+	if (_displayFPS)
+		setDisplayFPS(false);
+	else
+		setDisplayFPS(true);
+}
+
 void GameRenderer::clear() {
 	window->clear();
 }

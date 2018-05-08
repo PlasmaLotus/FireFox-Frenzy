@@ -10,6 +10,7 @@ Updated May 17, 2017
 #include "../Renderer/GameRenderer.h"
 #include "../Controller/GameController.h"
 #include "../Event/EventManager.h"
+#include "PauseMenuState.h"
 class GameState : public State {
 public:
 	GameState(sf::RenderWindow *w);
@@ -18,6 +19,7 @@ public:
 	GameLogic *getGame();
 	void pause();
 	void reset();
+	GameRenderer* getRenderer();
 private:
 	GameLogic *game;
 	GameRenderer *renderer;
@@ -26,5 +28,6 @@ private:
 	GameController *p2Controller;
 	ControllerConfig* p1KeyConfig;
 	ControllerConfig* p2KeyConfig;
+	PauseMenuState* pauseMenuState;
 };
 #endif

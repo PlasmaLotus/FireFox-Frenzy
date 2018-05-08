@@ -61,6 +61,9 @@ public:
 	void setDisplayHitboxes(bool value);
 	void setDisplayPositions(bool value);
 	void setDisplayFPS(bool value);
+	void toggleHitboxes();
+	void togglePositions();
+	void toggleFPS();
 	void __showFPS();
 	void __showPlayerPositions();
 

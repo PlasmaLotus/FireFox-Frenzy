@@ -2,10 +2,12 @@
 #define __PauseMenu__
 #include "../States/MenuState.h"
 
+class GameState;
 class PauseMenuState : public MenuState {
 public:
 	//PauseMenuState(sf::RenderWindow *w);
 	PauseMenuState();
+	PauseMenuState(GameState* gs, sf::RenderWindow * w, Menu *m);
 	PauseMenuState(sf::RenderWindow * w, Menu *m);
 	PauseMenuState(sf::RenderWindow *w);
 	PauseMenuState(Menu * m);

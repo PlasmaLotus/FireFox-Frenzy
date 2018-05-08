@@ -24,6 +24,7 @@ public:
 	static StateManager& getInstance();
 	void switchToState(State* state);
 	void goBack();
+	void goBackTo(State* state);
 	void quit();
 	sf::RenderWindow * getWindow();
 	void run();

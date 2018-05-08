@@ -23,8 +23,7 @@ int StateManager::getWindowHeight()
 	return StateManager::getInstance().window.getSize().y;
 }
 
-StateManager::~StateManager()
-{
+StateManager::~StateManager(){
 	delete _newState;
 	delete _currentState;
 }
@@ -42,9 +41,43 @@ void StateManager::switchToState(State* state) {
 void StateManager::goBack() {
 	_deletedState = true;
 	/*
-
 	*/
 }
+
+void StateManager::goBackTo(State *state) {
+	std::stack<State* > tempStack;
+	State *temp = _states.top();
+	if (temp != state) {
+		bool found = false;
+		tempStack.push(temp);
+		while (!found) {
+			_states.pop();
+			temp = _states.top();
+			if (temp == state) {
+				found = true;
+			}
+			else {
+				tempStack.push(temp);
+				if (_states.size() <= 0) {
+					break;
+				}
+			}
+		}
+		if (_states.size() <= 0) {
+			while (tempStack.size() > 0) {
+				_states.push(tempStack.top());
+				tempStack.pop();
+			}
+		}
+
+	}
+
+
+	for (int i = 0; i ­ < howMany, ++i) {
+		goBack();
+	}
+}
+
 
 void StateManager::quit() {
 	_running = false;
