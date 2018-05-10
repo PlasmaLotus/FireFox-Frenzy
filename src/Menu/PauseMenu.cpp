@@ -32,21 +32,19 @@ PauseMenu::PauseMenu(GameState* gs):
 	addItem(
 		MenuItem("Toggle FPS",
 			[&]() {
-		if(gameState != nullptr){
-			gameState->getRenderer()->toggleFPS()­;
-		};
+		if (gameState != nullptr) { gameState->getRenderer()->toggleFPS(); };
 	}));
 
 	addItem(
 		MenuItem("Toggle Player Positions ",
 			[&]() {
-		if (gameState != nullptr) { gameState->getRenderer()->togglePositions()­ };
+		if (gameState != nullptr) { gameState->getRenderer()->togglePositions();};
 	}));
 
 	addItem(
 		MenuItem("Toggle Hitboxes",
 			[&]() {
-		if (gameState != nullptr) { gameState->getRenderer()->toggleHitboxes()­ };
+		if (gameState != nullptr) { gameState->getRenderer()->toggleHitboxes();};
 	}));
 
 	addItem(

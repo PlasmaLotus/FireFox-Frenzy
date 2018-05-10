@@ -42,7 +42,7 @@ ProjectileDrawable::~ProjectileDrawable()
 {
 }
 
-void PlayerDrawable::setDisplayHitboxes(bool display)
+void ProjectileDrawable::setDisplayHitboxes(bool display)
 {
 	_displayHitboxes = display;
 }

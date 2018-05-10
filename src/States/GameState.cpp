@@ -78,7 +78,7 @@ void GameState::pause() {
 		game->gameState = GameCurrentState::PAUSED;
 		//StateManager::getInstance().switchToState(new PauseMenuState(window));
 		if (pauseMenuState == nullptr) {
-			pauseMenuState = new PauseMenuState(this, window, new PauseMenu());
+			pauseMenuState = new PauseMenuState(this, window);
 		}
 	}
 	else {

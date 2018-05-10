@@ -72,10 +72,11 @@ void StateManager::goBackTo(State *state) {
 
 	}
 
-
-	for (int i = 0; i ­ < howMany, ++i) {
+	/*
+	for (int i = 0; i­ < howMany; ++i) {
 		goBack();
 	}
+	*/
 }
 
 

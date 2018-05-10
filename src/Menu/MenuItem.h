@@ -35,7 +35,7 @@ public:
 	MenuItemType getMenuType();
 	std::string getName();
 	const std::string getOptionString() const;
-
+	//void addListItem()
 	MenuItemType menuItemType;
 private:
 	

@@ -18,6 +18,7 @@ MenuRenderer::MenuRenderer(sf::RenderWindow *w, Menu *m):
 
 MenuRenderer::~MenuRenderer()
 {
+	_menuItems.clear();
 }
 
 void MenuRenderer::render()

@@ -20,12 +20,12 @@ Updated Dec 25, 2016
 #include <vector>
 class MenuRenderer : public Renderer{
 public:
-	void render();
-	void clear();
-	void update();
-	void draw();
+	virtual void render();
+	virtual void clear();
+	virtual void update();
+	virtual void draw();
 
-	void display();
+	virtual void display();
 	void addMenu(Menu *m);
 	void addWindow(sf::RenderWindow * g);
 	sf::Texture getLastFrame();
@@ -33,7 +33,7 @@ public:
 	MenuRenderer();
 	MenuRenderer(sf::RenderWindow* window, Menu* m);
 	~MenuRenderer();
-	bool initRenderer();
+	virtual bool initRenderer();
 
 	sf::RenderWindow* window;
 	Menu* menu;
