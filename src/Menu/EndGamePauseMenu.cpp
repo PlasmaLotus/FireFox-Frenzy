@@ -1,15 +1,10 @@
-#include "PauseMenu.h"
+#include "EndGamePauseMenu.h"
 #include "../States/StateManager.h"
 #include "../States/TitleScreen.h"
 #include "../States/GameState.h"
 
-PauseMenu::PauseMenu(){
-	addItem(
-		MenuItem("Back To Game",
-			[&]() {
-		StateManager::getInstance().goBack();
-	}));
-
+EndGamePauseMenu::EndGamePauseMenu() {
+	
 	addItem(
 		MenuItem("Back to Title",
 			[&]() {
@@ -24,32 +19,14 @@ PauseMenu::PauseMenu(){
 }
 
 
-PauseMenu::PauseMenu(GameState* gs):
+EndGamePauseMenu::EndGamePauseMenu(GameState* gs):
 	gameState{ gs } {
 	addItem(
-		MenuItem("Back To Game",
+		MenuItem("Play Again!",
 			[&]() {
 		if (gameState != nullptr) {
-			gameState->pause();
+			gameState->reset();
 		}
-	}));
-
-	addItem(
-		MenuItem("Toggle FPS",
-			[&]() {
-		if (gameState != nullptr) { gameState->getRenderer()->toggleFPS(); };
-	}));
-
-	addItem(
-		MenuItem("Toggle Player Positions ",
-			[&]() {
-		if (gameState != nullptr) { gameState->getRenderer()->togglePositions();};
-	}));
-
-	addItem(
-		MenuItem("Toggle Hitboxes",
-			[&]() {
-		if (gameState != nullptr) { gameState->getRenderer()->toggleHitboxes();};
 	}));
 
 	addItem(
@@ -65,10 +42,10 @@ PauseMenu::PauseMenu(GameState* gs):
 	}));
 }
 
-PauseMenu::~PauseMenu() {
+EndGamePauseMenu::~EndGamePauseMenu() {
 }
 
-void PauseMenu::inputBack()
+void EndGamePauseMenu::inputBack()
 {
 	onReturn();
 	if (gameState != nullptr) {

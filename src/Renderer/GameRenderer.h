@@ -22,13 +22,16 @@ Updated Dec 25, 2016
 class GameRenderer : public Renderer{
 public:
 
-	void render();
 	//void render(int dt);
 	//sf::Image render();
-	void clear();
-	void draw();
+	virtual void clear();
+	virtual void draw();
+	virtual void render();
+	virtual void display();
+	virtual void update();
 
-	void display();
+	void _draw(sf::RenderTexture target);
+
 	void drawPlayers();
 	void drawProjectiles();
 	void drawMap();
@@ -45,12 +48,12 @@ public:
 	~GameRenderer();
 	//void setBoards(Board b1, Board b2);
 	
-	bool initRenderer();
+	virtual bool initRenderer();
 
 	sf::RenderWindow* window;
 	GameLogic* game;
-	sf::Font font;
 	sf::Texture lastFrame;//not implemented
+	sf::RenderTexture _frame;
 	bool texturesLoaded = false;
 	const float size = 100.f;
 	//sf::CircleShape shape(size);
@@ -75,6 +78,11 @@ public:
 	bool _displayHitboxes;
 	bool _displayPositions;
 	bool _displayFPS;
+
+	sf::Texture* playerTexture;
+	sf::Texture* projectileGeneralTexture;
+	sf::Font* font;
+	//sf::Font& _font{ sf::Font() };
 };
 
 #endif // !__Game_Renderer__

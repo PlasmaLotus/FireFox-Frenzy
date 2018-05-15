@@ -21,7 +21,7 @@ Item(x, y, GameLogic::ENERGY_MINIMUM_RADIUS),
 _collision(false),
 aura(amount)
 {
-	//state = ItemState::ItemCooldown;
+	lifetime = GameLogic::GAME_ENERGY_LIFETIME;
 	_stateCooldown = GameLogic::ENERGY_ITEM_COOLDOWN;
 	//calc radius
 	setRadius((GameLogic::ENERGY_MAX_RADIUS - GameLogic::ENERGY_MINIMUM_RADIUS) * amount / GameLogic::ENERGY_MAX_AURA + GameLogic::ENERGY_MINIMUM_RADIUS);

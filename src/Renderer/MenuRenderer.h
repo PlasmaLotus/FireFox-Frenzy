@@ -20,36 +20,32 @@ Updated Dec 25, 2016
 #include <vector>
 class MenuRenderer : public Renderer{
 public:
+	MenuRenderer();
+	MenuRenderer(sf::RenderWindow* window, Menu* m);
+	~MenuRenderer();
 	virtual void render();
 	virtual void clear();
 	virtual void update();
 	virtual void draw();
-
 	virtual void display();
-	void addMenu(Menu *m);
-	void addWindow(sf::RenderWindow * g);
+
+	virtual void addMenu(Menu *m);
+	virtual void addWindow(sf::RenderWindow * g);
 	sf::Texture getLastFrame();
 
-	MenuRenderer();
-	MenuRenderer(sf::RenderWindow* window, Menu* m);
-	~MenuRenderer();
-	virtual bool initRenderer();
-
-	sf::RenderWindow* window;
-	Menu* menu;
-
+protected:
 	sf::Texture lastFrame;//not implemented
-	//sf::Text debugText;
-	//sf::Font font;
 	bool texturesLoaded = false;
 	const float ok = 100.f;
-	//sf::CircleShape shape(ok);
-	sf::CircleShape shape;
 	sf::RectangleShape menuItems[10];
 	std::vector<MenuItemDrawable> _menuItems;
 	int nbMenuItems;
 	bool fontLoaded{ true };
-	//MenuItemDrawable test;
+	sf::CircleShape shape;
+	Menu* menu;
+	sf::RenderWindow* window;
+	virtual bool initRenderer();
+	sf::Font font;
 };
 
 #endif // __Menu_Renderer__

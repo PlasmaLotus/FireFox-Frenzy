@@ -18,10 +18,12 @@ GameRenderer::~GameRenderer(){
 }
 
 void GameRenderer::render(){
-	//update();
-	clear();
+	//Renderer::render();
+	//clear();
+	update();
 	draw();
 	display();
+	
 }
 
 bool GameRenderer::initRenderer() {
@@ -30,16 +32,32 @@ bool GameRenderer::initRenderer() {
 	shape.setPosition(100, 100);
 	shape.setRadius(size);
 	mapDrawable = new MapDrawable(&game->map);
-	playerDrawable1 = new PlayerDrawable(game->getPlayer(1));
-	playerDrawable2 = new PlayerDrawable(game->getPlayer(2));
-	playerDrawable2->playerColor = sf::Color::Magenta;
+
 	
 	_displayFPS = true;
 	_displayPositions = true;
 	_displayHitboxes = true;
 
-	if (!font.loadFromFile("Assets/Fonts/Minecraft.ttf"))
+	font = new sf::Font();
+	if (!font->loadFromFile("Assets/Fonts/Minecraft.ttf")) {
+		printf("Unable to load Minecraft Font PNG\n");
 		success = false;
+	}
+	
+	playerTexture = new sf::Texture();
+	if (!playerTexture->loadFromFile("./Assets/Images/player2.png")) {
+		printf("Unable to load Player PNG\n");
+	}
+
+	projectileGeneralTexture = new sf::Texture();
+	if (!projectileGeneralTexture->loadFromFile("./Assets/Images/Player_Shot.png")) {
+		printf("Unable to load Player PNG\n");
+	}
+
+	playerDrawable1 = new PlayerDrawable(game->getPlayer(1), *playerTexture, *font);
+	playerDrawable2 = new PlayerDrawable(game->getPlayer(2), *playerTexture, *font);
+	playerDrawable2->playerColor = sf::Color::Magenta;
+	
 	/*
 	// player 1 (left side of the screen)
 	p1View.setViewport(sf::FloatRect(0, 0, 0.5f, 1));
@@ -81,49 +99,14 @@ void GameRenderer::addPlayerAlert(int playerID, std::string text){
 	addPlayerAlert(&p, text);
 }
 
-void GameRenderer::setDisplayHitboxes(bool value){
-	_displayHitboxes = value;
-}
-
-void GameRenderer::setDisplayPositions(bool value){
-	_displayPositions = value;
-}
-
-void GameRenderer::setDisplayFPS(bool value){
-	_displayFPS = value;
-}
-
-void GameRenderer::toggleHitboxes()
-{
-	if (_displayHitboxes)
-		setDisplayHitboxes(false);
-	else
-		setDisplayHitboxes(true);
-}
-
-void GameRenderer::togglePositions()
-{
-	if (_displayPositions)
-		setDisplayPositions(false);
-	else
-		setDisplayPositions(true);
-}
-
-void GameRenderer::toggleFPS()
-{
-	if (_displayFPS)
-		setDisplayFPS(false);
-	else
-		setDisplayFPS(true);
-}
 
 void GameRenderer::clear() {
 	window->clear();
 }
 
 void GameRenderer::draw(){
+	
 	drawMap();
-	updateParticleSystems(StateManager::getInstance().getElapsedTime());
 	drawParticleSystems();
 
 	drawProjectiles();
@@ -136,22 +119,46 @@ void GameRenderer::draw(){
 	//window->draw();
 }
 
+void GameRenderer::_draw(sf::RenderTexture target) {
+	
+	drawMap();
+	drawParticleSystems();
+
+	drawProjectiles();
+	drawItems();
+	drawPlayers();
+
+	handleViews();
+	__showFPS();
+	__showPlayerPositions();
+	//window->draw();
+}
+
 void GameRenderer::display() {
 	window->display();
 }
 
-void GameRenderer::drawPlayers(){
+void GameRenderer::update(){
+
+	/*Update players*/
 	playerDrawable1->update();
 	playerDrawable2->update();
-	//window->setView(p1View);
-	window->draw(*playerDrawable1);
-	window->draw(*playerDrawable2);
-	/*
-	window->setView(p2View);
-	window->draw(*playerDrawable1);
-	window->draw(*playerDrawable2);
-	*/
 
+	playerDrawable1->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable2->setDisplayHitboxes(_displayHitboxes);
+
+
+	/*Update Map*/
+	mapDrawable->update();
+
+	/*Update Particles*/
+	updateParticleSystems(StateManager::getInstance().getElapsedTime());
+}
+
+void GameRenderer::drawPlayers(){
+
+	window->draw(*playerDrawable1);
+	window->draw(*playerDrawable2);
 }
 
 void GameRenderer::drawProjectiles(){
@@ -167,7 +174,7 @@ void GameRenderer::drawProjectiles(){
 				circle.setRadius(p->width);
 				window->draw(circle);
 				*/
-				ProjectileDrawable pro(p);
+				ProjectileDrawable pro(p, *projectileGeneralTexture);
 				pro.update();
 				window->draw(pro);
 			}
@@ -191,7 +198,7 @@ void GameRenderer::drawMap()
 	window->draw(mapOutline);
 	*/
 
-	mapDrawable->update();
+	
 	window->draw(*mapDrawable);
 }
 
@@ -203,10 +210,10 @@ void GameRenderer::drawItems() {
 			if (p != nullptr) {
 				sf::CircleShape circle;
 				if (p->state == ItemState::ItemCooldown) {
-					circle.setFillColor(sf::Color(100, 100, 100, 100));
+					circle.setFillColor(sf::Color(100, 100, 100, 150));
 				}
 				else {
-					circle.setFillColor(sf::Color(100, 100,100,200));
+					circle.setFillColor(sf::Color(120, 120,120,255));
 				}
 				circle.setPosition(p->posX - p->width / 2, p->posY - p->width / 2);
 				circle.setRadius(p->width);
@@ -244,7 +251,7 @@ void GameRenderer::handleViews(){
 
 	//mainView.setViewport(sf::FloatRect(minX, minY, maxX - minX + 100, maxY - minY + 100));
 	float some = 1280.f * 9.f / 16.f;
-	float extraRoom = 360.f;
+	float extraRoom = 480.f;
 	//if (distX > window->getSize().x * 0.8f || distY > window->getSize().y  * 0.8f) {
 		float newDistX = distX;
 		float newDistY =  distY;
@@ -318,6 +325,57 @@ void GameRenderer::drawParticleSystems()
 sf::Texture GameRenderer::getLastFrame() {
 	return lastFrame;
 }
+
+void GameRenderer::setDisplayHitboxes(bool value) {
+	_displayHitboxes = value;
+}
+
+void GameRenderer::setDisplayPositions(bool value) {
+	_displayPositions = value;
+}
+
+void GameRenderer::setDisplayFPS(bool value) {
+	_displayFPS = value;
+}
+
+void GameRenderer::toggleHitboxes()
+{
+	if (_displayHitboxes) {
+		setDisplayHitboxes(false);
+		StateManager::getInstance().m_alertManager.addAlert("HitBox Display turned OFF");
+	}
+	else {
+		setDisplayHitboxes(true);
+		StateManager::getInstance().m_alertManager.addAlert("HitBox Display turned ON");
+	}
+}
+
+void GameRenderer::togglePositions()
+{
+	if (_displayPositions) {
+		setDisplayPositions(false);
+		StateManager::getInstance().m_alertManager.addAlert("Player Positions Display turned OFF");
+	}
+	else {
+		setDisplayPositions(true);
+		StateManager::getInstance().m_alertManager.addAlert("Player Positions Display turned ON");
+
+	}
+}
+
+void GameRenderer::toggleFPS()
+{
+	if (_displayFPS) {
+		setDisplayFPS(false);
+		StateManager::getInstance().m_alertManager.addAlert("FPS Display turned OFF");
+	}
+	else {
+		setDisplayFPS(true);
+		StateManager::getInstance().m_alertManager.addAlert("FPS Display turned ON");
+
+	}
+}
+
 
 void GameRenderer::__showFPS() {
 	if (_displayFPS) {

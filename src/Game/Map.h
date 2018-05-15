@@ -17,6 +17,8 @@ public:
 	*/
 	virtual bool testCollision(Entity *e);
 	std::vector<Entity*> _walls;
+	Vector2 getRandomSpawnPoint(float width, float height);
+	Vector2 getRandomSpawnPointFrom(float x, float y, float maxDistance, float width, float height);
 
 protected:
 	/*
@@ -29,6 +31,6 @@ protected:
 	void _handleCollisionOuterWall(Entity*e, MapCollisionAngle angle);
 	void _handleCollisionWall(Entity*e, Entity wall, MapCollisionAngle angle);
 	void generateMap(int generationID = 0);
-	Vector2 getRandomSpawnPoint(float width, float height);
+
 };
 #endif //Map

@@ -1,13 +1,14 @@
 #include "ProjectileDrawable.h"
 #include "../Game/GameLogic.h"
 
+/*
 ProjectileDrawable::ProjectileDrawable()
 {
 }
-
-ProjectileDrawable::ProjectileDrawable(Projectile * pj)
-	:
-	projectile(pj)
+*/
+ProjectileDrawable::ProjectileDrawable(Projectile * pj, sf::Texture& tx):
+	projectile(pj),
+	m_texture(tx)
 	//m_shaderLoaded(false)
 {
 	projectileHitboxShape.setFillColor(sf::Color(0, 255, 0, 150));
@@ -21,15 +22,6 @@ ProjectileDrawable::ProjectileDrawable(Projectile * pj)
 	posX = projectile->posX;
 	posY = projectile->posY;
 	radius = projectile->width;
-
-	if (!m_texture.loadFromFile("./Assets/Images/Player_Shot.png")) {
-		printf("Unable to load Player PNG\n");
-	}
-
-	if (!m_font.loadFromFile("./Assets/fonts/Minecraft.ttf")) {
-		printf("Unable to load Minecraft Font\n");
-	}
-	
 
 	m_sprite.setTexture(m_texture);
 	m_sprite.setOrigin(sf::Vector2f(1.0f * m_sprite.getGlobalBounds().width / 2, 1.0f * m_sprite.getGlobalBounds().height / 2));

@@ -16,6 +16,7 @@ public:
 	void update(int dt);
 	int lifetime;
 	virtual Projectile* getProjectile(int id, float x, float y, float orientation);
+	virtual Projectile* spawnProjectile(int id, float x, float y, float orientation);
 	virtual Projectile* getProjectileAlt(int id, float x, float y, float orientation);
 	int _projectilesToSpawnThisTick{ 1 };
 	bool _projectileSpawned{ false };

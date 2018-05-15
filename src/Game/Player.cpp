@@ -336,6 +336,7 @@ void Player::handleAmmo(int dt)
 
 void Player::handleShooting(int dt)
 {
+	/*Rapid FIRE*/
 	if (_shootHeld) {
 		shootHeld = true;
 	}
@@ -468,6 +469,7 @@ void Player::handleShootingAlt(int dt)
 
 
 void Player::_handleShooting(int power) {
+	/*RAPID FIRE*/
 	float ratio = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
 	//int projectilePower = 1.0f * _shotChargeHeldTime / GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME * GameLogic::PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST;
 	

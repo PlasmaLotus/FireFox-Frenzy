@@ -1,19 +1,19 @@
-#include "PauseMenuState.h"
-#include "../Menu/PauseMenu.h"
+#include "EndGamePauseMenuState.h"
+#include "../Menu/EndGamePauseMenu.h"
 #include "../States/StateManager.h"
 #include "../States/GameState.h"
 #include "../Renderer/PauseMenuRenderer.h"
 
-PauseMenuState::PauseMenuState():
-	PauseMenuState(nullptr, nullptr){
+EndGamePauseMenuState::EndGamePauseMenuState():
+	EndGamePauseMenuState(nullptr, nullptr){
 }
-PauseMenuState::PauseMenuState(sf::RenderWindow * w) :
-	PauseMenuState(nullptr, w){
+EndGamePauseMenuState::EndGamePauseMenuState(sf::RenderWindow * w) :
+	EndGamePauseMenuState(nullptr, w){
 }
 
-PauseMenuState::PauseMenuState(GameState* gs, sf::RenderWindow * w) :
+EndGamePauseMenuState::EndGamePauseMenuState(GameState* gs, sf::RenderWindow * w) :
 	//MenuState()
-	MenuState(w, new PauseMenu(gs))
+	MenuState(w, new EndGamePauseMenu(gs))
 {
 	p1KeyConfig = new ControllerConfig(StateManager::getControllerConfigPath(1));
 	p1Controller = new MenuController(p1KeyConfig, menu);
@@ -22,17 +22,17 @@ PauseMenuState::PauseMenuState(GameState* gs, sf::RenderWindow * w) :
 	//renderer = new MenuRenderer(window, menu);
 	renderer = new PauseMenuRenderer(window, menu);
 
-	p2Menu = new PauseMenu();
+	p2Menu = new EndGamePauseMenu();
 }
 
 
-PauseMenuState::~PauseMenuState() {
+EndGamePauseMenuState::~EndGamePauseMenuState() {
 	delete menu;
 	delete p2Menu;
 	delete renderer;
 }
 
-void PauseMenuState::tick(int dt, bool render) {
+void EndGamePauseMenuState::tick(int dt, bool render) {
 	renderer->render();
 	menu->tick();
 	p1Controller->handleInput();

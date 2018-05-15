@@ -28,6 +28,6 @@ private:
 	GameController *p2Controller;
 	ControllerConfig* p1KeyConfig;
 	ControllerConfig* p2KeyConfig;
-	PauseMenuState* pauseMenuState;
+	MenuState* pauseMenuState;
 };
 #endif

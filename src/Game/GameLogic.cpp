@@ -5,10 +5,10 @@ Updated May 13, 2017
 #include "GameLogic.h"
 #include "../States/StateManager.h"
 
-const float GameLogic::PLAYER_MAX_VELOCITY(2.0f);
+const float GameLogic::PLAYER_MAX_VELOCITY(1.9f);
 const float GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE(0.06f);
 const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
-const float GameLogic::PLAYER_FRICTION(0.98f);
+const float GameLogic::PLAYER_FRICTION(0.995f);
 const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.92f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
@@ -18,7 +18,7 @@ const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
 
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 3.f );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
-const float GameLogic::PROJECTILE_SPEED_MINIMUM( 1.0f );
+const float GameLogic::PROJECTILE_SPEED_MINIMUM( 2.5f );
 const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 6.0f );
 const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
@@ -34,7 +34,8 @@ const float GameLogic::GAME_DASH_ENERGY_LOSS_MULTIPLYER{ 0.90f };
 */
 
 GameLogic::GameLogic() :
-	gameState(GameCurrentState::RUNNING){
+	gameState(GameCurrentState::RUNNING),
+	_init(false){
 	init();
 }
 
@@ -46,6 +47,8 @@ GameLogic::~GameLogic(){
 }
 
 void GameLogic::init() {
+	_init = false;
+	_gameEnd = false;
 	_spawnPoints.clear();
 	_spawnTimer = 0;
 	for (int i = 4; i-- >= 0; ) {
@@ -97,62 +100,98 @@ void GameLogic::init() {
 	}
 	frame = 0;
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown3));
+	_init = true;
 }
+
 void GameLogic::reset() {
 	_emptyAllEntities();
 	_entities.clear();
 	init();
+	gameState = GameCurrentState::COUNTDOWN;
 }
 
 void GameLogic::tick(int dt) {
-
-	switch (gameState)
-	{
-	case::GameCurrentState::COUNTDOWN:
-		countdownTimer -= dt;
-		int it;
-		if (countdownTimer > GAME_COUNTDOWN_TIME / 3 * 2) {
-			it = 2;
-		}
-		if (countdownTimer > GAME_COUNTDOWN_TIME / 3) {
-			it = 1;
-		}
-		if (it != _countdownIt) {
-			if (it == 2) {
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown2));
+	if (_init) {
+		switch (gameState)
+		{
+		case::GameCurrentState::COUNTDOWN: {
+			countdownTimer -= dt;
+			int it = 3;
+			if (countdownTimer > GAME_COUNTDOWN_TIME / 3 * 2) {
+				it = 2;
 			}
-			if (it == 1) {
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown1));
+			if (countdownTimer > GAME_COUNTDOWN_TIME / 3) {
+				it = 1;
 			}
-		}
-		_countdownIt = it;
+			if (it != _countdownIt) {
+				if (it == 2) {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown2));
+				}
+				if (it == 1) {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown1));
+				}
+			}
+			_countdownIt = it;
 
-		if (countdownTimer <= 0){
+			if (countdownTimer <= 0) {
+				gameState = GameCurrentState::RUNNING;
+				countdownTimer = 0;
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::CountdownStart));
+			}
+			break;
+		}
+		case GameCurrentState::RUNNING: {
+			//printf("GameTick:  DT - %ld\n", dt);
+			frame++;
+			_totalDT += dt;
+			_spawnTimer += dt;
+			if (_spawnTimer >= GAME_ENERGY_SPAWN_TIMER) {
+				_spawnTimer -= GAME_ENERGY_SPAWN_TIMER;
+				_spawnEnergy();
+			}
+			printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
+			_handleEntitiesUpdate(dt);
+			_handleEntitiesCollisions(dt);
+			_handleMapCollision(dt);
+			_handleEntitesEnd();
+			_handleGameEnd();
+			break;
+		}
+		case::GameCurrentState::ENDED: {
+			countdownTimer -= dt;
+			int it = 3;
+			if (countdownTimer > GAME_COUNTDOWN_TIME / 3 * 2) {
+				it = 2;
+			}
+			if (countdownTimer > GAME_COUNTDOWN_TIME / 3) {
+				it = 1;
+			}
+			if (it != _countdownIt) {
+				if (it == 2) {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown2));
+				}
+				if (it == 1) {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown1));
+				}
+			}
+			_countdownIt = it;
+
+			/*
+			if (countdownTimer <= 0) {
 			gameState = GameCurrentState::RUNNING;
 			countdownTimer = 0;
 			StateManager::getInstance().eventManager.queueEvent(Event(EventType::CountdownStart));
+			}
+			*/
+			break;
 		}
-		break;
-	case GameCurrentState::RUNNING:
-		//printf("GameTick:  DT - %ld\n", dt);
-		frame++;
-		_totalDT += dt;
-		_spawnTimer += dt;
-		if (_spawnTimer >= GAME_ENERGY_SPAWN_TIMER) {
-			_spawnTimer -= GAME_ENERGY_SPAWN_TIMER;
-			_spawnEnergy();
+
+		default:
+			break;
 		}
-		printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
-		_handleEntitiesUpdate(dt);
-		_handleEntitiesCollisions(dt);
-		_handleMapCollision(dt);
-		_handleEntitesEnd();
-		_handleGameEnd();
-		break;
-	default:
-		break;
 	}
 	
+
 }
 
 void GameLogic::pause() {
@@ -241,33 +280,38 @@ void GameLogic::_handleEntitesEnd(){
 
 void GameLogic::_handleGameEnd() {
 	int pAlive = 0;
-	for (int i = _playerIDs.size() - 1; i >= 0; i--) {
-		for (int j = 0; j < _entities.size(); j++) {
-			Entity *e = _entities.at(j);
-			try {
-				Player *p = dynamic_cast<Player *>(e);
-				if (p != nullptr) {
-					if (p->isAlive() || p->HP > 0) {
-						pAlive++;
-					}
+	for (int i = _entities.size() - 1; i >= 0; i--) {
+		//for (int j = 0; j < _entities.size(); j++) {
+		Entity *e = _entities.at(i);
+		try {
+			Player *p = dynamic_cast<Player *>(e);
+			if (p != nullptr) {
+				if (p->isAlive() && p->HP > 0) {
+					pAlive++;
 				}
 			}
-			catch (const std::bad_cast& cast) {
-			}
+		}
+		catch (const std::bad_cast& cast) {
 		}
 	}
 	if (pAlive <= 1) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::GameEnd));
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::LastManStanding));
 		gameState = GameCurrentState::ENDED;
+		_gameEnd = true;
 	}
-	/*
-	if (_totalDT >= GAME_TIME_LIMIT_MAXIMUM) {
+
+	
+	if (_totalDT >= GAME_MAXIMUM_GAME_TIME) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::GameEnd));
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::TimeLimit));
 		gameState = GameCurrentState::ENDED;
+		countdownTimer = 3000;
+		_gameEnd = true;
 	}
-	*/
+	else {
+
+	}
 }
 
 void GameLogic::addEntityIDToDelete(int id){
@@ -355,8 +399,16 @@ void GameLogic::_spawnItems(){
 }
 
 void GameLogic::_spawnEnergy(){
+	/*
 	for (int i = 0; i < _spawnPoints.size(); i++) {
 		Vector2 v = _spawnPoints.at(i);
+		Energy *e{ new Energy(v, GAME_ENERGY_SPAWN_AURA) };
+		addEntity(e);
+	}
+	*/
+
+	for (int i = 0; i < GAME_ENERGY_SPAWN_AMOUNT; i++) {
+		Vector2 v = map.getRandomSpawnPoint(ENERGY_MINIMUM_RADIUS, ENERGY_MINIMUM_RADIUS);
 		Energy *e{ new Energy(v, GAME_ENERGY_SPAWN_AURA) };
 		addEntity(e);
 	}

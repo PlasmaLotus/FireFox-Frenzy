@@ -20,23 +20,27 @@ Updated Dec 25, 2016
 #include <vector>
 class  PauseMenuRenderer: public MenuRenderer {
 public:
-	void render();
-	void clear();
-	void update();
-	void draw();
-	void display();
-
 	PauseMenuRenderer();
 	PauseMenuRenderer(sf::RenderWindow* window, Menu* m);
 	~PauseMenuRenderer();
-	bool initRenderer();
+
+	virtual void render();
+	virtual void clear();
+	virtual void update();
+	virtual void draw();
+	virtual void display();
+
+
+protected:
+
+	virtual bool initRenderer();
 
 	//sf::RenderWindow* window;
 	//Menu* menu;
 
 	//sf::Texture lastFrame;
-	sf::Font font;
-	bool texturesLoaded = false;
+	//sf::Font font;
+	//bool texturesLoaded = false;
 	float _windowHeight;
 	float _windowWidth;
 	sf::RectangleShape background;

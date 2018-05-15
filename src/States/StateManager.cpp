@@ -1,16 +1,21 @@
 #include "StateManager.h"
 #include "GameState.h"
 
-StateManager::StateManager():
+StateManager::StateManager() :
 	_currentState(NULL),
 	_newState(NULL),
 	_switchState(false),
-	_deletedState(false)
+	_deletedState(false),
+	_stateTransition(false),
+	_backToTitle(false),
+	_stateTransitionTime(0),
+	m_alertManager("Assets/Fonts/Minecraft.ttf", 18, window.getView().getSize())
 {
 	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "TACD");
 	_currentState = new TitleScreen(&window);
 	_states.push(_currentState);
 	eventManager.setAudioEventManager(&audioEventManager);
+	//m_alertManager = Alerts("Assets\fonts\Minecraft.ttf", 18, window.getSize());
 }
 
 int StateManager::getWindowWidth()
@@ -36,10 +41,12 @@ StateManager& StateManager::getInstance() {
 void StateManager::switchToState(State* state) {
 	_newState = state;
 	_switchState = true;
+	startTransition();
 }
 
 void StateManager::goBack() {
 	_deletedState = true;
+	startTransition();
 	/*
 	*/
 }
@@ -77,19 +84,49 @@ void StateManager::goBackTo(State *state) {
 		goBack();
 	}
 	*/
+	//startTransition();
 }
 
+void StateManager::goBackToTitle(){
+	if (_states.size() > 1) {
+		//_removeFromStack();
+		_deletedState = true;
+		_backToTitle = true;
+	}
+	else {
+		_backToTitle = false;
+		startTransition();
+	}
+
+}
+
+void StateManager::_removeFromStack(){
+	if (_states.size() > 1) {
+		State * s = _states.top();
+		delete s;
+		_states.pop();
+		_currentState = _states.top();
+	}
+	else {
+		//Quit?
+	}
+}
 
 void StateManager::quit() {
 	_running = false;
+}
+
+void StateManager::startTransition(){
+	_stateTransition = true;
+	_stateTransitionTime = 3000;//1 second
+	_stateTransitionTimer.restart();
 }
 
 sf::RenderWindow *StateManager::getWindow() {
 	return &window;
 }
 
-void StateManager::run()
-{
+void StateManager::run(){
 	int frame = 0, milisecond = 0, second = 0, minute = 0;
 	double MS_PER_FRAME = (1000.0) / FPS;//1000 ms per seconds
 	gameTimer.restart();
@@ -146,20 +183,37 @@ void StateManager::run()
 			else {
 				//renderElapsedTimeFloat += elapsedTime.asMicroseconds();
 			}
+
+			if (_switchState) {
+				_states.push(_newState);
+				//delete _currentState;
+				_currentState = _newState;
+				_switchState = false;
+				_newState = nullptr;
+				window.clear();
+			}
+
 			if (_deletedState) {
-				if (_states.size() > 1) {
-					State * s = _states.top();
-					delete s;
-					_states.pop();
-					_currentState = _states.top();
-				}
-				else {
-					//Quit?
-				}
+				_removeFromStack();
 				_deletedState = false;
+				goBackToTitle();
+				window.clear();
 			}
 			else {
-				_run();
+				if (_stateTransition) {
+					_stateTransitionTime -= elapsedTime.asMicroseconds();
+					//_stateTransitionTimer += currentTime.getElapsedTime();
+					//if (_stateTransitionTime <= 0) {
+					if (_stateTransitionTimer.getElapsedTime() >= sf::milliseconds(750)){
+						_stateTransition = false;
+						_stateTransitionTime = 0;
+						_stateTransitionTimer.restart();
+					}
+					window.clear();
+				}
+				else {
+					_run();
+				}
 			}
 			{
 				gotoxy(0, 0);
@@ -169,19 +223,14 @@ void StateManager::run()
 					(float)elapsedTime.asMilliseconds() * 60, elapsedTime.asMilliseconds(), (float)CLOCKS_PER_SEC);
 			}
 
-			if (_switchState) {
-				_states.push(_newState);
-				//delete _currentState;
-				_currentState = _newState;
-				_switchState = false;
-				_newState = nullptr;
-			}
+			
 			
 		}
 	return;
 }
 
 void StateManager::_run() {
+	window.clear();
 	eventManager.handleEvents(getElapsedTime());
 	audioEventManager.handleEvents(getElapsedTime());
 	//window.draw(m_alertManager);
@@ -190,6 +239,8 @@ void StateManager::_run() {
 		_states.top()->tick(getElapsedTime(), true);
 		//_states.top()->tick(getElapsedTime(), _renderFrame);
 	}
+	m_alertManager.update(getElapsedTime(), window);
+	//window.draw(m_alertManager);
 }
 
 int64_t StateManager::getElapsedTime() {

@@ -42,8 +42,14 @@ public:
 	std::vector<Entity *> _entities;
 	std::stack<int> _idsToDestroy;
 	void addEntityIDToDelete(int id);
-	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 32 };
-	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 32 };
+	bool _gameEnd;
+	bool _init;
+
+	static const int GAME_MAXIMUM_GAME_TIME{ 120000 };//120000 = 2 mins
+	//static const int GAME_TIME_LIMIT_MAXIMUM{ 120000 };
+
+	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 40 };
+	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 40 };
 	static const int PLAYER_DISPLAY_HITBOX_WIDTH{ 24 };
 	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 24 };
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
@@ -62,7 +68,6 @@ public:
 	static float const PLAYER_DASH_VELOCITY;
 	static float const PLAYER_MINIMUM_DASH_VELOCITY;
 	static const float PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE;
-	static const int GAME_TIME_LIMIT_MAXIMUM{ 20000 };
 	static const int GAME_COUNTDOWN_TIME{ 3000 };
 	int countdownTimer = GAME_COUNTDOWN_TIME;
 	int _countdownIt;
@@ -78,6 +83,8 @@ public:
 	static const int PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST{ 100 };
 	static const int PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME{ 10 };
 	static const int PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME{ 2500 };
+
+	static const int PROJECTILE_MINIMUM_LIFETIME{ 1000 };
 
 	static const int PLAYER_BASE_HP{100};
 	static const int PLAYER_SHOOT_COOLDOWN{ 75 };
@@ -96,8 +103,10 @@ public:
 	static const int ENERGY_ITEM_COOLDOWN{ 3000 };
 	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
 	static const int ITEM_MINIMUM_LIFETIME{ 10000 };
-	static const int GAME_ENERGY_SPAWN_TIMER{ 20000 };
-	static const int GAME_ENERGY_SPAWN_AURA{ 75 };
+	static const int GAME_ENERGY_SPAWN_TIMER{ 10000 };
+	static const int GAME_ENERGY_SPAWN_AMOUNT{ 8 };
+	static const int GAME_ENERGY_SPAWN_AURA{ 100 };
+	static const int GAME_ENERGY_LIFETIME{ 5000 };
 
 	static const int GAME_COLLISION_HITLAG{ 8 };
 	static const float GAME_SHIELD_ENERGY_LOSS_MULTIPLYER;

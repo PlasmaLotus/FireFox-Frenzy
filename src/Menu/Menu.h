@@ -27,9 +27,9 @@ public:
 	sf::RenderWindow *window;
 	int selection;
 	std::vector<MenuItem> items;
-	Menu *previousMenu;
-	Menu *nextMenu;
-	void setPreviousMenu(Menu* menu);
+	//Menu *previousMenu;
+	//Menu *nextMenu;
+	//void setPreviousMenu(Menu* menu);
 	void addItem(MenuItem menuItem);
 
 	virtual void onSelection();

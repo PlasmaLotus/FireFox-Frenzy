@@ -18,8 +18,8 @@ Updated Mai 7, 2018
 class ProjectileDrawable : public sf::Drawable {
 public:
 
-	ProjectileDrawable();
-	ProjectileDrawable(Projectile *projectile);
+	//ProjectileDrawable();
+	ProjectileDrawable(Projectile *projectile, sf::Texture& tx);
 	~ProjectileDrawable();
 
 	// Hérité via Drawable
@@ -35,10 +35,10 @@ public:
 	int radius;
 	sf::Color projectileColor;
 	sf::CircleShape projectileHitboxShape;
-	sf::Texture m_texture;
+	sf::Texture& m_texture;
+	//sf::Font& m_font;
 	sf::Sprite m_sprite;
 
-	sf::Font m_font;
 	sf::Text m_text;
 	float angleDeg;
 	void setDisplayHitboxes(bool display);

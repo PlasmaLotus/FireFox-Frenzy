@@ -23,16 +23,17 @@ MenuRenderer::~MenuRenderer()
 
 void MenuRenderer::render()
 {
-	clear();
+	//Renderer::render();
+	
+	//clear();
 	update();
 	draw();
 	display();
+	
 }
 
 bool MenuRenderer::initRenderer() {
 	//sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-	shape.setRadius(100.f);
-	shape.setFillColor(sf::Color::Red);
 	//debugText.setString("Debug Text");
 	/*
 	debugText.setFillColor(sf::Color::Magenta);
@@ -41,6 +42,10 @@ bool MenuRenderer::initRenderer() {
 	debugText.setCharacterSize(64);
 	*/
 	nbMenuItems = menu->items.size();
+
+	if (!font.loadFromFile("Assets\fonts\Minecraft.ttf")) {
+		fontLoaded = false;
+	}
 
 	//if (!font.loadFromFile("Assets\fonts\LemonMilk.LemonMilk.otf")) {
 	/*
@@ -52,6 +57,7 @@ bool MenuRenderer::initRenderer() {
 		//sf::Font::
 		//font.loadFromMemory("", 367112);
 	}
+
 	debugText.setFont(font);
 	debugText.setString("Sf Text Test");
 	debugText.setCharacterSize(24);
@@ -88,6 +94,7 @@ void MenuRenderer::update() {
 		_menuItems.at(i).update();
 	}
 }
+
 void MenuRenderer::draw()
 {
 	//window->draw(shape);

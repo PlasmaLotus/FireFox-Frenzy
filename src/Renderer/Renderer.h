@@ -8,9 +8,11 @@ public:
 	Renderer();
 	virtual ~Renderer();
 	virtual void render();
+protected:
 	virtual void clear();
 	virtual void draw();
 	virtual void display();
+	virtual void update();
 };
 
 #endif

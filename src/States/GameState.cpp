@@ -6,7 +6,8 @@ Updated May 13, 2017
 #include "GameState.h"
 #include "../States/StateManager.h"
 #include "../States/PauseMenuState.h"
-#include "../Menu/PauseMenu.h"
+//#include "../Menu/PauseMenu.h"
+#include "../States/EndGamePauseMenuState.h"
 
 GameState::GameState(sf::RenderWindow *w):
 	State(){
@@ -21,6 +22,9 @@ GameState::GameState(sf::RenderWindow *w):
 }
 
 GameState::~GameState(){
+	if (pauseMenuState != nullptr) {
+		delete pauseMenuState;
+	}
 	delete p1Controller;
 	delete p1KeyConfig;
 	delete p2Controller;
@@ -28,9 +32,6 @@ GameState::~GameState(){
 	delete renderer;
 	delete game;
 
-	if (pauseMenuState != nullptr) {
-		delete pauseMenuState;
-	}
 }
 
 void GameState::tick(int dt, bool render){
@@ -60,7 +61,9 @@ void GameState::tick(int dt, bool render){
 		break;
 	case GameCurrentState::ENDED:
 		printf("===== GAME ENDED =====\n");
-		game->tick(dt);
+		//game->tick(dt);
+		p1Controller->handleInput();
+		p2Controller->handleInput();
 		renderer->render();
 		break;
 	default:
@@ -75,14 +78,40 @@ GameLogic * GameState::getGame(){
 void GameState::pause() {
 	
 	if (game->gameState != GameCurrentState::PAUSED) {
-		game->gameState = GameCurrentState::PAUSED;
-		//StateManager::getInstance().switchToState(new PauseMenuState(window));
-		if (pauseMenuState == nullptr) {
-			pauseMenuState = new PauseMenuState(this, window);
+
+		if (game->gameState == GameCurrentState::RUNNING) {
+			game->gameState = GameCurrentState::PAUSED;
+			//StateManager::getInstance().switchToState(new PauseMenuState(window));
+			if (pauseMenuState == nullptr) {
+				pauseMenuState = new PauseMenuState(this, window);
+			}
+			else {
+				delete pauseMenuState;
+				pauseMenuState = new PauseMenuState(this, window);
+			}
 		}
+		else if (game->gameState == GameCurrentState::ENDED) {
+			game->gameState = GameCurrentState::PAUSED;
+			if (pauseMenuState == nullptr) {
+				pauseMenuState = new EndGamePauseMenuState(this, window);//END GAME
+			}
+			else {
+				delete pauseMenuState;
+				pauseMenuState = new EndGamePauseMenuState(this, window);
+			}
+			
+		}
+		
 	}
 	else {
-		game->gameState = GameCurrentState::RUNNING;
+		
+		if (!game->_gameEnd) {
+			game->gameState = GameCurrentState::RUNNING;
+		}
+		else {
+			game->gameState = GameCurrentState::ENDED;
+		}
+		
 	}
 	//StateManager::getInstance().switchToState(new PauseMenuState(window, new PauseMenu()));
 }
@@ -91,6 +120,8 @@ void GameState::reset() {
 	game->reset();
 	p1Controller->setPlayer(game->getPlayer(1));
 	p2Controller->setPlayer(game->getPlayer(2));
+	renderer->playerDrawable1->setPlayer(game->getPlayer(1));
+	renderer->playerDrawable2->setPlayer(game->getPlayer(2));
 }
 
 GameRenderer * GameState::getRenderer()

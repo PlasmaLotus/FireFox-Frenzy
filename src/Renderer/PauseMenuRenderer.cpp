@@ -22,7 +22,8 @@ PauseMenuRenderer::~PauseMenuRenderer()
 
 void PauseMenuRenderer::render()
 {
-	clear();
+	//MenuRenderer::render();
+	//clear();
 	update();
 	draw();
 	display();
@@ -47,6 +48,7 @@ bool PauseMenuRenderer::initRenderer() {
 	
 	if (!font.loadFromFile("Assets\fonts\Minecraft.ttf")) {
 		success = false;
+		fontLoaded = false;
 	}
 	
 	int menuItemWidth = 100;

@@ -14,8 +14,11 @@ public:
 	PauseMenu(GameState *gs);
 	virtual ~PauseMenu();
 	
+	virtual void inputBack();
 private:
 	GameState* gameState;
+	//Menu* m_confirmMenu();
+
 };
 
 #endif

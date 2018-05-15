@@ -18,8 +18,8 @@ class PlayerDrawableDashPosition;
 class PlayerDrawable : public sf::Drawable {
 public:
 
-	PlayerDrawable();
-	PlayerDrawable(Player *player);
+	//PlayerDrawable();
+	PlayerDrawable(Player *player, sf::Texture& tx, sf::Font ft);
 	~PlayerDrawable();
 
 	// Hérité via Drawable
@@ -39,10 +39,14 @@ public:
 	sf::CircleShape cursorShape;
 	std::vector<sf::RectangleShape>dashOffsetShapes;
 
-	sf::Texture rTexture;
-	sf::Sprite sprite;
+	void setPlayer(Player *p);
+
 
 	sf::Font m_font;
+	//sf::Font m__font;
+	sf::Texture& rTexture;
+	sf::Sprite sprite;
+
 	sf::Text m_hpText;
 	sf::Text m_dashText;
 	sf::Text m_shotText;

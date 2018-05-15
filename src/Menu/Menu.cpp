@@ -7,8 +7,9 @@
 Menu::~Menu()
 {
 	//window->create(sf::VideoMode(800, 600), "TACD");
-	delete previousMenu;
-	delete nextMenu;
+	//delete previousMenu;
+	//delete nextMenu;
+	items.clear();
 }
 
 Menu::Menu()
@@ -89,11 +90,11 @@ void Menu::inputBack() {
 	onReturn();
 	StateManager::getInstance().goBack();
 }
-
+/*
 void Menu::setPreviousMenu(Menu* menu){
 	previousMenu = menu;
 }
-
+*/
 void Menu::addItem(MenuItem menuItem) {
 	items.push_back(menuItem);
 }

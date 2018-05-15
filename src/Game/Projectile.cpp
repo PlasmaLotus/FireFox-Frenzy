@@ -17,7 +17,7 @@ Projectile::Projectile():
 Projectile::Projectile(int pID, float x, float y) :
 	CircleEntity(x, y, GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM),
 	_playerID(pID),
-	lifetime{ 6000 },
+	lifetime{ GameLogic::PROJECTILE_MINIMUM_LIFETIME },
 	durability{ 1 },
 	orientationX{ 0.f },
 	orientationY{ 0.f },

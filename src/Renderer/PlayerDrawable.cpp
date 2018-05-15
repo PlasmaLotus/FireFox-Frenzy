@@ -3,11 +3,17 @@
 #include "../Game/Shield.h"
 #include "../Game/GameLogic.h"
 #include <math.h>
-PlayerDrawable::PlayerDrawable() {
 
+/*
+PlayerDrawable::PlayerDrawable():
+	rTexture() {
+	//rTexture = sf::Texture();
 }
-PlayerDrawable::PlayerDrawable(Player *pl) :
-	player(pl)
+*/
+PlayerDrawable::PlayerDrawable(Player *pl, sf::Texture& tx, sf::Font ft) :
+	player(pl),
+	rTexture(tx)
+	//m_font(ft)
 	//m_shaderLoaded(false)
 {
 	playerShape.setFillColor(sf::Color(0,0,255,150));
@@ -20,8 +26,10 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 	cursorShape.setFillColor(sf::Color::Cyan);
 	cursorShape.setRadius(2);
 	playerColor = sf::Color::Cyan;
-	posX = player->posX;
-	posY = player->posY;
+	if (player != nullptr) {
+		posX = player->posX;
+		posY = player->posY;
+	}
 	int dashOffsetNumber{ 5 };
 	for (int i = 0; i <= dashOffsetNumber; i++) {
 		sf::RectangleShape r(sf::Vector2f(player->width, player->height));
@@ -32,13 +40,16 @@ PlayerDrawable::PlayerDrawable(Player *pl) :
 		dashOffsetShapes.push_back(r);
 	}
 	
+	/*
 	if (!rTexture.loadFromFile("./Assets/Images/player2.png")) {
 		printf("Unable to load Player PNG\n");
 	}
-
-	if (!m_font.loadFromFile("./Assets/fonts/Minecraft.ttf")) {
-		printf("Unable to load Minecraft Font\n");
+	*/
+	//m__font = sf::Font(m_font);
+	if (!m_font.loadFromFile("Assets/Fonts/Minecraft.ttf")) {
+		printf("Unable to load Minecraft Font PNG\n");
 	}
+
 	m_hpText = sf::Text("HP", m_font, 12);
 	m_dashText = sf::Text("Dash", m_font, 12);
 	m_ammoText = sf::Text("Ammo", m_font, 12);
@@ -139,111 +150,119 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 
 bool PlayerDrawable::onLoad()
 {
-	return false;
+	return true;
 }
 
 void PlayerDrawable::update()
 {
-	posX = player->posX;
-	posY = player->posY;
-	
-	playerShape.setPosition(sf::Vector2f(1.0f *posX - player->width / 2, 1.0f*posY - player->height / 2));
-	
-	cursorShape.setPosition(sf::Vector2f(1.0f* posX + player->cursorOrientationX, 1.0f* posY + player->cursorOrientationY));
-	
-	/*Withouth set Origin*/
-	//sprite.setPosition(sf::Vector2f(posX - sprite.getGlobalBounds().width / 2, posY - sprite.getGlobalBounds().height / 2));
-	sprite.setPosition(sf::Vector2f(posX, posY));
-
-	/*Updating Alerts*/
-	for (int i = m_alerts.size() - 1; i >= 0; --i) {
-		PlayerDrawableAlert& alert{ m_alerts.at(i) };
-		--(alert.timer);
-		if (alert.timer < 0) {
-			m_alerts.erase(m_alerts.begin() + i);
-			//updateAlertsPlacement();
-		}
-	}
-
-	/*Updating Dash*/
-	if (player->state == PlayerState::Dashing) {
-		m_dashPositions.push_back(PlayerDrawableDashPosition(posX, posY));
-	}
-	for (int i = m_dashPositions.size() - 1; i >= 0; --i) {
-		PlayerDrawableDashPosition& d{ m_dashPositions.at(i) };
-		--(d.timer);
-		if (d.timer < 0) {
-			m_dashPositions.erase(m_dashPositions.begin() + i);
-		}
-	}
-	
-	//sprite.setRotation(std::asin(player->orientationX / player->orientationY));
-	//PI = atan(1)*4
-	//180* = atan(1)*4
-	
-	if (player->orientation == 0.f) {
-	}
-	else {
-		angleDeg = std::atan2(player->orientationX, -player->orientationY) * 180 / (atan(1) * 4);
-	}
-	//sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x, 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y));
-	//sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width / 2, 1.0f * sprite.getGlobalBounds().height / 2));
-	sprite.setRotation(angleDeg);
-	/*Shader initialisatidwaon*/
-	/*
-	sf::Glsl::Ivec3 color{ playerShape.getFillColor().r, playerShape.getFillColor().g, playerShape.getFillColor().b };
-	//m_shader.setUniform();
-	//sf::Shader::se
-	//m_shader.setParameter("wave_phase", 10);
-	m_shader.setUniform("frag_LightOrigin", playerShape.getPosition());
-	m_shader.setUniform("frag_LightColor", color);
-	m_shader.setUniform("frag_LightAttenuation", 50);
-	*/
 	if (player != nullptr) {
-		/*Ammo*/
-		std::string ammoS = "Ammo: ";
-		ammoS += std::to_string(player->ammo);
-		m_ammoText.setString(ammoS);
+		posX = player->posX;
+		posY = player->posY;
 
-		/*HP*/
-		if (_hp != player->HP) {
-			_hp = player->HP;
-			std::string s = "HP: ";
-			s += std::to_string(_hp);
-			s += "/";
-			s += std::to_string(GameLogic::PLAYER_BASE_HP);
-			m_hpText.setString(s);
+		playerShape.setPosition(sf::Vector2f(1.0f *posX - player->width / 2, 1.0f*posY - player->height / 2));
+
+		cursorShape.setPosition(sf::Vector2f(1.0f* posX + player->cursorOrientationX, 1.0f* posY + player->cursorOrientationY));
+
+		/*Withouth set Origin*/
+		//sprite.setPosition(sf::Vector2f(posX - sprite.getGlobalBounds().width / 2, posY - sprite.getGlobalBounds().height / 2));
+		sprite.setPosition(sf::Vector2f(posX, posY));
+
+		/*Updating Alerts*/
+		for (int i = m_alerts.size() - 1; i >= 0; --i) {
+			PlayerDrawableAlert& alert{ m_alerts.at(i) };
+			--(alert.timer);
+			if (alert.timer < 0) {
+				m_alerts.erase(m_alerts.begin() + i);
+				//updateAlertsPlacement();
+			}
 		}
-		/*Shooting*/
-		if (player->_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
-			isChargingShot = true;
-			std::string s;
-			s += std::to_string(player->_shotChargeHeldTimeAlt);
-			s += "/";
-			s += std::to_string(GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME);
-			m_shotText.setString(s);
+
+		/*Updating Dash*/
+		if (player->state == PlayerState::Dashing) {
+			m_dashPositions.push_back(PlayerDrawableDashPosition(posX, posY));
+		}
+		for (int i = m_dashPositions.size() - 1; i >= 0; --i) {
+			PlayerDrawableDashPosition& d{ m_dashPositions.at(i) };
+			--(d.timer);
+			if (d.timer < 0) {
+				m_dashPositions.erase(m_dashPositions.begin() + i);
+			}
+		}
+
+		//sprite.setRotation(std::asin(player->orientationX / player->orientationY));
+		//PI = atan(1)*4
+		//180* = atan(1)*4
+
+		if (player->orientation == 0.f) {
 		}
 		else {
-			isChargingShot = false;
+			angleDeg = std::atan2(player->orientationX, -player->orientationY) * 180 / (atan(1) * 4);
 		}
-		/*Dashing*/
-		if (player->_dashChargeHeldTime >= GameLogic::PLAYER_DASH_MINIMUM_CHARGE_TIME) {
-			isChargingDash = true;
-			std::string s;
-			s += std::to_string(player->_dashChargeHeldTime);
-			s += "/";
-			s += std::to_string(GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME);
-			m_dashText.setString(s);
+		//sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x, 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y));
+		//sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width / 2, 1.0f * sprite.getGlobalBounds().height / 2));
+		sprite.setRotation(angleDeg);
+		/*Shader initialisatidwaon*/
+		/*
+		sf::Glsl::Ivec3 color{ playerShape.getFillColor().r, playerShape.getFillColor().g, playerShape.getFillColor().b };
+		//m_shader.setUniform();
+		//sf::Shader::se
+		//m_shader.setParameter("wave_phase", 10);
+		m_shader.setUniform("frag_LightOrigin", playerShape.getPosition());
+		m_shader.setUniform("frag_LightColor", color);
+		m_shader.setUniform("frag_LightAttenuation", 50);
+		*/
+		if (player != nullptr) {
+			/*Ammo*/
+			std::string ammoS = "Ammo: ";
+			ammoS += std::to_string(player->ammo);
+			m_ammoText.setString(ammoS);
+
+			/*HP*/
+			if (_hp != player->HP) {
+				_hp = player->HP;
+				std::string s = "HP: ";
+				s += std::to_string(_hp);
+				s += "/";
+				s += std::to_string(GameLogic::PLAYER_BASE_HP);
+				m_hpText.setString(s);
+			}
+			/*Shooting*/
+			if (player->_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME) {
+				isChargingShot = true;
+				std::string s;
+				s += std::to_string(player->_shotChargeHeldTimeAlt);
+				s += "/";
+				s += std::to_string(GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME);
+				m_shotText.setString(s);
+			}
+			else {
+				isChargingShot = false;
+			}
+			/*Dashing*/
+			if (player->_dashChargeHeldTime >= GameLogic::PLAYER_DASH_MINIMUM_CHARGE_TIME) {
+				isChargingDash = true;
+				std::string s;
+				s += std::to_string(player->_dashChargeHeldTime);
+				s += "/";
+				s += std::to_string(GameLogic::PLAYER_DASH_MAXIMUM_CHARGE_TIME);
+				m_dashText.setString(s);
+			}
+			else {
+				isChargingDash = false;
+			}
 		}
-		else {
-			isChargingDash = false;
-		}
+
+		m_hpText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY - player->height - 10);
+		m_ammoText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY - player->height - 20);
+		m_dashText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY + player->height + 10);
+		m_shotText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY + player->height + 20);
 	}
 	
-	m_hpText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY - player->height - 10);
-	m_ammoText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY - player->height - 20);
-	m_dashText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY + player->height + 10);
-	m_shotText.setPosition(posX - m_hpText.getGlobalBounds().width / 2, posY + player->height + 20);
+}
+
+void PlayerDrawable::setPlayer(Player *p)
+{
+	player = p;
 }
 
 void PlayerDrawable::addAlert(std::string text){

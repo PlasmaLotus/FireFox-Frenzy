@@ -2,6 +2,7 @@
 #include "CircleEntity.h"
 #include "GameLogic.h"
 #include "Map.h"
+#include <random>
 
 Map::Map() :
 	Map(GameLogic::MAP_DEFAULT_WIDTH, GameLogic::MAP_DEFAULT_HEIGHT)
@@ -338,7 +339,66 @@ void Map::generateMap(int generationID) {
 	}
 }
 
-Vector2 Map::getRandomSpawnPoint(float width, float height)
+
+/**
+Generates a point on the map which wont collide with any map entity, accorting to the width and height
+
+@param width The width of the entity.
+@param height The height of the entity.
+@return a position with x and y of the spawn point
+*/
+Vector2 Map::getRandomSpawnPoint(float wdt, float hgt)
 {
-	return Vector2();
+	float x, y;
+
+	bool success = false;
+	int tries = 0;
+	while (!success) {
+		x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / width));
+		y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / height));
+		success = true;
+		for (int i = 0; i < _walls.size(); ++i) {
+			Entity* wall{ _walls.at(i) };
+
+			/*Check if the wall can collide with the point*/
+			if (std::abs(wall->posX - x) < (wdt / 2 + wall->width / 2) || std::abs(wall->posY - y) < (hgt / 2 + wall->height / 2)) {
+				success = false;
+				break;
+			}
+		}
+		if (tries >= 1000) {
+			break;
+		}
+	}
+	
+	return Vector2{ x, y };
+}
+
+Vector2 Map::getRandomSpawnPointFrom(float px, float py, float maxDistance, float wdt, float hgt)
+{
+	float x, y;
+
+	bool success = false;
+	int tries = 0;
+	while (!success) {
+		x = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (px - maxDistance/2 , px + maxDistance/2)));
+		y = static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (py - maxDistance / 2 , py + maxDistance / 2)));
+		success = true;
+		for (int i = 0; i < _walls.size(); ++i) {
+			Entity* wall{ _walls.at(i) };
+
+			/*Check if the wall can collide with the point*/
+			if (std::abs(wall->posX - x) < (wdt / 2 + wall->width / 2) || std::abs(wall->posY - y) < (hgt / 2 + wall->height / 2)) {
+				success = false;
+				break;
+			}
+		}
+		++tries;
+		if (tries >= 1000) {
+			break;
+		}
+	}
+
+	return Vector2{ x, y };
+
 }

@@ -25,6 +25,8 @@ public:
 	void switchToState(State* state);
 	void goBack();
 	void goBackTo(State* state);
+	void goBackToTitle();
+	void _removeFromStack();
 	void quit();
 	sf::RenderWindow * getWindow();
 	void run();
@@ -46,7 +48,9 @@ public:
 	void resetGameTimer();
 	int getFrameRate();
 	int getAbsoluteFrameRate();
+	Alerts m_alertManager;
 protected:
+	void startTransition();
 	StateManager();
 	int _id{ 0 };
 	bool _running{ true };
@@ -59,11 +63,14 @@ protected:
 	sf::Time renderElapsedTime;
 	bool _switchState;
 	bool _deletedState;
+	bool _stateTransition;
+	int _stateTransitionTime;
+	sf::Clock _stateTransitionTimer;
+	bool _backToTitle;
 	ControllerConfig p1Config;
 	ControllerConfig p2Config;
 	bool _renderFrame{ true };
 	sf::Clock gameTimer;
-	//Alerts m_alertManager;
 	
 };
 #endif 

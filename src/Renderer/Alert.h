@@ -18,11 +18,11 @@ private:
 
 class Alerts : public sf::Drawable, sf::Transformable {
 public:
-	Alerts(const std::string & fileLocation, float tileSize, sf::Vector2u windowSize);
+	Alerts(const std::string & fileLocation, float fontSize, sf::Vector2f windowSize);
 	void addAlert(std::string text);
 	//void addAlert(std::string text, sf::Color color);
 	void removeAlert(unsigned int i);
-	void update();
+	void update(int dt, const sf::RenderWindow & window);
 	void setFontSize(float size);
 
 private:
@@ -31,13 +31,11 @@ private:
 	//sf::Text
 	float fontSize;
 	sf::Font m_font;
-	sf::Vector2u windowSize;
 	std::string location;
+	sf::Vector2f windowSize;
+	sf::Vector2f windowDimensions;
 	std::vector<Alert> m_alerts;
 	const int MAX_ALERT_NUMBER{ 6 };
-	std::string _controls1;
-	std::string _controls2;
-	std::string _controls3;
 };
 
 #endif

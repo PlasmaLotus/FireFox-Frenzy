@@ -38,6 +38,17 @@ Projectile * PowerUp::getProjectile(int id, float x, float y, float orientation)
 	return p;
 }
 
+Projectile * PowerUp::spawnProjectile(int id, float x, float y, float orientation)
+{
+	Projectile *p{ new Projectile(id, x, y) };
+	p->durability = 1;
+	//p->lifetime = 700;
+	p->orientation = orientation;
+	_projectilesToSpawnThisTick--;
+	_projectileSpawned = true;
+	return p;
+}
+
 Projectile * PowerUp::getProjectileAlt(int id, float x, float y, float orientation)
 {
 	return getProjectile(id,  x,  y,  orientation);
