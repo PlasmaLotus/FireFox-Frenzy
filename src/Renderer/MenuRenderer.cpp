@@ -41,7 +41,7 @@ bool MenuRenderer::initRenderer() {
 	debugText.setPosition(sf::Vector2f(100, 100));
 	debugText.setCharacterSize(64);
 	*/
-	nbMenuItems = menu->items.size();
+	nbMenuItems = menu->getItemsSize();
 
 	if (!font.loadFromFile("Assets\fonts\Minecraft.ttf")) {
 		fontLoaded = false;
@@ -66,11 +66,11 @@ bool MenuRenderer::initRenderer() {
 	debugText.setPosition(50, 50);
 	*/
 
-	for (int i = 0; i < menu->items.size(); i++) {
-		menuItems[i] = sf::RectangleShape(sf::Vector2f(100, 50));
-		menuItems[i].setPosition(50, i * 100);
+	for (int i = 0; i < menu->getItemsSize(); i++) {
+		//menuItems[i] = sf::RectangleShape(sf::Vector2f(100, 50));
+		//menuItems[i].setPosition(50, i * 100);
 		//menuItems[i].setFillColor(sf::Color::Magenta);
-		_menuItems.push_back(MenuItemDrawable(&menu->items.at(i), 50, i*100));
+		_menuItems.push_back(MenuItemDrawable(&menu->getItems().at(i), 50, i*100));
 		//_menuItems[i].setFont(font);
 	}
 	bool success = false;
@@ -84,13 +84,15 @@ void MenuRenderer::clear() {
 }
 
 void MenuRenderer::update() {
-	for (int i = 0; i < menu->items.size(); i++) {
-		if (menu->selection == i) {
+	for (int i = 0; i < menu->getItemsSize(); i++) {
+		
+		if (menu->getSelection() == i) {
 			_menuItems.at(i).isSelected(true);
 		}
 		else {
 			_menuItems.at(i).isSelected(false);
 		}
+		
 		_menuItems.at(i).update();
 	}
 }
@@ -103,7 +105,7 @@ void MenuRenderer::draw()
 	*/
 	int y = 100;
 
-	for (unsigned i = 0; i < menu->items.size(); ++i) {
+	for (unsigned i = 0; i < menu->getItemsSize(); ++i) {
 		y += 18;
 		/*
 		std::string text = "XDXDXDXD";
@@ -116,8 +118,8 @@ void MenuRenderer::draw()
 	}
 
 	//window->draw(debugText);
-	for (int i = 0; i < menu->items.size(); i++) {
-		if (menu->selection == i){
+	for (int i = 0; i < menu->getItemsSize(); i++) {
+		if (menu->getSelection() == i){
 			menuItems[i].setFillColor(sf::Color::Cyan);
 		}
 		else {

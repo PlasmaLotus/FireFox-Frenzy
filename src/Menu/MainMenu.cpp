@@ -3,7 +3,8 @@
 #include "../States/Gamestate.h"
 #include "../States/OptionMenuState.h"
 
-MainMenu::MainMenu(){
+MainMenu::MainMenu():
+	Menu(){
 
 	addItem(
 		MenuItem("Play",

@@ -13,7 +13,7 @@ void OptionMenuState::tick(int dt, bool render) {
 	p1Controller->handleInput();
 	//p1Controller->updateConfig();
 	renderer->render();
-	menu->tick();
+	menu->tick(dt);
 
 }
 

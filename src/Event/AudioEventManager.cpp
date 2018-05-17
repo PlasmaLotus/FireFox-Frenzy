@@ -33,26 +33,7 @@ bool AudioEventManager::_initSoundBuffers() {
 	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
 	*/
 
-	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/countdown.wav"))
-		success = false;
-	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
-	
-	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/go.wav"))
-		success = false;
-	_soundBufferMap[AudioEvent::AudioCountdownStart] = buffer;
-
-
-	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/song019.wav"))
-		success = false;
-	_soundBufferMap[AudioEvent::DefaultEventAudio] = buffer;
-
-	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/song105.wav"))
-		success = false;
-	_soundBufferMap[AudioEvent::TestEventAudio] = buffer;
+	/*Game Audio*/
 
 	buffer = sf::SoundBuffer();
 	if (!buffer.loadFromFile("./Assets/Sounds/song170.wav"))
@@ -74,6 +55,73 @@ bool AudioEventManager::_initSoundBuffers() {
 		success = false;
 	_soundBufferMap[AudioEvent::AudioShotChargeMax] = buffer;
 
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Laser3.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ProjectileSpawnAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/freesound/170141__timgormly__8-bit-bump.aiff"))
+		success = false;
+	_soundBufferMap[AudioEvent::PlayerHurtAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/freesound/170155__timgormly__8-bit-powerup1.aiff"))
+		success = false;
+	_soundBufferMap[AudioEvent::PlayerPickupAudio] = buffer;
+
+	/*Menu Sounds*/
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/DoMenuActionSfx.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::MenuSelectionAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Negative.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::MenuSelectionErrorAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/MainMenuMoveCursorNextSfx.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::MenuItemIncreaseAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/MainMenuMoveCursorPrevSfx.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::MenuItemDecreaseAudio] = buffer;
+	
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/SubMenuMoveCursorSfx.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::MenuItemChangeAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/SFX09.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::MenuReturnAudio] = buffer;
+
+	/*Other Sounds*/
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/countdown.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/go.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::AudioCountdownStart] = buffer;
+
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/song019.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::DefaultEventAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/song105.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::TestEventAudio] = buffer;
 
 
 	/*Defining the repeat interval of persistant sounds*/

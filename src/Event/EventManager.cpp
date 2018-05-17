@@ -24,19 +24,6 @@ void EventManager::queueEvent(Event e) {
 void EventManager::handleEvents(int dt)
 {
 
-	/*
-	for (std::vector<Event>::iterator i = _events.begin(); i != _events.end(); i++) {
-		i->lifetime += dt;
-		if (!i->handled) {
-			__handleEvent(i->type, i->_id);
-			i->handled = true;
-		}
-		if (i->lifetime >= DEFAULT_LIFETIME_DEATH) {
-			_events.erase(i);
-		}
-	}
-	*/
-	//if 
 	for (int i = _events.size() - 1; i >= 0; i--) {
 		Event &event = _events.at(i);
 		event.lifetime += dt;
@@ -52,13 +39,11 @@ void EventManager::handleEvents(int dt)
 	printf("Event Queue ---------- : %d\n", _events.size());
 }
 
-void EventManager::setGame(GameLogic * g)
-{
+void EventManager::setGame(GameLogic * g){
 	game = g;
 }
 
-void EventManager::setRenderer(Renderer * r)
-{
+void EventManager::setRenderer(Renderer * r){
 	renderer = r;
 }
 
@@ -66,6 +51,33 @@ bool EventManager::__handleEvent(Event event){
 	EventType e = event.type;
 	//int id = even
 	switch (e) {
+
+	/*MenuEvents*/
+	case EventType::MenuSelection: {
+		audio->queueAudioEvent(AudioEvent::MenuSelectionAudio, nullptr, false);
+		break;
+	}
+	case EventType::MenuSelectionError: {
+		audio->queueAudioEvent(AudioEvent::MenuSelectionErrorAudio, nullptr, false);
+		break;
+	}
+	case EventType::MenuReturn: {
+		audio->queueAudioEvent(AudioEvent::MenuReturnAudio, nullptr, false);
+		break;
+	}
+	case EventType::MenuItemChange: {
+		audio->queueAudioEvent(AudioEvent::MenuItemChangeAudio, nullptr, false);
+		break;
+	}
+	case EventType::MenuItemIncrease: {
+		audio->queueAudioEvent(AudioEvent::MenuItemIncreaseAudio, nullptr, false);
+		break;
+	}
+	case EventType::MenuItemDecrease: {
+		audio->queueAudioEvent(AudioEvent::MenuItemDecreaseAudio, nullptr, false);
+		break;
+	}
+	/*Game Events*/
 	case EventType::ProjectileSpawn: {
 		//Entity *e = game->findEntity(id);
 
@@ -116,6 +128,23 @@ bool EventManager::__handleEvent(Event event){
 		if (gr != nullptr) {
 			gr->playerHitDisplay(event.entity->posX, event.entity->posY);
 		}
+		audio->queueAudioEvent(AudioEvent::PlayerHurtAudio, event.entity, false);
+		break;
+	}
+
+	case EventType::PlayerPickupEnergy:
+	case EventType::PlayerPickupPowerUp:
+	case EventType::PlayerPickup: {
+		GameRenderer* gr{ dynamic_cast<GameRenderer*>(renderer) };
+		if (gr != nullptr) {
+			gr->playerHitDisplay(event.entity->posX, event.entity->posY);
+		}
+		audio->queueAudioEvent(AudioEvent::PlayerPickupAudio, event.entity, false);
+
+		break;
+	}
+	case EventType::PlayerLowHP: {
+		
 		break;
 	}
 
@@ -130,13 +159,8 @@ bool EventManager::__handleEvent(Event event){
 }
 
 void EventManager::__handleEventProjectileSpawn(Projectile* projectile) {
-	
-	//bool loaded = sbuffer.loadFromFile("Assets/Sounds/Pew_Pew-DKnight556-1379997159.wav");
-	//sound.setBuffer(sbuffer);
-	//sound.setVolume(100.f);
-	//sound.play();
-	//sound.getSta
-	audio->queueAudioEvent(AudioEvent::TestEventAudio, projectile, false);
+
+	audio->queueAudioEvent(AudioEvent::ProjectileSpawnAudio, projectile, false);
 }
 
 void EventManager::__handleEventCoundownStart()

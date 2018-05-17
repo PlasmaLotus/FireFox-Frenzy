@@ -3,7 +3,8 @@
 #include "../States/TitleScreen.h"
 #include "../States/GameState.h"
 
-PauseMenu::PauseMenu(){
+PauseMenu::PauseMenu():
+	Menu(){
 	addItem(
 		MenuItem("Back To Game",
 			[&]() {
@@ -25,6 +26,7 @@ PauseMenu::PauseMenu(){
 
 
 PauseMenu::PauseMenu(GameState* gs):
+	Menu(),
 	gameState{ gs } {
 	addItem(
 		MenuItem("Back To Game",
@@ -70,8 +72,13 @@ PauseMenu::~PauseMenu() {
 
 void PauseMenu::inputBack()
 {
+	input();
 	onReturn();
 	if (gameState != nullptr) {
 		gameState->pause(); 
 	}
+}
+
+void PauseMenu::inputPause() {
+	inputBack();
 }

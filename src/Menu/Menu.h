@@ -16,27 +16,31 @@ public:
 	//Menu();
 	Menu();
 	virtual ~Menu();
-	virtual void tick();
+	virtual void tick(int dt);
 	virtual void inputLeft();
 	virtual void inputRight();
 	virtual void inputUp();
 	virtual void inputDown();
 	virtual void inputSelect();
 	virtual void inputBack();
-
-	sf::RenderWindow *window;
-	int selection;
+	virtual void inputPause();
+	std::vector<MenuItem> & getItems();
+	int getSelection();
+	int getItemsSize();
+	MenuItem getItem(int index);
+protected:
 	std::vector<MenuItem> items;
-	//Menu *previousMenu;
-	//Menu *nextMenu;
-	//void setPreviousMenu(Menu* menu);
+	virtual void input();
+	int selection;
 	void addItem(MenuItem menuItem);
-
 	virtual void onSelection();
+	virtual void onSelectionError();
 	virtual void onItemIncrease();
 	virtual void onItemDecrease();
 	virtual void onItemChange();
 	virtual void onReturn();
+	bool _inputted;
+	int _inputTime;
 };
 
 #endif

@@ -161,6 +161,8 @@ void Player::handleCollision(){
 
 void Player::_handleCollision(PowerUpItem p) {
 	/*PowerUpÎtem*/
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPickupPowerUp, this));
+
 	ability = p.powerUp;
 }
 
@@ -178,7 +180,9 @@ void Player::_handleCollision(Projectile p){
 }
 
 void Player::_handleCollision(Energy e){
+
 	/*Energy Pack hits the player*/
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPickupEnergy, this));
 	ammo += e.aura;
 	if (ammo > GameLogic::PLAYER_MAX_AMMO) {
 		ammo = GameLogic::PLAYER_MAX_AMMO;

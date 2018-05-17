@@ -55,7 +55,7 @@ void MenuController::handleCommand(ControllerCommand command){
 		}
 		case ControllerCommand::Pause:
 		{
-			menu->inputSelect();
+			menu->inputPause();
 			break;
 		}
 		case ControllerCommand::Cheat:
@@ -79,31 +79,32 @@ void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	else {
 		command = handler.negatif;
 	}
+	float joystickDeadZone = config->joystickDeadZone + 10;
 	switch (command) {
 	case ControllerCommand::Up:
 	{
-		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputUp();
 		}
 		break;
 	}
 	case ControllerCommand::Down:
 	{
-		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputDown();
 		}
 		break;
 	}
 
 	case ControllerCommand::Left: {
-		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputLeft();
 		}
 		break;
 	}
 	case ControllerCommand::Right:
 	{
-		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputRight();
 		}
 		break;
@@ -124,19 +125,19 @@ void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	}
 	case ControllerCommand::Shoot:
 	case ControllerCommand::ShootAlt: {
-		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputSelect();
 		}
 		break;
 	}
 	case ControllerCommand::Dash: {
-		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputBack();
 		}
 		break;
 	}
 	case ControllerCommand::Shield: {
-		if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
+		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputBack();
 		}
 		break;

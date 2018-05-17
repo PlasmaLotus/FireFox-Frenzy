@@ -17,6 +17,7 @@ public:
 	~TitleScreen();
 private:
 	int _idleTicks;
+	//std::vector<MenuItems> _items;
 };
 
 #endif //TITLESCREEN

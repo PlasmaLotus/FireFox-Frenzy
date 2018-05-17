@@ -5,21 +5,21 @@ Updated May 13, 2017
 #include "GameLogic.h"
 #include "../States/StateManager.h"
 
-const float GameLogic::PLAYER_MAX_VELOCITY(1.9f);
+const float GameLogic::PLAYER_MAX_VELOCITY(1.4f);
 const float GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE(0.06f);
 const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
 const float GameLogic::PLAYER_FRICTION(0.995f);
 const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.92f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
-const float GameLogic::PLAYER_DASH_VELOCITY(5.0f);
-const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(2.1f);
+const float GameLogic::PLAYER_DASH_VELOCITY(2.2f);
+const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(1.9f);
 const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
 
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 3.f );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
 const float GameLogic::PROJECTILE_SPEED_MINIMUM( 2.5f );
-const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 6.0f );
+const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 5.0f );
 const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };

@@ -34,7 +34,7 @@ PauseMenuState::~PauseMenuState() {
 
 void PauseMenuState::tick(int dt, bool render) {
 	renderer->render();
-	menu->tick();
+	menu->tick(dt);
 	p1Controller->handleInput();
 	p2Controller->handleInput();
 }

@@ -3,7 +3,8 @@
 #include "../States/TitleScreen.h"
 #include "../States/GameState.h"
 
-EndGamePauseMenu::EndGamePauseMenu() {
+EndGamePauseMenu::EndGamePauseMenu():
+	Menu(){
 	
 	addItem(
 		MenuItem("Back to Title",
@@ -20,6 +21,7 @@ EndGamePauseMenu::EndGamePauseMenu() {
 
 
 EndGamePauseMenu::EndGamePauseMenu(GameState* gs):
+	Menu(),
 	gameState{ gs } {
 	addItem(
 		MenuItem("Play Again!",
@@ -47,8 +49,13 @@ EndGamePauseMenu::~EndGamePauseMenu() {
 
 void EndGamePauseMenu::inputBack()
 {
+	input();
 	onReturn();
 	if (gameState != nullptr) {
 		gameState->pause(); 
 	}
+}
+
+void EndGamePauseMenu::inputPause() {
+	inputBack();
 }

@@ -13,7 +13,7 @@ public:
 	EndGamePauseMenu();
 	EndGamePauseMenu(GameState *gs);
 	virtual ~EndGamePauseMenu();
-	
+	virtual void inputPause();
 	virtual void inputBack();
 private:
 	GameState* gameState;

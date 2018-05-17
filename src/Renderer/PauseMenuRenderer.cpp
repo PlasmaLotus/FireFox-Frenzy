@@ -5,18 +5,15 @@ Updated May 13, 2017
 
 #include "PauseMenuRenderer.h"
 
-PauseMenuRenderer::PauseMenuRenderer()
-{
+PauseMenuRenderer::PauseMenuRenderer(){
 }
 
 PauseMenuRenderer::PauseMenuRenderer(sf::RenderWindow *w, Menu *m):
-	MenuRenderer(w, m)
-{
+	MenuRenderer(w, m){
 	initRenderer();
 }
 
-PauseMenuRenderer::~PauseMenuRenderer()
-{
+PauseMenuRenderer::~PauseMenuRenderer(){
 	_menuItems.clear();
 }
 
@@ -31,7 +28,7 @@ void PauseMenuRenderer::render()
 
 bool PauseMenuRenderer::initRenderer() {
 	bool success = true;
-	nbMenuItems = menu->items.size();
+	nbMenuItems = menu->getItemsSize();
 	int menuItemTabulation = 25;
 
 	_windowHeight = window->getDefaultView().getSize().y;
@@ -55,10 +52,10 @@ bool PauseMenuRenderer::initRenderer() {
 	int menuItemHeight = 50;
 	int menuItemPosX = _windowWidth / 2 - menuItemWidth / 2;
 	int menuItemPosYOrigin = foreground.getPosition().y - foreground.getSize().y / 2;
-	for (int i = 0; i < menu->items.size(); i++) {
+	for (int i = 0; i < menu->getItemsSize(); i++) {
 		menuItems[i] = sf::RectangleShape(sf::Vector2f(menuItemWidth, menuItemHeight));
 		menuItems[i].setPosition(menuItemPosX, i * menuItemHeight + (i + 1) * menuItemTabulation);
-		_menuItems.push_back(MenuItemDrawable(&menu->items.at(i), menuItemPosX, i * menuItemHeight + (i + 1) * menuItemTabulation));
+		_menuItems.push_back(MenuItemDrawable(&menu->getItems().at(i), menuItemPosX, i * menuItemHeight + (i + 1) * menuItemTabulation));
 	}
 
 	return success;
@@ -70,8 +67,8 @@ void PauseMenuRenderer::clear() {
 }
 
 void PauseMenuRenderer::update() {
-	for (int i = 0; i < menu->items.size(); i++) {
-		if (menu->selection == i) {
+	for (int i = 0; i < menu->getItemsSize(); i++) {
+		if (menu->getSelection() == i) {
 			_menuItems.at(i).isSelected(true);
 		}
 		else {
@@ -79,23 +76,20 @@ void PauseMenuRenderer::update() {
 		}
 		_menuItems.at(i).update();
 	}
-
 }
-void PauseMenuRenderer::draw()
-{
-	int y = 100;
+void PauseMenuRenderer::draw(){
 
-	//window->draw(debugText);
-	for (int i = 0; i < menu->items.size(); i++) {
-		if (menu->selection == i){
+	for (int i = 0; i < menu->getItemsSize(); i++) {
+		/*
+		if (menu->getSelection() == i){
 			menuItems[i].setFillColor(sf::Color::Cyan);
 		}
 		else {
 			menuItems[i].setFillColor(sf::Color::Magenta);
 		}
+		*/
 		window->draw(_menuItems.at(i));
 	}
-
 }
 
 void PauseMenuRenderer::display() {
