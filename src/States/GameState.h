@@ -19,6 +19,8 @@ public:
 	GameLogic *getGame();
 	void pause();
 	void reset();
+	void _reset();
+	bool _resetBool;
 	GameRenderer* getRenderer();
 private:
 	GameLogic *game;
@@ -29,5 +31,6 @@ private:
 	ControllerConfig* p1KeyConfig;
 	ControllerConfig* p2KeyConfig;
 	MenuState* pauseMenuState;
+	sf::RenderTexture * gameFrame;
 };
 #endif

@@ -8,8 +8,8 @@ Updated May 13, 2017
 const float GameLogic::PLAYER_MAX_VELOCITY(1.4f);
 const float GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE(0.06f);
 const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
-const float GameLogic::PLAYER_FRICTION(0.995f);
-const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.92f };
+const float GameLogic::PLAYER_FRICTION(0.98f);
+const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.91f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
 const float GameLogic::PLAYER_DASH_VELOCITY(2.2f);
@@ -47,6 +47,8 @@ GameLogic::~GameLogic(){
 }
 
 void GameLogic::init() {
+	countdownTimer = GAME_COUNTDOWN_TIME;
+	_playerIDs.clear();
 	_init = false;
 	_gameEnd = false;
 	_spawnPoints.clear();

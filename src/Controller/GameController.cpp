@@ -29,7 +29,7 @@ bool GameController::handleInput() {
 	cAngleY = 0.f;
 	bool input = Controller::handleInput();
 	player->setPlayerOrienation(pAngleX, pAngleY);
-	if ((pAngleX >= config->joystickDeadZone || pAngleX <= -config->joystickDeadZone)||
+	if ((pAngleX >= config->joystickDeadZone || pAngleX <= -config->joystickDeadZone) &&
 		(pAngleY >= config->joystickDeadZone || pAngleY <= -config->joystickDeadZone)) {
 		player->commandMove(pAngleX, pAngleY);
 	}

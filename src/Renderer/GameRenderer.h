@@ -29,19 +29,21 @@ public:
 	virtual void render();
 	virtual void display();
 	virtual void update();
+	void reset();
+	//void _draw(sf::RenderTarget* target);
+	//sf::RenderTexture
 
-	void _draw(sf::RenderTexture target);
-
-	void drawPlayers();
-	void drawProjectiles();
-	void drawMap();
-	void drawItems();
+	void drawPlayers(sf::RenderTarget* target);
+	void drawProjectiles(sf::RenderTarget* target);
+	void drawMap(sf::RenderTarget* target);
+	void drawItems(sf::RenderTarget* target);
 	void addGame(GameLogic * g);
 	void addWindow(sf::RenderWindow * g);
-	void handleViews();
-	void drawParticleSystems();
+	void handleViews(sf::RenderTarget* target);
+	void drawParticleSystems(sf::RenderTarget* target);
 	void updateParticleSystems(int dt);
-	sf::Texture getLastFrame();
+	sf::Sprite renderFrame();
+	sf::RenderTexture* getLastFrame();
 
 	GameRenderer();
 	GameRenderer(sf::RenderWindow* window, GameLogic* game);
@@ -53,7 +55,7 @@ public:
 	sf::RenderWindow* window;
 	GameLogic* game;
 	sf::Texture lastFrame;//not implemented
-	sf::RenderTexture _frame;
+	sf::RenderTexture* _frame;
 	bool texturesLoaded = false;
 	const float size = 100.f;
 	//sf::CircleShape shape(size);
@@ -82,6 +84,7 @@ public:
 	sf::Texture* playerTexture;
 	sf::Texture* projectileGeneralTexture;
 	sf::Font* font;
+
 	//sf::Font& _font{ sf::Font() };
 };
 

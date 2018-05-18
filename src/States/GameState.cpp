@@ -54,7 +54,12 @@ void GameState::tick(int dt, bool render){
 		break;
 	case GameCurrentState::PAUSED:
 		printf("===== GAME PAUSED =====\n");
-		renderer->render();
+		if (gameFrame == nullptr) {
+			gameFrame = renderer->getLastFrame();
+		}
+		//renderer->render();
+		//window->draw(*gameFrame);
+		//window->
 		if (pauseMenuState != nullptr) {
 			pauseMenuState->tick(dt);
 		}
@@ -69,6 +74,11 @@ void GameState::tick(int dt, bool render){
 	default:
 		break;
 	}
+
+	if (_resetBool) {
+		_reset();
+		_resetBool = false;
+	}
 }
 
 GameLogic * GameState::getGame(){
@@ -78,6 +88,9 @@ GameLogic * GameState::getGame(){
 void GameState::pause() {
 	
 	if (game->gameState != GameCurrentState::PAUSED) {
+		if (gameFrame != nullptr) {
+			delete gameFrame;
+		}
 
 		if (game->gameState == GameCurrentState::RUNNING) {
 			game->gameState = GameCurrentState::PAUSED;
@@ -117,11 +130,25 @@ void GameState::pause() {
 }
 
 void GameState::reset() {
+	_resetBool = true;
+}
+
+void GameState::_reset() {
 	game->reset();
+	renderer->reset();
+	//p1Controller->setPlayer(game->getPlayer(1));
+	//p2Controller->setPlayer(game->getPlayer(2));
+	/*
+	if (renderer != nullptr) {
+		delete renderer;
+	}
+	*/
 	p1Controller->setPlayer(game->getPlayer(1));
 	p2Controller->setPlayer(game->getPlayer(2));
-	renderer->playerDrawable1->setPlayer(game->getPlayer(1));
-	renderer->playerDrawable2->setPlayer(game->getPlayer(2));
+	//countdown
+	//renderer = new GameRenderer(window, game);
+	//renderer->playerDrawable1->setPlayer(game->getPlayer(1));
+	//renderer->playerDrawable2->setPlayer(game->getPlayer(2));
 }
 
 GameRenderer * GameState::getRenderer()

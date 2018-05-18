@@ -27,12 +27,14 @@ void GameRenderer::render(){
 }
 
 bool GameRenderer::initRenderer() {
+
 	bool success = true;
 	shape.setFillColor(sf::Color::Blue);
 	shape.setPosition(100, 100);
 	shape.setRadius(size);
 	mapDrawable = new MapDrawable(&game->map);
 
+	_frame = new sf::RenderTexture();
 	
 	_displayFPS = true;
 	_displayPositions = true;
@@ -106,34 +108,47 @@ void GameRenderer::clear() {
 
 void GameRenderer::draw(){
 	
+	drawMap(window);
+	drawParticleSystems(window);
+
+	drawProjectiles(window);
+	drawItems(window);
+	drawPlayers(window);
+	
+	handleViews(window);
+	__showFPS();
+	__showPlayerPositions();
+	//window->draw();
+}
+
+sf::RenderTexture* GameRenderer::getLastFrame() {
+	drawMap(_frame);
+	drawParticleSystems(_frame);
+
+	drawProjectiles(_frame);
+	drawItems(_frame);
+	drawPlayers(_frame);
+
+	handleViews(_frame);
+	
+	return _frame;
+}
+/*
+void GameRenderer::_draw(sf::RenderTarget* target) {
+	
 	drawMap();
 	drawParticleSystems();
 
 	drawProjectiles();
 	drawItems();
 	drawPlayers();
-	
-	handleViews();
-	__showFPS();
-	__showPlayerPositions();
-	//window->draw();
-}
-
-void GameRenderer::_draw(sf::RenderTexture target) {
-	
-	drawMap();
-	drawParticleSystems();
-
-	drawProjectiles();
-	drawItems();
-	drawPlayers();
 
 	handleViews();
 	__showFPS();
 	__showPlayerPositions();
 	//window->draw();
 }
-
+*/
 void GameRenderer::display() {
 	window->display();
 }
@@ -155,13 +170,22 @@ void GameRenderer::update(){
 	updateParticleSystems(StateManager::getInstance().getElapsedTime());
 }
 
-void GameRenderer::drawPlayers(){
-
-	window->draw(*playerDrawable1);
-	window->draw(*playerDrawable2);
+void GameRenderer::reset() {
+	playerDrawable1 = new PlayerDrawable(game->getPlayer(1), *playerTexture, *font);
+	playerDrawable2 = new PlayerDrawable(game->getPlayer(2), *playerTexture, *font);
 }
 
-void GameRenderer::drawProjectiles(){
+
+void GameRenderer::drawPlayers(sf::RenderTarget* target){
+	/*
+	window->draw(*playerDrawable1);
+	window->draw(*playerDrawable2);
+	*/
+	target->draw(*playerDrawable1);
+	target->draw(*playerDrawable2);
+}
+
+void GameRenderer::drawProjectiles(sf::RenderTarget* target){
 	std::vector<Entity*> vec = game->_entities;
 	for (int i = 0; i < vec.size(); i++) {
 		try {
@@ -176,7 +200,8 @@ void GameRenderer::drawProjectiles(){
 				*/
 				ProjectileDrawable pro(p, *projectileGeneralTexture);
 				pro.update();
-				window->draw(pro);
+				//window->draw(pro);
+				target->draw(pro);
 			}
 		}
 		catch (const std::bad_cast& cast){
@@ -184,7 +209,7 @@ void GameRenderer::drawProjectiles(){
 	}
 }
 
-void GameRenderer::drawMap()
+void GameRenderer::drawMap(sf::RenderTarget* target)
 {
 	/*
 	Map map = game->map;
@@ -198,11 +223,11 @@ void GameRenderer::drawMap()
 	window->draw(mapOutline);
 	*/
 
-	
-	window->draw(*mapDrawable);
+	target->draw(*mapDrawable);
+	//window->draw(*mapDrawable);
 }
 
-void GameRenderer::drawItems() {
+void GameRenderer::drawItems(sf::RenderTarget* target) {
 	std::vector<Entity*> vec = game->_entities;
 	for (int i = 0; i < vec.size(); i++) {
 		try {
@@ -217,7 +242,8 @@ void GameRenderer::drawItems() {
 				}
 				circle.setPosition(p->posX - p->width / 2, p->posY - p->width / 2);
 				circle.setRadius(p->width);
-				window->draw(circle);
+				target->draw(circle);
+				//window->draw(circle);
 			}
 		}
 		catch (const std::bad_cast& cast) {
@@ -231,77 +257,67 @@ void GameRenderer::addGame(GameLogic* g) {
 void GameRenderer::addWindow(sf::RenderWindow* g) {
 	window = g;
 }
-void GameRenderer::handleViews(){
+void GameRenderer::handleViews(sf::RenderTarget* target){
 	//setViewport(sf::FloatRect(0.75f, 0, 0.25f, 0.25f));
 	Player*p1 = game->getPlayer(1);
 	Player*p2 = game->getPlayer(2);
 
-	float minX, minY, maxX, maxY, distX, distY;
-	maxX = std::max(p1->posX, p2->posX);
-	maxY = std::max(p1->posY, p2->posY);
-	minX = std::min(p1->posX, p2->posX);
-	minY = std::min(p1->posY, p2->posY);
-	distX = abs(p1->posX - p2->posX);
-	distY = abs(p1->posY - p2->posY);
-	/*
-	//p1View.move(p->posX - p->prevPosX, p->posY - p->prevPosY);
-	p1View.setCenter(playerDrawable1->player->posX, playerDrawable1->player->posY);
-	p2View.setCenter(playerDrawable2->player->posX, playerDrawable2->player->posY);
-	*/
+	if (p1 != nullptr && p2 != nullptr) {
 
-	//mainView.setViewport(sf::FloatRect(minX, minY, maxX - minX + 100, maxY - minY + 100));
-	float some = 1280.f * 9.f / 16.f;
-	float extraRoom = 480.f;
-	//if (distX > window->getSize().x * 0.8f || distY > window->getSize().y  * 0.8f) {
-		float newDistX = distX;
-		float newDistY =  distY;
-		if (distY * 16.f / 9.f > distX) {
-			newDistX = distY * 16.f / 9.f;
-			newDistY = newDistX * 9.f / 16.f;
-		}
-		if (distX * 9.f / 16.f > distY) {
-			newDistY = distX * 9.f / 16.f;
-			newDistX = newDistY * 16.f / 9.f;
-		}
+		float minX, minY, maxX, maxY, distX, distY;
+		maxX = std::max(p1->posX, p2->posX);
+		maxY = std::max(p1->posY, p2->posY);
+		minX = std::min(p1->posX, p2->posX);
+		minY = std::min(p1->posY, p2->posY);
+		distX = abs(p1->posX - p2->posX);
+		distY = abs(p1->posY - p2->posY);
+		/*
+		//p1View.move(p->posX - p->prevPosX, p->posY - p->prevPosY);
+		p1View.setCenter(playerDrawable1->player->posX, playerDrawable1->player->posY);
+		p2View.setCenter(playerDrawable2->player->posX, playerDrawable2->player->posY);
+		*/
+
+		//mainView.setViewport(sf::FloatRect(minX, minY, maxX - minX + 100, maxY - minY + 100));
+		float some = 1280.f * 9.f / 16.f;
+		float extraRoom = 480.f;
+		//if (distX > window->getSize().x * 0.8f || distY > window->getSize().y  * 0.8f) {
+			float newDistX = distX;
+			float newDistY =  distY;
+			if (distY * 16.f / 9.f > distX) {
+				newDistX = distY * 16.f / 9.f;
+				newDistY = newDistX * 9.f / 16.f;
+			}
+			if (distX * 9.f / 16.f > distY) {
+				newDistY = distX * 9.f / 16.f;
+				newDistX = newDistY * 16.f / 9.f;
+			}
 	
-		//if (newDistX < 1280 && newDistY < 720) {
-		if (newDistX < StateManager::getWindowWidth() && newDistY < StateManager::getWindowHeight()) {
-			newDistX = 1.0f * StateManager::getWindowWidth();
-			newDistY = 1.0f * StateManager::getWindowHeight();
-		}
-		sf::Vector2f viewSize(newDistX + extraRoom * 16.f / 9.f, newDistY + extraRoom * 9.f / 16.f);
-		mainView.setSize(viewSize);
-		//mainView.setSize(sf::Vector2f(newDistX + extraRoom * 16.f / 9.f , newDistY + extraRoom * 9.f / 16.f));
-		
-		///TODO Limit 
-		///Limit camera dependant of  map;
-		sf::Vector2f viewCenter(1.0f * distX / 2.f + minX, 1.0f * distY / 2.f + minY);
-		if (viewCenter.x < window->getSize().x /2.f || viewCenter.y < window->getSize().y /2.f) {
-			if (viewCenter.x < window->getSize().x /2.f) {
-				viewCenter.x = window->getSize().x / 2.f;
+			//if (newDistX < 1280 && newDistY < 720) {
+			if (newDistX < StateManager::getWindowWidth() && newDistY < StateManager::getWindowHeight()) {
+				newDistX = 1.0f * StateManager::getWindowWidth();
+				newDistY = 1.0f * StateManager::getWindowHeight();
 			}
-			if (viewCenter.y < window->getSize().y /2.f) {
-				viewCenter.y = window->getSize().y / 2.f;
-			}
-		}
+			sf::Vector2f viewSize(newDistX + extraRoom * 16.f / 9.f, newDistY + extraRoom * 9.f / 16.f);
+			mainView.setSize(viewSize);
+			//mainView.setSize(sf::Vector2f(newDistX + extraRoom * 16.f / 9.f , newDistY + extraRoom * 9.f / 16.f));
 		
-		mainView.setCenter(viewCenter);
-		//mainView.setCenter(sf::Vector2f(1.0f * distX / 2.f + minX, 1.0f * distY / 2.f + minY));
-		//mainView.setCenter(sf::Vector2f(1.0f * newDistX / 2.f + minX, 1.0f * newDistY / 2.f + minY));
-	//}
-
-	/*
-	else {
-		//mainView.setSize(sf::Vector2f(window->getSize().x, distY > window->getSize().y));
-		mainView.setSize(sf::Vector2f(1280.f, 720.f));
-		//mainView.setCenter(sf::Vector2f(540, 360));
-		//mainView.set
-		mainView.setCenter(sf::Vector2f(1.0f * distX / 2.f + minX, 1.0f * distY / 2.f + minY));	
+			///TODO Limit 
+			///Limit camera dependant of  map;
+			sf::Vector2f viewCenter(1.0f * distX / 2.f + minX, 1.0f * distY / 2.f + minY);
+			if (viewCenter.x < window->getSize().x /2.f || viewCenter.y < window->getSize().y /2.f) {
+				if (viewCenter.x < window->getSize().x /2.f) {
+					viewCenter.x = window->getSize().x / 2.f;
+				}
+				if (viewCenter.y < window->getSize().y /2.f) {
+					viewCenter.y = window->getSize().y / 2.f;
+				}
+			}
+		
+			mainView.setCenter(viewCenter);
+			//window->setView(mainView);
+			target->setView(mainView);
 	}
-	*/
-	
-	//mainView.setCenter(p1->posX, p1->posY);
-	window->setView(mainView);
+
 }
 void GameRenderer::updateParticleSystems(int dt)
 {
@@ -314,7 +330,13 @@ void GameRenderer::updateParticleSystems(int dt)
 		}
 	}
 }
-void GameRenderer::drawParticleSystems()
+sf::Sprite GameRenderer::renderFrame()
+{
+	_frame->clear();
+	_frame->draw(*playerDrawable1);
+	return sf::Sprite();
+}
+void GameRenderer::drawParticleSystems(sf::RenderTarget* target)
 {
 	for (int i = _particleSystems.size() - 1; i >= 0; --i) {
 		ParticleSystem *p{ _particleSystems.at(i) };
@@ -322,9 +344,7 @@ void GameRenderer::drawParticleSystems()
 	}
 }
 
-sf::Texture GameRenderer::getLastFrame() {
-	return lastFrame;
-}
+
 
 void GameRenderer::setDisplayHitboxes(bool value) {
 	_displayHitboxes = value;

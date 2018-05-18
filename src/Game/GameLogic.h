@@ -119,7 +119,7 @@ public:
 	/*Special Projectiles*/
 	static const int PROJECTILE_FIRE_AOE_SPAWN_INTERVAL{ 50 };
 
-
+	
 private:
 	void init();
 	void _emptyAllEntities();
