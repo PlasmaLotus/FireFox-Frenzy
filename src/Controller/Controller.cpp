@@ -135,7 +135,7 @@ bool Controller::handleInput() {
 			_swapConfig = false;
 		}
 		handleInputKeyboard();
-		handleInputMouse();
+		//handleInputMouse();
 		handleMouseAxis();
 		if (sf::Joystick::isConnected(config->getJoystickNumber())) {
 			//mode = ControlMode::Joystick;

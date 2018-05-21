@@ -33,7 +33,7 @@ public:
 	int64_t getElapsedTime();
 	int64_t getRenderElapsedTime();
 	int getUniqueID();
-	static const int FPS = 144;
+	static const int FPS = 60;//144
 	static const int renderFPS = 60;
 	int SCREEN_WIDTH{ 1280 };
 	int SCREEN_HEIGHT{ 720 };
@@ -49,11 +49,22 @@ public:
 	int getFrameRate();
 	int getAbsoluteFrameRate();
 	Alerts m_alertManager;
-protected:
 	void startTransition();
+	void setScreenDimensions(int x, int y);
+	void setDisplayFPS(bool state);
+	void setDisplayHitboxes(bool state);
+	void setDisplayPlayerPositions(bool state);
+	bool getDisplayFPS();
+	bool getDisplayHitboxes();
+	bool getDisplayPlayerPositions();
+	void toggleHitboxes();
+	void togglePositions();
+	void toggleFPS();
+protected:
 	StateManager();
 	int _id{ 0 };
 	bool _running{ true };
+	void _runHandlers();
 	sf::RenderWindow window;
 	State *_currentState;
 	State *_newState;
@@ -71,6 +82,9 @@ protected:
 	ControllerConfig p2Config;
 	bool _renderFrame{ true };
 	sf::Clock gameTimer;
+	bool _displayFPS;
+	bool _displayHitboxes;
+	bool _displayPlayerPos;
 	
 };
 #endif 

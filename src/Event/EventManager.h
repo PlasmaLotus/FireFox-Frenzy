@@ -7,7 +7,7 @@
 #include "AudioEventManager.h"
 enum EventType{NoEvent, GameEnd, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, 
 	GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo, TimeLimit, LastManStanding,
-MenuItemIncrease, MenuItemDecrease, MenuSelection, MenuSelectionError, MenuItemChange, MenuReturn, 
+MenuItemIncrease, MenuItemDecrease, MenuSelection, MenuSelectionError, MenuItemChange, MenuReturn, PauseMenuEnter,
 PlayerLowHP, PlayerShotChargeStart, PlayerShotChargeStartMid, PlayerShotChargeStartMax, PlayerShotChargeEnd,
 PlayerHit, PlayerPickup, PlayerPickupEnergy, PlayerPickupPowerUp
 };

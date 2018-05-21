@@ -54,9 +54,12 @@ void GameState::tick(int dt, bool render){
 		break;
 	case GameCurrentState::PAUSED:
 		printf("===== GAME PAUSED =====\n");
+		/*
 		if (gameFrame == nullptr) {
 			gameFrame = renderer->getLastFrame();
 		}
+		*/
+		window->draw(renderer->renderFrame());
 		//renderer->render();
 		//window->draw(*gameFrame);
 		//window->
@@ -89,7 +92,8 @@ void GameState::pause() {
 	
 	if (game->gameState != GameCurrentState::PAUSED) {
 		if (gameFrame != nullptr) {
-			delete gameFrame;
+			//delete gameFrame;
+			gameFrame = nullptr;
 		}
 
 		if (game->gameState == GameCurrentState::RUNNING) {
@@ -97,6 +101,7 @@ void GameState::pause() {
 			//StateManager::getInstance().switchToState(new PauseMenuState(window));
 			if (pauseMenuState == nullptr) {
 				pauseMenuState = new PauseMenuState(this, window);
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PauseMenuEnter));
 			}
 			else {
 				delete pauseMenuState;
@@ -107,6 +112,7 @@ void GameState::pause() {
 			game->gameState = GameCurrentState::PAUSED;
 			if (pauseMenuState == nullptr) {
 				pauseMenuState = new EndGamePauseMenuState(this, window);//END GAME
+				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PauseMenuEnter));
 			}
 			else {
 				delete pauseMenuState;
@@ -126,6 +132,7 @@ void GameState::pause() {
 		}
 		
 	}
+	StateManager::getInstance().startTransition();
 	//StateManager::getInstance().switchToState(new PauseMenuState(window, new PauseMenu()));
 }
 

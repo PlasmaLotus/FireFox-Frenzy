@@ -36,10 +36,15 @@ bool GameRenderer::initRenderer() {
 
 	_frame = new sf::RenderTexture();
 	
+	_displayFPS = StateManager::getInstance().getDisplayFPS();
+	_displayPositions = StateManager::getInstance().getDisplayPlayerPositions();
+	_displayHitboxes = StateManager::getInstance().getDisplayHitboxes();
+	
+	/*
 	_displayFPS = true;
 	_displayPositions = true;
 	_displayHitboxes = true;
-
+	*/
 	font = new sf::Font();
 	if (!font->loadFromFile("Assets/Fonts/Minecraft.ttf")) {
 		printf("Unable to load Minecraft Font PNG\n");
@@ -333,8 +338,11 @@ void GameRenderer::updateParticleSystems(int dt)
 sf::Sprite GameRenderer::renderFrame()
 {
 	_frame->clear();
-	_frame->draw(*playerDrawable1);
-	return sf::Sprite();
+	getLastFrame();
+	sf::Sprite sprite(_frame->getTexture());
+	
+	//_frame->draw(*playerDrawable1);
+	return sprite;
 }
 void GameRenderer::drawParticleSystems(sf::RenderTarget* target)
 {
@@ -395,7 +403,6 @@ void GameRenderer::toggleFPS()
 
 	}
 }
-
 
 void GameRenderer::__showFPS() {
 	if (_displayFPS) {

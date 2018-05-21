@@ -139,6 +139,7 @@ void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	case ControllerCommand::Shield: {
 		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
 			menu->inputBack();
+
 		}
 		break;
 	}

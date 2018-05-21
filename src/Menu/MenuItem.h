@@ -22,15 +22,16 @@ class MenuItem {
 public:
 
 
-	MenuItem(std::string, command c);
+	MenuItem(std::string name, command c);
 	MenuItem(std::string name, int value, int max, MenuItemType type);
+	//MenuItem(std::string name, command * commandStack, int max);
 	MenuItem(std::string name, command c, int value, int max, MenuItemType type);
 	virtual ~MenuItem();
 	command getFn() const;
 	void increase();
 	void decrease();
-	void select();
-	void handleInput();
+	//void select();
+	//void handleInput();
 	void setMenuType(MenuItemType t);
 	MenuItemType getMenuType();
 	std::string getName();

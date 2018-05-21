@@ -24,8 +24,12 @@ void Menu::tick(int dt)
 	if (selection < 0) {
 		selection = items.size() - 1;
 	}
+
 	if (_inputted) {
 		_inputTime += dt;
+		if (_inputTime > INPUT_INITIAL_DELAY) {
+			_inputTime -= INPUT_INCRIMENTAL_DELAY;
+		}
 	}
 	else {
 		_inputTime = 0;
@@ -33,93 +37,97 @@ void Menu::tick(int dt)
 	_inputted = false;
 }
 
+void Menu::input() {
+	_inputted = true;
+}
+
 void Menu::inputLeft()
 {
 	input();
 	if (items.size() >= selection) {
-
-	printf("Input left\n");
-	if (items.at(selection).menuItemType == MenuItemType::RANGE) {
-		items.at(selection).decrease();
-	}
-	onItemDecrease();
+		if (items.at(selection).menuItemType == MenuItemType::RANGE) {
+			items.at(selection).decrease();
+			onItemDecrease();
+		}
 	}
 }
 
 void Menu::inputRight()
 {
 	input();
-	if (items.size() >= selection) {
-
-	printf("Input right\n");
-	if (items.at(selection).menuItemType == MenuItemType::RANGE || items.at(selection).menuItemType == MenuItemType::LIST) {
-		items.at(selection).increase();
-		onItemIncrease();
-	}
+	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY) {
+		if (items.size() >= selection) {
+			if (items.at(selection).menuItemType == MenuItemType::RANGE || items.at(selection).menuItemType == MenuItemType::LIST) {
+				items.at(selection).increase();
+				onItemIncrease();
+			}
+		}
 	}
 }
 
 void Menu::inputUp()
 {
 	input();
-	selection-= 1;
-	if (selection < 0) {
-		selection = items.size() - 1;
+	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY) {
+		selection-= 1;
+		if (selection < 0) {
+			selection = items.size() - 1;
+		}
+		onItemChange();
 	}
-	onItemChange();
 }
 
 void Menu::inputDown()
 {
 	input();
-	selection+= 1;
-	if (selection >= items.size()) {
-		selection = 0;
+	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY) {
+		selection+= 1;
+		if (selection >= items.size()) {
+			selection = 0;
+		}
+		onItemChange();
 	}
-	onItemChange();
 }
 
 void Menu::inputSelect()
 {
 	input();
-	if (selection >= 0 && selection < items.size()) {
-		items.at(selection).getOptionString();
-		items.at(selection).getFn()();
-		onSelection();
-	}
-	else {
-		printf("Cant Select that");
-		onSelectionError();
+	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY) {
+		if (selection >= 0 && selection < items.size()) {
+			items.at(selection).getOptionString();
+			items.at(selection).getFn()();
+			onSelection();
+		}
+		else {
+			printf("Cant Select that");
+			onSelectionError();
+		}
 	}
 	
 }
 
 void Menu::inputBack() {
 	input();
-	printf("Input back\n");
-	onReturn();
-	StateManager::getInstance().goBack();
+	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY) {
+		onReturn();
+		StateManager::getInstance().goBack();
+	}
+	//printf("Input back\n");
 }
 void Menu::inputPause(){
 	inputSelect();
 }
-std::vector<MenuItem> & Menu::getItems()
-{
+std::vector<MenuItem> & Menu::getItems(){
 	return items;
 }
-int Menu::getSelection()
-{
+int Menu::getSelection(){
 	return selection;
-}
-void Menu::input(){
-	_inputted = true;
 }
 
 int Menu::getItemsSize() {
 	return items.size();
 }
-MenuItem Menu::getItem(int index)
-{
+MenuItem Menu::getItem(int index){
 	if (index < 0) {
 		index = 0;
 	}

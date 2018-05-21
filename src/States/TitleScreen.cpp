@@ -5,7 +5,6 @@
 TitleScreen::TitleScreen(sf::RenderWindow * w):
 	MenuState(w, new MainMenu()){
 	_idleTicks = 0;
-	
 }
 
 void TitleScreen::tick(int dt, bool render) {

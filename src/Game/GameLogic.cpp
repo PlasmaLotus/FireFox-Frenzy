@@ -53,6 +53,7 @@ void GameLogic::init() {
 	_gameEnd = false;
 	_spawnPoints.clear();
 	_spawnTimer = 0;
+	map.generateMap(1);
 	for (int i = 4; i-- >= 0; ) {
 		switch (i) {
 		case 3: {
@@ -81,10 +82,18 @@ void GameLogic::init() {
 		Vector2 v2 = _spawnPoints.at(1);
 		Vector2 v3 = _spawnPoints.at(2);
 		Vector2 v4 = _spawnPoints.at(3);
+		/*
 		Player *p1{ new Player(this, v1)};
 		Player *p2{ new Player(this, v2) };
 		Player *p3{ new Player(this, v3) };
 		Player *p4{ new Player(this, v4) };
+		*/
+		Player *p1{ new Player(this, map.getSpawnPoint(1)) };
+		Player *p2{ new Player(this, map.getSpawnPoint(2)) };
+		Player *p3{ new Player(this, map.getSpawnPoint(3)) };
+		Player *p4{ new Player(this, map.getSpawnPoint(4)) };
+
+
 
 		_playerIDs.push_back(p1->getID());
 		__playerIDs[0] = p1->getID();

@@ -139,7 +139,7 @@ void ControllerConfig::loadDefaultConfig() {
 	buttonMap[7] = ControllerCommand::Pause;
 
 	//axisMap.insert(std::pair<sf::Joystick::Axis, AxisHandler>(sf::Joystick::Axis::PovY, { ControllerCommand::Up, ControllerCommand::Down}));
-	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Down, ControllerCommand::Up };
+	axisMap[sf::Joystick::Axis::PovY] = { ControllerCommand::Up, ControllerCommand::Down };
 	axisMap[sf::Joystick::Axis::PovX] = { ControllerCommand::Right, ControllerCommand::Left };
 	axisMap[sf::Joystick::Axis::R] = { ControllerCommand::CursorUp, ControllerCommand::CursorDown };
 	axisMap[sf::Joystick::Axis::U] = { ControllerCommand::CursorRight, ControllerCommand::CursorLeft };

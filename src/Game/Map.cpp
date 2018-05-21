@@ -10,17 +10,13 @@ Map::Map() :
 }
 
 Map::~Map(){
-	for (int i = _walls.size() - 1; i >= 0; --i) {
-		Entity* wall{ _walls.at(i) };
-		if (wall != nullptr) {
-			delete wall;
-		}
-	}
-	_walls.clear();
+	clearWalls();
 }
 
 Map::Map(float wdth, float hght):
-Entity(){
+Entity()
+{
+	_mapGenID = 0;
 	width = wdth;
 	height = hght;
 	generateMap(1);
@@ -44,6 +40,17 @@ bool Map::testCollision(Entity * e){
 	}
 	else
 		return false;
+}
+
+void Map::clearWalls()
+{
+	for (int i = _walls.size() - 1; i >= 0; --i) {
+		Entity* wall{ _walls.at(i) };
+		if (wall != nullptr) {
+			delete wall;
+		}
+	}
+	_walls.clear();
 }
 
 bool Map::_testCollisionOuterWalls(Entity * e){
@@ -322,21 +329,101 @@ void Map::_handleCollisionWall(Entity * e, Entity wall, MapCollisionAngle angle)
 
 void Map::generateMap(int generationID) {
 	/*Generate map dimensions and obstacles*/;
-
+	_mapGenID = generationID;
+	clearWalls();
 	switch (generationID) {
-	case 1: {
-		/*
-		SquareEntity* s{ new SquareEntity(700, 700, 100, 100) };
-		_walls.push_back(dynamic_cast<Entity*>(s));
-		*/
-		width = 4096;
-		height = 2160;
+	case 0: {
+		//Test 
+		width = 4096.f;
+		height = 2160.f;
 		_walls.push_back(new SquareEntity(700, 700, 100, 100));
 		_walls.push_back(new CircleEntity(900, 900, 100));
+		break;
+	}
+	case 1: {
+
+		width = 4096.f;
+		height = 2160.f;
+		_walls.push_back(new SquareEntity(width / 4.f, height / 4.f, width / 10.f, height / 10.f));
+		_walls.push_back(new SquareEntity(width / 4.f * 3.f, height / 4.f, width / 10.f, height / 10.f));
+		_walls.push_back(new SquareEntity(width / 4.f, height / 4.f * 3.f, width / 10.f, height / 10.f));
+		_walls.push_back(new SquareEntity(width / 4.f * 3.f, height / 4.f * 3.f, width / 10.f, height / 10.f));
+		_walls.push_back(new CircleEntity(width / 2.f, height / 2.f, height / 5.f));
+
+		break;
+	}
+	case 2: {
+
+		width = 4096.f;
+		height = 2160.f;
+		
 		break;
 		}
 	default: break;
 	}
+}
+
+
+Vector2 Map::getSpawnPoint(int player)
+{
+	float x, y;
+	x = y = 50.f;
+	switch (_mapGenID) {
+	case 0: {
+		switch (player) {
+		case 1: {
+			x = 100.f;
+			y = 200.f;
+			break;
+		}
+		case 2: {
+			x = 400.f;
+			y = 200.f;
+			break;
+		}
+		case 3: {
+			break;
+		}
+		case 4: {
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	case 1:
+	case 2: {
+		switch (player) {
+		case 1: {
+			x = width / 4.f;
+			y = height / 2.f;
+			break;
+		}
+		case 2: {
+			x = width / 4.f * 3.f;
+			y = height / 2.f;
+			break;
+		}
+		case 3: {
+			x = width / 2.f;
+			y = height / 4.f;
+			break;
+		}
+		case 4: {
+			x = width / 2.f;
+			y = height / 4.f * 3.f;
+			break;
+		}
+		default:
+			break;
+		}
+		break;
+	}
+	}
+
+	
+	return Vector2{ x, y };
 }
 
 

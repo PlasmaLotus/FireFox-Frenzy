@@ -11,6 +11,14 @@ MenuItem::MenuItem(std::string name, command c) :
 	_optionType = MenuItemType::NONE;
 }
 
+MenuItem::MenuItem(std::string name, int value, int max, MenuItemType type):
+_name(name),
+_value(value),
+_max(max),
+ _optionType(type){
+	//_optionType = MenuItemType::RANGE; 
+}
+
 MenuItem::MenuItem(std::string name, command c, int value, int max,
 	MenuItemType type) :
 	_optionType(type),
@@ -42,6 +50,7 @@ void MenuItem::decrease()
 	}
 }
 
+/*
 void MenuItem::select()
 {
 }
@@ -49,7 +58,7 @@ void MenuItem::select()
 void MenuItem::handleInput()
 {
 }
-
+*/
 void MenuItem::setMenuType(MenuItemType t)
 {
 	menuItemType = t;

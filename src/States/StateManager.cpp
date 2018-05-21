@@ -122,6 +122,40 @@ void StateManager::startTransition(){
 	_stateTransitionTimer.restart();
 }
 
+void StateManager::setScreenDimensions(int x, int y)
+{
+}
+
+void StateManager::setDisplayFPS(bool state)
+{
+	_displayFPS = state;
+}
+
+void StateManager::setDisplayHitboxes(bool state)
+{
+	_displayHitboxes = state;
+}
+
+void StateManager::setDisplayPlayerPositions(bool state)
+{
+	_displayPlayerPos = state;
+}
+
+bool StateManager::getDisplayFPS()
+{
+	return _displayFPS;
+}
+
+bool StateManager::getDisplayHitboxes()
+{
+	return _displayHitboxes;
+}
+
+bool StateManager::getDisplayPlayerPositions()
+{
+	return _displayPlayerPos;
+}
+
 sf::RenderWindow *StateManager::getWindow() {
 	return &window;
 }
@@ -136,103 +170,103 @@ void StateManager::run(){
 	float renderElapsedTimeFloat{ 0.f };
 	renderElapsedTimeFloat += currentTime.getElapsedTime().asMicroseconds();
 	while (window.isOpen() && _running)
-		{
-			/*Manage Time Beta*/
-			if (frame >= 32767) {
-				frame = 0;
-			}
-
-			if (frame % 10000 == 0) {
-				//system("cls");
-			}
-			_renderFrame = false;
-			currentTime.restart();
-			sf::Event event;
-			while (window.pollEvent(event))
-			{
-				if (event.type == sf::Event::Closed)
-				{
-					window.close();
-					_running = false;
-				}
-				else if (event.type == sf::Event::LostFocus) {
-					//sf::Event::
-				}
-				else if (event.type == sf::Event::GainedFocus) {
-						/*
-					try {
-						GameState * gs = dynamic_cast< GameState*>(_currentState);
-						if (gs != nullptr) {
-							gs->pause();
-						}
-					}
-					catch (const std::bad_cast& cast) {
-					}
-						*/
-				}
-				else {
-				}
-			}
-			elapsedTime = currentTime.getElapsedTime();
-			//renderElapsedTime += currentTime.getElapsedTime();
-			renderElapsedTimeFloat += currentTime.getElapsedTime().asMicroseconds();
-			if (renderElapsedTimeFloat >= 1000.f / renderFPS) {
-				_renderFrame = true;
-				renderElapsedTimeFloat -= 1000.f / renderFPS;
-			}
-			else {
-				//renderElapsedTimeFloat += elapsedTime.asMicroseconds();
-			}
-
-			if (_switchState) {
-				_states.push(_newState);
-				//delete _currentState;
-				_currentState = _newState;
-				_switchState = false;
-				_newState = nullptr;
-				window.clear();
-			}
-
-			if (_deletedState) {
-				_removeFromStack();
-				_deletedState = false;
-				goBackToTitle();
-				window.clear();
-			}
-			else {
-				if (_stateTransition) {
-					_stateTransitionTime -= elapsedTime.asMicroseconds();
-					//_stateTransitionTimer += currentTime.getElapsedTime();
-					//if (_stateTransitionTime <= 0) {
-					if (_stateTransitionTimer.getElapsedTime() >= sf::milliseconds(750)){
-						_stateTransition = false;
-						_stateTransitionTime = 0;
-						_stateTransitionTimer.restart();
-					}
-					window.clear();
-				}
-				else {
-					_run();
-				}
-			}
-			{
-				gotoxy(0, 0);
-				printf("DT: %3.3lld, %Id, %I64d ---\n", elapsedTime.asSeconds(), elapsedTime.asMilliseconds(), elapsedTime.asMicroseconds());
-				printf("RenderDT: %3.3f, Elapsed:%I64d  Con: %3.3f ---\n", renderElapsedTimeFloat, elapsedTime.asMicroseconds(),  (1000.f / renderFPS));
-				printf("NB Frames: %3.8f     Temps: %d    Clocks per Sec: %3.2f\n",
-					(float)elapsedTime.asMilliseconds() * 60, elapsedTime.asMilliseconds(), (float)CLOCKS_PER_SEC);
-			}
-
-			
-			
+	{
+		/*Manage Time Beta*/
+		if (frame >= 32767) {
+			frame = 0;
 		}
+
+		if (frame % 10000 == 0) {
+			//system("cls");
+		}
+		_renderFrame = false;
+		currentTime.restart();
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::Closed)
+			{
+				window.close();
+				_running = false;
+			}
+			else if (event.type == sf::Event::LostFocus) {
+				//sf::Event::
+			}
+			else if (event.type == sf::Event::GainedFocus) {
+					/*
+				try {
+					GameState * gs = dynamic_cast< GameState*>(_currentState);
+					if (gs != nullptr) {
+						gs->pause();
+					}
+				}
+				catch (const std::bad_cast& cast) {
+				}
+					*/
+			}
+			else {
+			}
+		}
+		elapsedTime = currentTime.getElapsedTime();
+		//renderElapsedTime += currentTime.getElapsedTime();
+		renderElapsedTimeFloat += currentTime.getElapsedTime().asMicroseconds();
+		if (renderElapsedTimeFloat >= 1000.f / renderFPS) {
+			_renderFrame = true;
+			renderElapsedTimeFloat -= 1000.f / renderFPS;
+		}
+		else {
+			//renderElapsedTimeFloat += elapsedTime.asMicroseconds();
+		}
+
+		if (_switchState) {
+			_states.push(_newState);
+			//delete _currentState;
+			_currentState = _newState;
+			_switchState = false;
+			_newState = nullptr;
+			window.clear();
+		}
+
+		if (_deletedState) {
+			_removeFromStack();
+			_deletedState = false;
+			goBackToTitle();
+			window.clear();
+		}
+		else {
+			if (_stateTransition) {
+				_stateTransitionTime -= elapsedTime.asMicroseconds();
+				//_stateTransitionTimer += currentTime.getElapsedTime();
+				//if (_stateTransitionTime <= 0) {
+				if (_stateTransitionTimer.getElapsedTime() >= sf::milliseconds(750)){
+					_stateTransition = false;
+					_stateTransitionTime = 0;
+					_stateTransitionTimer.restart();
+				}
+				window.clear();
+			}
+			else {
+				_run();
+			}
+		}
+		{
+			gotoxy(0, 0);
+			printf("DT: %3.3lld, %Id, %I64d ---\n", elapsedTime.asSeconds(), elapsedTime.asMilliseconds(), elapsedTime.asMicroseconds());
+			printf("RenderDT: %3.3f, Elapsed:%I64d  Con: %3.3f ---\n", renderElapsedTimeFloat, elapsedTime.asMicroseconds(),  (1000.f / renderFPS));
+			printf("NB Frames: %3.8f     Temps: %d    Clocks per Sec: %3.2f\n",
+				(float)elapsedTime.asMilliseconds() * 60, elapsedTime.asMilliseconds(), (float)CLOCKS_PER_SEC);
+		}
+
+		_runHandlers();
+			
+	}
 	return;
 }
 
 void StateManager::_run() {
 	window.clear();
-	eventManager.handleEvents(getElapsedTime());
-	audioEventManager.handleEvents(getElapsedTime());
+	//eventManager.handleEvents(getElapsedTime());
+	//audioEventManager.handleEvents(getElapsedTime());
 	//window.draw(m_alertManager);
 	//_currentState->tick(getElapsedTime(), _renderFrame);
 	if (_states.size() > 0){
@@ -241,6 +275,12 @@ void StateManager::_run() {
 	}
 	m_alertManager.update(getElapsedTime(), window);
 	//window.draw(m_alertManager);
+}
+void StateManager::_runHandlers() {
+
+	eventManager.handleEvents(getElapsedTime());
+	audioEventManager.handleEvents(getElapsedTime());
+
 }
 
 int64_t StateManager::getElapsedTime() {
@@ -314,4 +354,42 @@ std::string StateManager::getCurrentGameTimer() {
 	s += ":";
 	s += gameTimer.getElapsedTime().asMicroseconds();
 	return s;
+}
+
+void StateManager::toggleHitboxes()
+{
+	if (_displayHitboxes) {
+		setDisplayHitboxes(false);
+		m_alertManager.addAlert("HitBox Display turned OFF");
+	}
+	else {
+		setDisplayHitboxes(true);
+		m_alertManager.addAlert("HitBox Display turned ON");
+	}
+}
+
+void StateManager::togglePositions()
+{
+	if (_displayPlayerPos) {
+		setDisplayPlayerPositions(false);
+		m_alertManager.addAlert("Player Positions Display turned OFF");
+	}
+	else {
+		setDisplayPlayerPositions(true);
+		m_alertManager.addAlert("Player Positions Display turned ON");
+
+	}
+}
+
+void StateManager::toggleFPS()
+{
+	if (_displayFPS) {
+		setDisplayFPS(false);
+		m_alertManager.addAlert("FPS Display turned OFF");
+	}
+	else {
+		setDisplayFPS(true);
+		m_alertManager.addAlert("FPS Display turned ON");
+
+	}
 }

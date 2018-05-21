@@ -78,7 +78,7 @@ void PauseMenuRenderer::update() {
 	}
 }
 void PauseMenuRenderer::draw(){
-
+	window->setView(window->getDefaultView());
 	for (int i = 0; i < menu->getItemsSize(); i++) {
 		/*
 		if (menu->getSelection() == i){

@@ -7,7 +7,7 @@
 #include "MenuState.h"
 #include "../Menu/MainMenu.h"
 
-class MenuState;
+//class MenuState;
 
 class TitleScreen : public MenuState
 {

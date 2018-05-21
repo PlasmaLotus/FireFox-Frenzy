@@ -29,8 +29,13 @@ bool GameController::handleInput() {
 	cAngleY = 0.f;
 	bool input = Controller::handleInput();
 	player->setPlayerOrienation(pAngleX, pAngleY);
+	/*
 	if ((pAngleX >= config->joystickDeadZone || pAngleX <= -config->joystickDeadZone) &&
 		(pAngleY >= config->joystickDeadZone || pAngleY <= -config->joystickDeadZone)) {
+		player->commandMove(pAngleX, pAngleY);
+	}
+	*/
+	if ((std::abs(pAngleX) > config->joystickDeadZone) || (std::abs(pAngleY) > config->joystickDeadZone)) {
 		player->commandMove(pAngleX, pAngleY);
 	}
 	player->setCursorOrientation(cAngleX, cAngleY);
@@ -172,8 +177,14 @@ void GameController::handleJoystickAxis(sf::Joystick::Axis axis) {
 			case ControllerCommand::CursorDown:
 			case ControllerCommand::CVertical:
 			{
+				//cAngleY = value;
+				if (axis == sf::Joystick::Axis::PovY) {
+					cAngleY = -value;
+				}
+				else {
+					cAngleY = value;
+				}
 				//if (value >= config->joystickDeadZone || value <= -config->joystickDeadZone) {
-				cAngleY = value;
 				/*
 				if (value >= 20.f || value <= -20.f) {
 					cAngleY = value;

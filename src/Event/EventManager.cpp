@@ -77,6 +77,10 @@ bool EventManager::__handleEvent(Event event){
 		audio->queueAudioEvent(AudioEvent::MenuItemDecreaseAudio, nullptr, false);
 		break;
 	}
+	case EventType::PauseMenuEnter: {
+		audio->queueAudioEvent(AudioEvent::MenuSelectionAudio, nullptr, false);
+		break;
+	}
 	/*Game Events*/
 	case EventType::ProjectileSpawn: {
 		//Entity *e = game->findEntity(id);
