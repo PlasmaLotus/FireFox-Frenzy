@@ -15,8 +15,7 @@ Menu::~Menu()
 Menu::Menu() :
 	selection(0),
 	_inputted(false),
-	_inputTime(0),
-	_inputtedThisFrame(false)
+	_inputTime(0)
 {
 }
 
@@ -41,7 +40,6 @@ void Menu::tick(int dt)
 		_inputTime = 0;
 	}
 	_inputted = false;
-	//_inputtedThisFrame = false;
 }
 
 void Menu::input() {
@@ -53,7 +51,7 @@ void Menu::inputLeft()
 	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY ) {
 		if (!_inputted) {
 			if (items.size() >= selection) {
-				if (items.at(selection).menuItemType == MenuItemType::RANGE) {
+				if (items.at(selection).getMenuType() == MenuItemType::RANGE) {
 					items.at(selection).decrease();
 					onItemDecrease();
 				}
@@ -68,7 +66,7 @@ void Menu::inputRight()
 	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY) {
 		if (!_inputted) {
 			if (items.size() >= selection) {
-				if (items.at(selection).menuItemType == MenuItemType::RANGE || items.at(selection).menuItemType == MenuItemType::LIST) {
+				if (items.at(selection).getMenuType() == MenuItemType::RANGE || items.at(selection).getMenuType() == MenuItemType::LIST) {
 					items.at(selection).increase();
 					onItemIncrease();
 				}

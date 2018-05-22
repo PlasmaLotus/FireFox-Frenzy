@@ -6,6 +6,13 @@ OptionsMenu::OptionsMenu():
 	Menu(){
 
 	addItem(
+		MenuItem("Volume",
+			[&]() {
+		StateManager::getInstance().audioEventManager.getVolume();
+	}, StateManager::getInstance().audioEventManager.getVolume(), 100, MenuItemType::RANGE));
+
+
+	addItem(
 		MenuItem("Toggle FPS",
 			[&]() {
 		StateManager::getInstance().toggleFPS();
@@ -32,6 +39,8 @@ OptionsMenu::OptionsMenu():
 
 
 OptionsMenu::~OptionsMenu() {
+
+	StateManager::getInstance().audioEventManager.setVolume(items.at(0).getRangeValue());
 }
 
 void OptionsMenu::tick(int dt)

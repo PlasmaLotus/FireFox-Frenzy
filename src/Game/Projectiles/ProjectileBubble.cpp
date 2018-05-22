@@ -30,6 +30,17 @@ void ProjectileBubble::update(int32_t dt)
 
 bool ProjectileBubble::isAlive(){
 	//return true;
+	if (durability > 0) {
+		if (lifetime > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
 	return (durability > 0 || lifetime > 0);
 }
 

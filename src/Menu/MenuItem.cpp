@@ -38,16 +38,17 @@ command MenuItem::getFn() const {
 
 void MenuItem::increase()
 {
-	if (range <= maxRange) {
-		range++;
+	if (_value <= _max) {
+		_value++;
 	}
 }
 
 void MenuItem::decrease()
 {
-	if (range >= 0) {
-		range--;
+	if (_value >= 0) {
+		_value--;
 	}
+	//_fn()
 }
 
 /*
@@ -61,12 +62,12 @@ void MenuItem::handleInput()
 */
 void MenuItem::setMenuType(MenuItemType t)
 {
-	menuItemType = t;
+	_optionType = t;
 }
 
 MenuItemType MenuItem::getMenuType()
 {
-	return menuItemType;
+	return _optionType;
 }
 
 std::string MenuItem::getName()
@@ -78,4 +79,19 @@ std::string MenuItem::getName()
 const std::string MenuItem::getOptionString() const {
 	
 	return _name;
+}
+
+std::string MenuItem::getRangeString()
+{
+	return std::string(std::to_string(_value) + "/" + std::to_string(_max));
+}
+
+void MenuItem::setFn(command c)
+{
+	_fn = c;
+}
+
+int MenuItem::getRangeValue()
+{
+	return _value;
 }

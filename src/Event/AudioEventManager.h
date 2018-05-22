@@ -35,7 +35,8 @@ public:
 	bool hasAudioEvent(AudioEvent event, Entity *e = nullptr);
 	void stopAllAudioEvents();
 	void handleEvents(int dt);
-
+	void setVolume(float vol);
+	float getVolume();
 private:
 	static const int SOUNDS_COUNT{ 16 };
 	std::map<AudioEvent, sf::SoundBuffer> _soundBufferMap;
@@ -43,6 +44,7 @@ private:
 	std::vector<AudioEventSound*> _sounds;
 	AudioEventSound __sounds[SOUNDS_COUNT];
 	bool _initSoundBuffers();
+	float _volume;
 };
 
 #endif // AUDIO EVENT MANAGER

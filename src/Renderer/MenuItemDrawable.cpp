@@ -57,8 +57,12 @@ void MenuItemDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) 
 	}
 	t.setFillColor(sf::Color::Black);
 	target.draw(t);
+
+	sf::Text t2(itemOption, m_font, 18);
+	t2.setPosition(posX + 15, posY + 30);
+	t2.setFillColor(sf::Color::Black);
 	//target.draw(m_menuItemText);
-	//target.draw(m_menuItemText2);
+	target.draw(t2);
 }
 
 bool MenuItemDrawable::onLoad()
@@ -87,6 +91,7 @@ void MenuItemDrawable::update()
 		case MenuItemType::TOGGLE: {
 			//str2 = "off";
 			m_menuItemText2.setString("Toggle");
+			itemOption = "Toggle";
 			height = 50;
 			width = 400;
 			/*
@@ -95,10 +100,21 @@ void MenuItemDrawable::update()
 			*/
 			break;
 		}
+		case MenuItemType::RANGE:
+		{
+			itemOption = item->getRangeString();
+			//m_menuItemText2.setString(str2);
+			height = 100;
+			width = 200;
+			/*
+			s1.setCharacterSize(22);
+			*/
+			break;
+		}
 		case MenuItemType::NONE:
 		default: {
 			//str2 = "";
-			m_menuItemText2.setString("null");
+			//m_menuItemText2.setString("null");
 			height = 100;
 			width = 200;
 			/*

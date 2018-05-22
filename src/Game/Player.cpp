@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "../Main.h"
 #include "GameLogic.h"
+#include "Enemy\Enemy.h"
 #include "../States/StateManager.h"
 
 Player::Player():
@@ -175,7 +176,7 @@ void Player::_handleCollision(Projectile p){
 	}
 	else {
 		HP -= p.power;
-		HP -= 1;
+		//HP -= 1;
 	}
 }
 
@@ -188,6 +189,20 @@ void Player::_handleCollision(Energy e){
 		ammo = GameLogic::PLAYER_MAX_AMMO;
 	}
 }
+
+/*
+void Player::_handleCollision(Enemy e) {
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerHit, this));
+	if (shieldActive) {
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldHit, this));
+		_loseAmmo(e.power *GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER);
+	}
+	else {
+		HP -= e.power;
+		//HP -= 1;
+	}
+}
+*/
 
 void Player::handleCollision(Entity * e){
 	try{
@@ -239,6 +254,17 @@ void Player::handleCollision(Entity * e){
 	}
 	catch (const std::bad_cast& cast) {
 	}
+	/*
+	try {
+		Enemy *p = dynamic_cast<Enemy *>(e);
+		if (p != nullptr) {
+			//handlecollisoin with player;
+			_handleCollision(*p);
+		}
+	}
+	catch (const std::bad_cast& cast) {
+	}
+	*/
 }
 
 bool Player::collidableWith(Entity* e){

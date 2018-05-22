@@ -4,6 +4,7 @@
 
 AudioEventManager::AudioEventManager() {
 	_initSoundBuffers() ;
+	_volume = 75.f;
 } 
 
 AudioEventManager::~AudioEventManager() {
@@ -138,6 +139,7 @@ void AudioEventManager::queueAudioEvent(AudioEvent event, Entity *e, bool repeat
 		AudioEventSound *aes{ new AudioEventSound(buffer, e) };
 		aes->m_event = event;
 		if (repeat) {
+			aes->setVolume(_volume);
 			aes->_m_repeat = true;
 			aes->setLoop(true);
 			if (_repeatIntervalMap.find(event) != _repeatIntervalMap.end()) {
@@ -283,7 +285,23 @@ void AudioEventManager::handleEvents( int dt ) {
 		}
 	}
 		
-} 
+}
+void AudioEventManager::setVolume(float vol)
+{
+	if (vol > 100.f) {
+		vol = 100.f;
+	}
+	else if (vol < 0.f) {
+		vol = 0.f;
+	}
+	_volume = vol;
+}
+
+float AudioEventManager::getVolume()
+{
+	return _volume;
+}
+
 
 AudioEventSound::AudioEventSound():
 	AudioEventSound(nullptr){

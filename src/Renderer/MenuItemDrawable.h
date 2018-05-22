@@ -51,6 +51,7 @@ public:
 	sf::Font m_font;
 	sf::Text m_menuItemText;
 	sf::Text m_menuItemText2;
+	std::string itemOption;
 };
 
 #endif // !__Game_Renderer__

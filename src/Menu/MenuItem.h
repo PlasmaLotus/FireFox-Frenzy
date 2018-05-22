@@ -37,7 +37,10 @@ public:
 	std::string getName();
 	const std::string getOptionString() const;
 	//void addListItem()
-	MenuItemType menuItemType;
+	//MenuItemType menuItemType;
+	std::string getRangeString();
+	void setFn(command c);
+	int getRangeValue();
 private:
 	
 	unsigned int range;
