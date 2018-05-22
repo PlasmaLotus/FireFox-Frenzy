@@ -22,7 +22,7 @@ const float GameLogic::PROJECTILE_SPEED_MINIMUM( 2.5f );
 const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 5.0f );
 const float GameLogic::PROJECTILE_BUBBLE_SPEED_MINIMUM(1.2f);
 const float GameLogic::PROJECTILE_BUBBLE_SPEED_MAXIMUM(2.5f);
-const float GameLogic::PROJECTILE_BUBBLE_HITBOX_RADIUS_MINIMUM(7.f);
+const float GameLogic::PROJECTILE_BUBBLE_HITBOX_RADIUS_MINIMUM(15.f);
 const float GameLogic::PROJECTILE_BUBBLE_HITBOX_RADIUS_MAXIMUM(15.f);
 const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
@@ -55,6 +55,7 @@ void GameLogic::init() {
 	_playerIDs.clear();
 	_init = false;
 	_gameEnd = false;
+	_totalDT = 0;
 	_spawnPoints.clear();
 	_spawnTimerEnergy = 0;
 	_spawnTimerPowerup = 0;
@@ -76,8 +77,8 @@ void GameLogic::init() {
 
 	_entities.push_back(p1);
 	_entities.push_back(p2);
-	_entities.push_back(p3);
-	_entities.push_back(p4);
+	//_entities.push_back(p3);
+	//_entities.push_back(p4);
 	
 	frame = 0;
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown3));
@@ -88,6 +89,7 @@ void GameLogic::reset() {
 	_emptyAllEntities();
 	_entities.clear();
 	init();
+	//countdownTimer 
 	gameState = GameCurrentState::COUNTDOWN;
 }
 

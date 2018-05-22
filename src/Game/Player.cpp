@@ -65,6 +65,7 @@ bool Player::isAlive() {
 void Player::update(int32_t dt)
 {
 	SquareEntity::update(dt);
+	handleAbility(dt);
 	_handleMovement(dt);
 	/*Projectiles*/
 	//handleProjectiles(dt);
@@ -83,7 +84,6 @@ void Player::update(int32_t dt)
 	/*Shield*/
 	handleShield(dt);
 	handleDash(dt);
-	handleAbility(dt);
 }
 
 void Player::setPlayerOrienation(float x, float y)
@@ -410,7 +410,7 @@ void Player::handleShooting(int dt)
 			}
 		}
 			if (_shootHeld) {
-				if (_shotChargeHeldTime > 0 && _shotChargeHeldTime >= GameLogic::PLAYER_DASH_MINIMUM_CHARGE_TIME) {
+				if (_shotChargeHeldTime > 0 && _shotChargeHeldTime >= ability->minimumChargeTime) {
 					//shootHeld = false;
 					canShoot = false;
 					shootCooldownTime = GameLogic::PLAYER_SHOOT_COOLDOWN;
@@ -571,11 +571,13 @@ void Player::handleAbility(int dt){
 	if (ability == nullptr) {
 		ability = new PowerUp(_game);
 	}
-	ability->update(dt);
 	if (!ability->isAlive()) {
+		delete ability;
+		//if (ability )
 		ability = new PowerUp(_game);
-		StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPowerUpLoss, this));
+		//StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPowerUpLoss, this));
 	}
+	ability->update(dt);
 }
 
 void Player::handleShield(int dt)

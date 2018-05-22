@@ -4,8 +4,9 @@
 
 
 PowerUp::PowerUp(GameLogic* gc):
-lifetime(10000),
+lifetime(100000),
 minimumChargeTime(GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME),
+maximumChargeTime(GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME),
 _game(gc){
 }
 

@@ -23,6 +23,10 @@ struct  Vector2
 	}
 };
 
+struct RGBA {
+	int r, g, b, a;
+	RGBA(int _r, int _g, int _b, int _a) :r(_r), g(_g), b(_b), a(_a) {};
+};
 struct CollisionStack {
 	int _id;
 	int delay;

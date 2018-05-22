@@ -23,5 +23,6 @@ public:
 	virtual bool isAlive();
 	GameLogic* _game;
 	int minimumChargeTime;
+	int maximumChargeTime;
 }; 
 #endif //PowerUp 

@@ -84,14 +84,14 @@ void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	case ControllerCommand::Up:
 	{
 		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
-			menu->inputUp();
+			menu->inputDown();
 		}
 		break;
 	}
 	case ControllerCommand::Down:
 	{
 		if (value >= joystickDeadZone || value <= -joystickDeadZone) {
-			menu->inputDown();
+			menu->inputUp();
 		}
 		break;
 	}
@@ -111,15 +111,17 @@ void MenuController::handleJoystickAxis(sf::Joystick::Axis axis) {
 	}
 
 	case ControllerCommand::CursorUp:
+
 	case ControllerCommand::CursorDown:
-	case ControllerCommand::CVertical:
+	//case ControllerCommand::CVertical:
 	{
+		//menu->inputUp();
 		break;
 	}
 
 	case ControllerCommand::CursorLeft:
 	case ControllerCommand::CursorRight:
-	case ControllerCommand::CHorizontal:
+	//case ControllerCommand::CHorizontal:
 	{
 		break;
 	}

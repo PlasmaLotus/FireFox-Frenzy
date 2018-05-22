@@ -7,6 +7,8 @@ BubblePowerUp::BubblePowerUp(GameLogic* gc):
 	PowerUp(gc)
 {
 	lifetime = 5000;
+	minimumChargeTime = GameLogic::PLAYER_PROJECTILE_BUBBLE_MINIMUM_CHARGE_TIME;
+	maximumChargeTime = GameLogic::PLAYER_PROJECTILE_BUBBLE_MAXIMUM_CHARGE_TIME;
 }
 
 BubblePowerUp::~BubblePowerUp() {
@@ -35,9 +37,9 @@ Projectile * BubblePowerUp::spawnProjectile(int id, float x, float y, float orie
 {
 	Projectile *p{ new ProjectileBubble(id, x, y) };
 	//p->durability = 1;
-	p->velocityX = GameLogic::PROJECTILE_SPEED_MINIMUM;
-	p->velocityY = GameLogic::PROJECTILE_SPEED_MINIMUM;
-	p->setRadius(GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM);
+	p->velocityX = GameLogic::PROJECTILE_BUBBLE_SPEED_MINIMUM;
+	p->velocityY = GameLogic::PROJECTILE_BUBBLE_SPEED_MINIMUM;
+	p->setRadius(GameLogic::PROJECTILE_BUBBLE_HITBOX_RADIUS_MINIMUM);
 	p->power = 1;
 	//p->lifetime = 700;
 	p->orientation = orientation;

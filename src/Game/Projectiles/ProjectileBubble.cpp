@@ -14,8 +14,8 @@ ProjectileBubble::ProjectileBubble(int id) :
 ProjectileBubble::ProjectileBubble(int id, float x, float y) :
 	Projectile(id, x, y)
 {
-	lifetime = 10000;
-	durability = 10;
+	lifetime = 7500;
+	durability = 7;
 }
 
 ProjectileBubble::~ProjectileBubble()

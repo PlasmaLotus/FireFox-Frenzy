@@ -11,7 +11,7 @@ StateManager::StateManager() :
 	_stateTransitionTime(0),
 	m_alertManager("Assets/Fonts/Minecraft.ttf", 18, window.getView().getSize())
 {
-	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "TACD");
+	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Neon Galaxy");
 	_currentState = new TitleScreen(&window);
 	_states.push(_currentState);
 	eventManager.setAudioEventManager(&audioEventManager);

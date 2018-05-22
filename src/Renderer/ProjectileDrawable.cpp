@@ -14,7 +14,7 @@ ProjectileDrawable::ProjectileDrawable(Projectile * pj, sf::Texture& tx):
 	projectileHitboxShape.setFillColor(sf::Color(0, 255, 0, 150));
 	projectileHitboxShape.setOutlineColor(sf::Color::Green);
 	projectileHitboxShape.setOutlineThickness(2);
-	float width = GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM;
+	float width = pj->width;
 	projectileHitboxShape.setRadius(width);
 
 	
