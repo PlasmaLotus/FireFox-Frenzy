@@ -24,7 +24,8 @@ Player::Player(GameLogic * g, float x, float y):
 	HP(GameLogic::PLAYER_BASE_HP),
 	ammo(GameLogic::PLAYER_BASE_AMMO),
 	dashVelocity(GameLogic::PLAYER_DASH_VELOCITY),
-	state(PlayerState::Moving){
+	state(PlayerState::Moving),
+	ability(new BubblePowerUp(g)){
 	velocityX = 0.f;
 	velocityY = 0.f;
 	orientation = 0.f;
@@ -165,16 +166,17 @@ void Player::_handleCollision(PowerUpItem p) {
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPickupPowerUp, this));
 
 	ability = p.powerUp;
+	//p.handleCollision();
 }
 
 void Player::_handleCollision(Projectile p){
 	/*Projectile hits the player*/
-	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerHit, this));
 	if (shieldActive) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldHit, this));
 		_loseAmmo(p.power *GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER);
 	}
 	else {
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerHit, this));
 		HP -= p.power;
 		//HP -= 1;
 	}
@@ -254,17 +256,18 @@ void Player::handleCollision(Entity * e){
 	}
 	catch (const std::bad_cast& cast) {
 	}
-	/*
+	
 	try {
-		Enemy *p = dynamic_cast<Enemy *>(e);
+		PowerUpItem *p = dynamic_cast<PowerUpItem *>(e);
 		if (p != nullptr) {
 			//handlecollisoin with player;
 			_handleCollision(*p);
+			p->handleCollision();
 		}
 	}
 	catch (const std::bad_cast& cast) {
 	}
-	*/
+	
 }
 
 bool Player::collidableWith(Entity* e){
@@ -385,8 +388,9 @@ void Player::handleShooting(int dt)
 
 	if (ammo > 0) {
 		if (shootHeld && canShoot) {
+			/*
 			if (_shotChargeHeldTime <= 0) {
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
+				//StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
 			}
 
 			else if (_shotChargeHeldTime >= (GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME / 2)) {
@@ -397,6 +401,7 @@ void Player::handleShooting(int dt)
 					StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMid, this));
 				}
 			}
+			*/
 
 
 			_shotChargeHeldTime += dt;
@@ -448,8 +453,9 @@ void Player::handleShootingAlt(int dt)
 
 	if (canShootAlt) {
 		if (shootHeldAlt) {
+			/*
 			if (_shotChargeHeldTimeAlt <= 0) {
-				StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
+				//StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStart, this));
 				//change event
 			}
 			else if (_shotChargeHeldTimeAlt >= (GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME / 2)) {
@@ -460,6 +466,7 @@ void Player::handleShootingAlt(int dt)
 					StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeStartMid, this));
 				}
 			}
+			*/
 
 			_shotChargeHeldTimeAlt += dt;
 			if (_shotChargeHeldTimeAlt >= GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME) {
@@ -491,7 +498,6 @@ void Player::handleShootingAlt(int dt)
 			shootHeldAlt = false;
 		}
 	}
-
 	
 	_shootHeldAlt = false;
 }
@@ -507,6 +513,7 @@ void Player::_handleShooting(int power) {
 		power = 1;
 	}
 	_loseAmmo(power);
+	/*
 	for (int i = 0; i < ability._projectilesToSpawnThisTick; ++i) {
 		//Create Projectile
 		Projectile *p = ability.getProjectile(getID(), posX, posY, cursorOrientation);
@@ -519,10 +526,14 @@ void Player::_handleShooting(int power) {
 		p->power = power;
 		_game->addEntity(p);
 
-		/*Spawn*/
+		//Spawn//
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn, p));
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
 	}
+	*/
+	ability->spawnProjectile(getID(), posX, posY, cursorOrientation);
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn));
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
 
 	shootHeld = false;
 	_shotChargeHeldTime = 0;
@@ -537,7 +548,7 @@ void Player::_handleShootingAlt(int power) {
 	}
 	_loseAmmo(power);
 	//Create Projectile
-	Projectile *p = ability.getProjectileAlt(getID(), posX, posY, cursorOrientation);
+	Projectile *p = ability->getProjectileAlt(getID(), posX, posY, cursorOrientation);
 	//p->orientation = cursorOrientation;
 	//p->orientationX = cursorOrientationX;
 	//p->orientationY = cursorOrientationY;
@@ -557,9 +568,13 @@ void Player::_handleShootingAlt(int power) {
 }
 
 void Player::handleAbility(int dt){
-	ability.update(dt);
-	if (!ability.isAlive()) {
-		ability = PowerUp();
+	if (ability == nullptr) {
+		ability = new PowerUp(_game);
+	}
+	ability->update(dt);
+	if (!ability->isAlive()) {
+		ability = new PowerUp(_game);
+		StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPowerUpLoss, this));
 	}
 }
 

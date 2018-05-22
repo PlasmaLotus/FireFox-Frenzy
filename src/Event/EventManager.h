@@ -6,10 +6,10 @@
 #include "../Game/GameLogic.h"
 #include "AudioEventManager.h"
 enum EventType{NoEvent, GameEnd, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, 
-	GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo, TimeLimit, LastManStanding,
+	GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo, TimeLimit, LastManStanding, ShieldOn, ShieldOff,
 MenuItemIncrease, MenuItemDecrease, MenuSelection, MenuSelectionError, MenuItemChange, MenuReturn, PauseMenuEnter,
 PlayerLowHP, PlayerShotChargeStart, PlayerShotChargeStartMid, PlayerShotChargeStartMax, PlayerShotChargeEnd,
-PlayerHit, PlayerPickup, PlayerPickupEnergy, PlayerPickupPowerUp
+PlayerHit, PlayerPickup, PlayerPickupEnergy, PlayerPickupPowerUp, PlayerPowerUpLoss
 };
 class Event {
 public:

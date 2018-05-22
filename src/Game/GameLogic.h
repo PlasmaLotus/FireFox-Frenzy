@@ -89,7 +89,7 @@ public:
 	static const int PLAYER_BASE_HP{100};
 	static const int PLAYER_SHOOT_COOLDOWN{ 75 };
 	static const int PLAYER_DASH_MAXIMUM_ENERGY_COST{ 100 };
-	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 2000 };
+	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 1000 };
 	static const int PLAYER_DASH_MINIMUM_CHARGE_TIME{ 10 };
 
 	static const float ENTITY_MINIMUM_RADIUS;
@@ -103,10 +103,14 @@ public:
 	static const int ENERGY_ITEM_COOLDOWN{ 3000 };
 	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
 	static const int ITEM_MINIMUM_LIFETIME{ 10000 };
-	static const int GAME_ENERGY_SPAWN_TIMER{ 10000 };
+	static const int GAME_ENERGY_SPAWN_TIMER{ 30000 };
 	static const int GAME_ENERGY_SPAWN_AMOUNT{ 8 };
 	static const int GAME_ENERGY_SPAWN_AURA{ 100 };
 	static const int GAME_ENERGY_LIFETIME{ 5000 };
+
+	static const int GAME_POWERUP_SPAWN_TIMER{ 10000 };
+	static const int GAME_POWERUP_SPAWN_AMOUNT{ 6 };
+	static const int GAME_POWERUP_LIFETIME{ 7500 };
 
 	static const int GAME_COLLISION_HITLAG{ 8 };
 	static const float GAME_SHIELD_ENERGY_LOSS_MULTIPLYER;
@@ -131,7 +135,8 @@ private:
 	void _spawnItems();
 	void _spawnEnergy();
 	void _spawnPowerUps();
-	int _spawnTimer;
+	int _spawnTimerEnergy;
+	int _spawnTimerPowerup;
 };
 
 #endif // !_Game_

@@ -235,6 +235,8 @@ void GameRenderer::drawMap(sf::RenderTarget* target)
 void GameRenderer::drawItems(sf::RenderTarget* target) {
 	std::vector<Entity*> vec = game->_entities;
 	for (int i = 0; i < vec.size(); i++) {
+		
+		
 		try {
 			Item * p = dynamic_cast<Item *> (vec.at(i));
 			if (p != nullptr) {
@@ -244,6 +246,24 @@ void GameRenderer::drawItems(sf::RenderTarget* target) {
 				}
 				else {
 					circle.setFillColor(sf::Color(120, 120,120,255));
+				}
+				circle.setPosition(p->posX - p->width / 2, p->posY - p->width / 2);
+				circle.setRadius(p->width);
+				target->draw(circle);
+				//window->draw(circle);
+			}
+		}
+		catch (const std::bad_cast& cast) {
+		}
+		try {
+			PowerUpItem * p = dynamic_cast<PowerUpItem *> (vec.at(i));
+			if (p != nullptr) {
+				sf::CircleShape circle;
+				if (p->state == ItemState::ItemCooldown) {
+					circle.setFillColor(sf::Color(255, 50, 50, 150));
+				}
+				else {
+					circle.setFillColor(sf::Color(255, 50, 50, 255));
 				}
 				circle.setPosition(p->posX - p->width / 2, p->posY - p->width / 2);
 				circle.setRadius(p->width);

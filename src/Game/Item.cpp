@@ -44,6 +44,7 @@ bool Item::isAlive(){
 }
 
 void Item::handleCollision(){
+	_alive = false;
 }
 
 void Item::handleCollision(Entity * e){

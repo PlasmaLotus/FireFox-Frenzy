@@ -147,6 +147,22 @@ bool EventManager::__handleEvent(Event event){
 
 		break;
 	}
+	case EventType::PlayerPowerUpLoss: {
+		audio->queueAudioEvent(AudioEvent::PlayerPowerUpLossAudio, event.entity, false);
+		break;
+	}
+	case EventType::ShieldOn: {
+		audio->queueAudioEvent(AudioEvent::ShieldOnAudio, event.entity, false);
+		break;
+	}
+	case EventType::ShieldOff: {
+		audio->queueAudioEvent(AudioEvent::ShieldOffAudio, event.entity, false);
+		break;
+	}
+	case EventType::ShieldHit: {
+		audio->queueAudioEvent(AudioEvent::ShieldHitAudio, event.entity, false);
+		break;
+	}
 	case EventType::PlayerLowHP: {
 		
 		break;

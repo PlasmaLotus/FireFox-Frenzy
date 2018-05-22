@@ -67,9 +67,29 @@ bool AudioEventManager::_initSoundBuffers() {
 	_soundBufferMap[AudioEvent::PlayerHurtAudio] = buffer;
 
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/freesound/170155__timgormly__8-bit-powerup1.aiff"))
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/pickup_weapon.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::PlayerPickupAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/Shield_on.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ShieldOnAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/Shield_off.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ShieldOffAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/Player_shielded_hit_enemy.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ShieldHitAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/multiplier.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::PlayerPowerUpLossAudio] = buffer;
 
 	/*Menu Sounds*/
 	buffer = sf::SoundBuffer();
@@ -78,7 +98,7 @@ bool AudioEventManager::_initSoundBuffers() {
 	_soundBufferMap[AudioEvent::MenuSelectionAudio] = buffer;
 
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/Negative.wav"))
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/SFX04_ineffective.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::MenuSelectionErrorAudio] = buffer;
 
@@ -123,7 +143,6 @@ bool AudioEventManager::_initSoundBuffers() {
 	if (!buffer.loadFromFile("./Assets/Sounds/song105.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::TestEventAudio] = buffer;
-
 
 	/*Defining the repeat interval of persistant sounds*/
 	_repeatIntervalMap[AudioEvent::AudioShotCharge] = 200;

@@ -3,8 +3,10 @@
 #include "Projectiles\ProjectileBubble.h"
 
 
-PowerUp::PowerUp():
-lifetime(100){
+PowerUp::PowerUp(GameLogic* gc):
+lifetime(10000),
+minimumChargeTime(GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME),
+_game(gc){
 }
 
 PowerUp::~PowerUp() {
@@ -26,11 +28,12 @@ int PowerUp::onShieldDamageTaken(int damage)
 void PowerUp::update(int dt){
 	_projectilesToSpawnThisTick = 1;
 	_projectileSpawned = false;
+	lifetime -= dt;
 }
 
 Projectile * PowerUp::getProjectile(int id, float x, float y, float orientation)
 {
-	Projectile *p{ new ProjectileBubble(id, x, y) };
+	Projectile *p{ new Projectile(id, x, y) };
 	p->durability = 1;
 	//p->lifetime = 700;
 	p->orientation = orientation;
@@ -41,13 +44,19 @@ Projectile * PowerUp::getProjectile(int id, float x, float y, float orientation)
 
 Projectile * PowerUp::spawnProjectile(int id, float x, float y, float orientation)
 {
-	Projectile *p{ new ProjectileBubble(id, x, y) };
-	p->durability = 1;
+	Projectile *p{ new Projectile(id, x, y) };
+	//p->durability = 1;
+	p->velocityX = GameLogic::PROJECTILE_SPEED_MINIMUM;
+	p->velocityY = GameLogic::PROJECTILE_SPEED_MINIMUM;
+	p->setRadius(GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM);
+	p->power = 1;
 	//p->lifetime = 700;
 	p->orientation = orientation;
 	_projectilesToSpawnThisTick--;
+	_game->addEntity(p);
 	_projectileSpawned = true;
-	return p;
+	return nullptr;
+	//ga
 }
 
 Projectile * PowerUp::getProjectileAlt(int id, float x, float y, float orientation)

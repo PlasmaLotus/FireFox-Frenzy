@@ -14,6 +14,7 @@ Updated 8 April, 2018
 #include <cmath>
 #include "Powerup.h"
 #include "PowerUpItem.h"
+#include "Powerup\BubblePowerup.h"
 class GameLogic;
 enum PlayerState{ ShootWindup, Shooting, ShootCooldown, Moving, Dashing, Shielding};
 class Player: public SquareEntity{
@@ -116,7 +117,7 @@ public:
 	void handleShield(int dt);
 
 	/*Powerup*/
-	PowerUp ability;
+	PowerUp* ability;
 	void handleAbility(int dt);
 };
 #endif // !__PLAYER__

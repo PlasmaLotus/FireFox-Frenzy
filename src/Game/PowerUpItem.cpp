@@ -2,12 +2,14 @@
 #include "GameLogic.h"
 //#include "Player.h"
 
-PowerUpItem::PowerUpItem() :
-	PowerUpItem(0, 0) {
+PowerUpItem::PowerUpItem(GameLogic * gc, PowerUp* p) :
+	PowerUpItem(gc, p, 0, 0) {
 }
 
-PowerUpItem::PowerUpItem(float x, float y) :
-	Item(x, y, GameLogic::POWERUP_RADIUS) {
+PowerUpItem::PowerUpItem(GameLogic * gc, PowerUp* p, float x, float y) :
+	Item(x, y, GameLogic::POWERUP_RADIUS),
+	powerUp(p){
+	lifetime = GameLogic::GAME_POWERUP_LIFETIME;
 }
 
 PowerUpItem::~PowerUpItem() {
@@ -18,11 +20,13 @@ void PowerUpItem::update(int32_t dt) {
 }
 
 bool PowerUpItem::isAlive() {
-	return true;
+	return Item::isAlive();
 }
 
 void PowerUpItem::handleCollision() {
+	Item::handleCollision();
 }
 
 void PowerUpItem::handleCollision(Entity * e) {
+	Item::handleCollision(e);
 }

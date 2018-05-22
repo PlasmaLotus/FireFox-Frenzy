@@ -8,7 +8,7 @@ Developped by PlasmaLotus
 #include <map>
 
 enum AudioEvent {NoEventAudio, DefaultEventAudio, TestEventAudio, MenuItemIncreaseAudio, MenuItemDecreaseAudio, MenuSelectionAudio, MenuSelectionErrorAudio, MenuItemChangeAudio, MenuReturnAudio, AudioCountdownStart, AudioCountdownTick, 
-	ProjectileSpawnAudio, AudioShotCharge, AudioShotChargeLow, AudioShotChargeMid, AudioShotChargeMax, PlayerHurtAudio, PlayerPickupAudio, PlayerPickupPowerupAudio, PlayerPickupEnergyAudio} ;
+	ProjectileSpawnAudio, AudioShotCharge, AudioShotChargeLow, AudioShotChargeMid, AudioShotChargeMax, PlayerHurtAudio, PlayerPickupAudio, PlayerPickupPowerupAudio, PlayerPickupEnergyAudio, PlayerPowerUpLossAudio, ShieldOnAudio, ShieldOffAudio, ShieldHitAudio} ;
 class Entity;
 
 class AudioEventSound : public sf::Sound {

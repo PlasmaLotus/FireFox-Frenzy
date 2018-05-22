@@ -3,17 +3,19 @@
 #include "Item.h"
 #include "PowerUp.h"
 
+class GameLogic;
 class PowerUpItem :
 	public Item
 {
 public:
-	PowerUpItem();
-	PowerUpItem(float x, float y);
+	//PowerUpItem(GameLogic * gc);
+	PowerUpItem(GameLogic * gc, PowerUp* p,float x, float y);
+	PowerUpItem(GameLogic * gc, PowerUp* p);
 	virtual ~PowerUpItem();
 	virtual void update(int32_t dt);
 	virtual bool isAlive();
 	virtual void handleCollision();
 	virtual void handleCollision(Entity *e);
-	PowerUp powerUp;
+	PowerUp* powerUp;
 };
 #endif //PowerUpItem

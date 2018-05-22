@@ -12,7 +12,7 @@ Updated May 13, 2017
 /*Contains all the commands that do stuff*/
 ControllerConfig::ControllerConfig() :
 	joystickNumber(0),
-	joystickDeadZone(4.0f),
+	joystickDeadZone(6.0f),
 	joystickMaxZone(70.f),
 	controlMode(ControlMode::Keyboard){
 	loadDefaultConfig();
@@ -20,7 +20,7 @@ ControllerConfig::ControllerConfig() :
 
 ControllerConfig::ControllerConfig(std::string iniPath) :
 	joystickNumber(0),
-	joystickDeadZone(4.0f),
+	joystickDeadZone(6.0f),
 	joystickMaxZone(70.f),
 	controlMode(ControlMode::Keyboard){
 	loadConfig(iniPath);

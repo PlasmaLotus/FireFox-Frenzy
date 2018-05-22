@@ -12,22 +12,26 @@ const float GameLogic::PLAYER_FRICTION(0.98f);
 const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.91f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
-const float GameLogic::PLAYER_DASH_VELOCITY(2.2f);
-const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(1.9f);
+const float GameLogic::PLAYER_DASH_VELOCITY(1.5f);
+const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(1.0f);
 const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
 
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 3.f );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
 const float GameLogic::PROJECTILE_SPEED_MINIMUM( 2.5f );
 const float GameLogic::PROJECTILE_SPEED_MAXIMUM( 5.0f );
+const float GameLogic::PROJECTILE_BUBBLE_SPEED_MINIMUM(1.2f);
+const float GameLogic::PROJECTILE_BUBBLE_SPEED_MAXIMUM(2.5f);
+const float GameLogic::PROJECTILE_BUBBLE_HITBOX_RADIUS_MINIMUM(7.f);
+const float GameLogic::PROJECTILE_BUBBLE_HITBOX_RADIUS_MAXIMUM(15.f);
 const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
 
 const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
 const float GameLogic::ENERGY_MINIMUM_RADIUS{ 3.f };
-const float GameLogic::POWERUP_RADIUS{ 5.f };
-const float GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER{ 0.90f };
+const float GameLogic::POWERUP_RADIUS{ 10.f };
+const float GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER{ 3.0f };//0.9
 /*
 const float GameLogic::GAME_SHOT_ENERGY_LOSS_MULTIPLYER{ 0.90f };
 const float GameLogic::GAME_DASH_ENERGY_LOSS_MULTIPLYER{ 0.90f };
@@ -52,63 +56,29 @@ void GameLogic::init() {
 	_init = false;
 	_gameEnd = false;
 	_spawnPoints.clear();
-	_spawnTimer = 0;
+	_spawnTimerEnergy = 0;
+	_spawnTimerPowerup = 0;
 	map.generateMap(1);
-	for (int i = 4; i-- >= 0; ) {
-		switch (i) {
-		case 3: {
-			_spawnPoints.push_back(Vector2{ 500.f, 500.f });
-			break;
-		}
-		case 2: {
-			_spawnPoints.push_back(Vector2{ 200.f, 500.f });
-			break;
-		}
-		case 1: {
-			_spawnPoints.push_back(Vector2{ 500.f, 200.f });
-			break;
-		}
-		case 0: {
-			_spawnPoints.push_back(Vector2{ 200.f, 200.f });
-			break;
-		}
-		default:
-			break;
-		}
-	}
+	
+	Player *p1{ new Player(this, map.getSpawnPoint(1)) };
+	Player *p2{ new Player(this, map.getSpawnPoint(2)) };
+	Player *p3{ new Player(this, map.getSpawnPoint(3)) };
+	Player *p4{ new Player(this, map.getSpawnPoint(4)) };
 
-	{
-		Vector2 v1 = _spawnPoints.at(0);
-		Vector2 v2 = _spawnPoints.at(1);
-		Vector2 v3 = _spawnPoints.at(2);
-		Vector2 v4 = _spawnPoints.at(3);
-		/*
-		Player *p1{ new Player(this, v1)};
-		Player *p2{ new Player(this, v2) };
-		Player *p3{ new Player(this, v3) };
-		Player *p4{ new Player(this, v4) };
-		*/
-		Player *p1{ new Player(this, map.getSpawnPoint(1)) };
-		Player *p2{ new Player(this, map.getSpawnPoint(2)) };
-		Player *p3{ new Player(this, map.getSpawnPoint(3)) };
-		Player *p4{ new Player(this, map.getSpawnPoint(4)) };
+	_playerIDs.push_back(p1->getID());
+	__playerIDs[0] = p1->getID();
+	_playerIDs.push_back(p2->getID());
+	__playerIDs[1] = p2->getID();
+	_playerIDs.push_back(p3->getID());
+	__playerIDs[2] = p3->getID();
+	_playerIDs.push_back(p4->getID());
+	__playerIDs[3] = p4->getID();
 
-
-
-		_playerIDs.push_back(p1->getID());
-		__playerIDs[0] = p1->getID();
-		_playerIDs.push_back(p2->getID());
-		__playerIDs[1] = p2->getID();
-		_playerIDs.push_back(p3->getID());
-		__playerIDs[2] = p3->getID();
-		_playerIDs.push_back(p4->getID());
-		__playerIDs[3] = p4->getID();
-
-		_entities.push_back(p1);
-		_entities.push_back(p2);
-		//_entities.push_back(p3);
-		//_entities.push_back(p4);
-	}
+	_entities.push_back(p1);
+	_entities.push_back(p2);
+	_entities.push_back(p3);
+	_entities.push_back(p4);
+	
 	frame = 0;
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown3));
 	_init = true;
@@ -155,9 +125,14 @@ void GameLogic::tick(int dt) {
 			//printf("GameTick:  DT - %ld\n", dt);
 			frame++;
 			_totalDT += dt;
-			_spawnTimer += dt;
-			if (_spawnTimer >= GAME_ENERGY_SPAWN_TIMER) {
-				_spawnTimer -= GAME_ENERGY_SPAWN_TIMER;
+			_spawnTimerEnergy += dt;
+			_spawnTimerPowerup += dt;
+			if (_spawnTimerPowerup >= GAME_POWERUP_SPAWN_TIMER) {
+				_spawnTimerPowerup -= GAME_POWERUP_SPAWN_TIMER;
+				_spawnPowerUps();
+			}
+			if (_spawnTimerEnergy >= GAME_ENERGY_SPAWN_TIMER) {
+				_spawnTimerEnergy -= GAME_ENERGY_SPAWN_TIMER;
 				_spawnEnergy();
 			}
 			printf("MaxVelocity:%3.5f - Game Frame: %d\n", PLAYER_MAX_VELOCITY, frame);
@@ -211,24 +186,29 @@ void GameLogic::pause() {
 void GameLogic::_handleEntitiesUpdate(int32_t dt){
 	printf("Volume of Entities: %d,\n", _entities.size());
 	for (int i = _entities.size() - 1; i >= 0; i--) {
-		Entity *e = _entities.at(i);
-		e->update(dt);
+		Entity *e{ _entities.at(i) };
+		if (e != nullptr) {
+			e->update(dt);
 
-		//Player Cast
-		for (int pOffset = 0; pOffset < _playerIDs.size(); pOffset++) {
-			if (e->getID() == _playerIDs.at(pOffset)) {
-				try{
-					Player *p = dynamic_cast<Player *>(e);
-					printf("Player id-%d - HP:%d -  x:%3.2f - y:%3.2f | Ammo: %d/%d, %d/%d,\n", p->getID(), p->HP, p->posX, p->posY, p->ammo, PLAYER_MAX_AMMO, p->_ammoRechargeProgress, PLAYER_AMMO_RECHARGE_COOLDOWN);
-					printf(" -- OriX:%3.2f - OriY:%3.2f | velocityX:%3.2f, velocityY:%3.2f\n", p->orientationX, p->orientationY, p->velocityX, p->velocityY);
-				}
-				catch (const std::bad_cast& cast){
+			//Player Cast
+			for (int pOffset = 0; pOffset < _playerIDs.size(); pOffset++) {
+				if (e->getID() == _playerIDs.at(pOffset)) {
+					try{
+						Player *p = dynamic_cast<Player *>(e);
+						printf("Player id-%d - HP:%d -  x:%3.2f - y:%3.2f | Ammo: %d/%d, %d/%d,\n", p->getID(), p->HP, p->posX, p->posY, p->ammo, PLAYER_MAX_AMMO, p->_ammoRechargeProgress, PLAYER_AMMO_RECHARGE_COOLDOWN);
+						printf(" -- OriX:%3.2f - OriY:%3.2f | velocityX:%3.2f, velocityY:%3.2f\n", p->orientationX, p->orientationY, p->velocityX, p->velocityY);
+					}
+					catch (const std::bad_cast& cast){
+					}
 				}
 			}
-		}
 		
-		if (!e->isAlive()) {
-			addEntityIDToDelete(e->getID());
+			if (!e->isAlive()) {
+				addEntityIDToDelete(e->getID());
+			}
+		}
+		else {
+			_entities.erase(_entities.begin() + i);
 		}
 	}
 }
@@ -426,4 +406,18 @@ void GameLogic::_spawnEnergy(){
 }
 
 void GameLogic::_spawnPowerUps(){
+	for (int i = 0; i < GAME_POWERUP_SPAWN_AMOUNT; i++) {
+		Vector2 v = map.getRandomSpawnPoint(ENERGY_MINIMUM_RADIUS, ENERGY_MINIMUM_RADIUS);
+		int whichPowerup = rand() % (RAND_MAX / 2);
+		PowerUpItem* item(nullptr);
+		switch (whichPowerup) {
+			
+			default: {
+				item = new PowerUpItem(this, new BubblePowerUp(this), v.x, v.y);
+			}
+				break;
+		}
+		
+		addEntity(item);
+	}
 }
