@@ -3,6 +3,7 @@
 #define __MAP__
 
 #include "Entity.h"
+#include "SquareEntity.h"
 #include <vector>
 enum MapCollisionAngle { WallUp, WallDown, WallLeft, WallRight };
 class Map: public Entity {

@@ -10,6 +10,17 @@ struct  Vector2
 	//Vector2(float i, float j) { x = i, y = j };
 	float x;
 	float y;
+	Vector2():x(0), y(0){}
+	Vector2(float _x, float _y) :x(_x), y(_y) {};
+	float getMagnitude() { return std::sqrt(std::pow(x, 2) + std::pow(y, 2)); };
+	Vector2 getNormal(){ 
+		if (getMagnitude() > 0) {
+			return Vector2(x / getMagnitude(), y / getMagnitude());
+		}
+		else {
+			return Vector2(0.f, 0.f);
+		}
+	}
 };
 
 struct CollisionStack {

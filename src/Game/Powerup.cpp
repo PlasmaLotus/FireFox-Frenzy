@@ -1,5 +1,6 @@
 #include "Powerup.h"
 #include "GameLogic.h"
+#include "Projectiles\ProjectileBubble.h"
 
 
 PowerUp::PowerUp():
@@ -29,7 +30,7 @@ void PowerUp::update(int dt){
 
 Projectile * PowerUp::getProjectile(int id, float x, float y, float orientation)
 {
-	Projectile *p{ new Projectile(id, x, y) };
+	Projectile *p{ new ProjectileBubble(id, x, y) };
 	p->durability = 1;
 	//p->lifetime = 700;
 	p->orientation = orientation;
@@ -40,7 +41,7 @@ Projectile * PowerUp::getProjectile(int id, float x, float y, float orientation)
 
 Projectile * PowerUp::spawnProjectile(int id, float x, float y, float orientation)
 {
-	Projectile *p{ new Projectile(id, x, y) };
+	Projectile *p{ new ProjectileBubble(id, x, y) };
 	p->durability = 1;
 	//p->lifetime = 700;
 	p->orientation = orientation;

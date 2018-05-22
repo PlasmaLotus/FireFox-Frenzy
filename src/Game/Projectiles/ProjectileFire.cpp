@@ -31,7 +31,6 @@ void ProjectileFire::update(int32_t dt)
 		}
 	}
 
-
 }
 
 bool ProjectileFire::isAlive(){

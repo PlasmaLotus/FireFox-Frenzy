@@ -18,6 +18,9 @@ config(c)
 }
 
 Controller::~Controller(){
+	if (config != nullptr) {
+		delete config;
+	}
 }
 
 void Controller::updateConfig(){
@@ -136,7 +139,7 @@ bool Controller::handleInput() {
 		}
 		handleInputKeyboard();
 		//handleInputMouse();
-		handleMouseAxis();
+		//handleMouseAxis();
 		if (sf::Joystick::isConnected(config->getJoystickNumber())) {
 			//mode = ControlMode::Joystick;
 			handleInputJoystick();

@@ -41,6 +41,7 @@ protected:
 	virtual void onReturn();
 	bool _inputted;
 	int _inputTime;
+	bool _inputtedThisFrame;
 	static const int INPUT_INITIAL_DELAY{ 500 };
 	static const int INPUT_INCRIMENTAL_DELAY{ 25 };
 };

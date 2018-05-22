@@ -266,8 +266,8 @@ void GameLogic::_handleMapCollision(int32_t dt) {
 		Entity *e = _entities.at(i);
 		if (map.testCollision(e)) {
 			/*COllision handle inside TestCollision*/
-			Map *m{ &map };
-			e->handleCollision(m);
+			//Map *m{ &map };
+			//e->handleCollision(m);
 			printf("COLLISION WITH MAP at id: %d\n", e->getID());
 		}
 

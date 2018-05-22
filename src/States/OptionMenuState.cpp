@@ -10,12 +10,15 @@ OptionMenuState::OptionMenuState(sf::RenderWindow *w):
 
 void OptionMenuState::tick(int dt, bool render) {
 	printf("OPtion Menu State Tick \n");
+	MenuState::tick(dt, render);
+	/*
+	bool input = false;
 	p1Controller->handleInput();
 	p2Controller->handleInput();
-	p1Controller->updateConfig();
-	p2Controller->updateConfig();
-	renderer->render();
-	menu->tick(dt);
+	*/
+
+	//p1Controller->updateConfig();
+	//p2Controller->updateConfig();
 	printf("NB SELECTIONS: %i\n", menu->getItems().size());
 	printf("CurrentSelection: %d\n", menu->getSelection());
 	printf("-- Menu Options --\n");

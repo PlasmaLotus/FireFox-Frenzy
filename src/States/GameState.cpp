@@ -26,9 +26,9 @@ GameState::~GameState(){
 		delete pauseMenuState;
 	}
 	delete p1Controller;
-	delete p1KeyConfig;
+	//delete p1KeyConfig;
 	delete p2Controller;
-	delete p2KeyConfig;
+	//delete p2KeyConfig;
 	delete renderer;
 	delete game;
 

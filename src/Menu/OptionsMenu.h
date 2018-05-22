@@ -13,6 +13,7 @@ public:
 	OptionsMenu();
 	
 	virtual ~OptionsMenu();
+	void tick(int dt);
 	virtual void inputPause();
 	virtual void inputBack();
 private:

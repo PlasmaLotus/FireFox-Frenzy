@@ -12,15 +12,15 @@ OptionsMenu::OptionsMenu():
 	}));
 
 	addItem(
-		MenuItem("Toggle Player Positions ",
-			[&]() {
-		StateManager::getInstance().togglePositions(); 
-	}));
-
-	addItem(
 		MenuItem("Toggle Hitboxes",
 			[&]() {
 		StateManager::getInstance().toggleHitboxes();
+	}));
+
+	addItem(
+		MenuItem("Toggle Player Positions ",
+			[&]() {
+		StateManager::getInstance().togglePositions(); 
 	}));
 
 	addItem(
@@ -32,6 +32,11 @@ OptionsMenu::OptionsMenu():
 
 
 OptionsMenu::~OptionsMenu() {
+}
+
+void OptionsMenu::tick(int dt)
+{
+	Menu::tick(dt);
 }
 
 void OptionsMenu::inputBack()

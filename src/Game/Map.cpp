@@ -53,7 +53,7 @@ void Map::clearWalls()
 	_walls.clear();
 }
 
-bool Map::_testCollisionOuterWalls(Entity * e){
+bool Map::_testCollisionOuterWalls(Entity * e) {
 	bool collision = false;
 	/*Test up wall*/
 	if (e != nullptr) {
@@ -83,27 +83,15 @@ bool Map::_testCollisionOuterWalls(Entity * e){
 
 		}
 	}
-
+	if (collision) {
+		e->handleCollision(this);
+	}
 	return collision;
 }
 
 bool Map::_testCollisionWalls(Entity * e){
-	//_handleCollisionWall()
 	bool collision = false;
-	/*
-	for (int i = _walls.size() - 1; i >= 0; --i) {
-		Entity &w{ _walls.at(i) };
-		if (w.testCollision(e)) {
-			//Determine where the collision should be handled//
-			collision = true;
-
-			//Test in X axis
-			if (e->posX <= w.posX) {
-				_handleCollisionWall(e, w, MapCollisionAngle::WallLeft);
-			}
-		}
-	}
-	*/
+	
 	if (e != nullptr) {
 		int e_x = e->posX / 100;
 		int e_y = e->posY / 100;
@@ -118,11 +106,9 @@ bool Map::_testCollisionWalls(Entity * e){
 				if (std::abs(e_x - w_x) < w_wid + 2 && std::abs(e_y - w_y) < w_hei + 2 ) {
 					if (w->testCollision(e)) {
 						collision = true;
-				
 						CircleEntity * cw = dynamic_cast<CircleEntity*>(w);
 						SquareEntity * sw = dynamic_cast<SquareEntity*>(w);
 				
-
 						if (sw != nullptr) {
 							/*Testing with square walls*/
 							//Testing if the object entered from the right
@@ -217,9 +203,7 @@ bool Map::_testCollisionWalls(Entity * e){
 						else {
 							/*If the wall isnt a square or circle entity...*/
 						}
-
-				
-
+						e->handleCollision(w);
 					}
 				}
 			}
@@ -247,7 +231,7 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 		offset = e->width/2 - e->posX;
 		e->posX += offset;
 		if (e->velocityX < 0) {
-			e->velocityX = 0;
+			//e->velocityX = 0;
 		}
 		break;
 	}
@@ -256,7 +240,7 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 		offset = this->width - e->posX - e->width /2;
 		e->posX += offset;
 		if (e->velocityX > 0) {
-			e->velocityX = 0;
+			//e->velocityX = 0;
 		}
 		
 		/*
@@ -273,7 +257,7 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 		e->posY += offset;
 
 		if (e->velocityY < 0) {
-			e->velocityY = 0;
+			//e->velocityY = 0;
 		}
 		break;
 	}
@@ -287,12 +271,13 @@ void Map::_handleCollisionOuterWall(Entity * e, MapCollisionAngle angle){
 		e->posY += offset;
 		*/
 		if (e->velocityY > 0) {
-			e->velocityY = 0;
+			//e->velocityY = 0;
 		}
 		break;
 	}
 	default:break;
 	}
+	//e->handleCollision(this);
 }
 
 void Map::_handleCollisionWall(Entity * e, Entity wall, MapCollisionAngle angle){
@@ -363,7 +348,6 @@ void Map::generateMap(int generationID) {
 	}
 }
 
-
 Vector2 Map::getSpawnPoint(int player)
 {
 	float x, y;
@@ -425,7 +409,6 @@ Vector2 Map::getSpawnPoint(int player)
 	
 	return Vector2{ x, y };
 }
-
 
 /**
 Generates a point on the map which wont collide with any map entity, accorting to the width and height
