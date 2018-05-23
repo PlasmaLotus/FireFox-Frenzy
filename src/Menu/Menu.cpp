@@ -110,16 +110,19 @@ void Menu::inputDown()
 
 void Menu::inputSelect()
 {
-	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY || !_inputted) {
-		if (selection >= 0 && selection < items.size()) {
-			items.at(selection).getOptionString();
-			items.at(selection).getFn()();
-			onSelection();
+	if (_inputTime == 0 || _inputTime >= INPUT_INITIAL_DELAY) {
+		if (!_inputted) {
+			if (selection >= 0 && selection < items.size()) {
+				items.at(selection).getOptionString();
+				items.at(selection).getFn()();
+				onSelection();
+			}
+			else {
+				printf("Cant Select that");
+				onSelectionError();
+			}
 		}
-		else {
-			printf("Cant Select that");
-			onSelectionError();
-		}
+		
 	}
 	
 	input();

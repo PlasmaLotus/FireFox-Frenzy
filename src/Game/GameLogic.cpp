@@ -4,15 +4,17 @@ Updated May 13, 2017
 */
 #include "GameLogic.h"
 #include "../States/StateManager.h"
+#include "Powerup\FirePowerup.h"
+#include "Powerup/RapidFirePowerup.h"
 
-const float GameLogic::PLAYER_MAX_VELOCITY(1.4f);
+const float GameLogic::PLAYER_MAX_VELOCITY(1.3f);
 const float GameLogic::PLAYER_MAX_VELOCITY_DECREASE_RATE(0.06f);
 const float GameLogic::PLAYER_MAX_VELOCITY_CAP_DECREASE_RATE(0.15f);
 const float GameLogic::PLAYER_FRICTION(0.98f);
 const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.91f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
-const float GameLogic::PLAYER_DASH_VELOCITY(1.5f);
+const float GameLogic::PLAYER_DASH_VELOCITY(1.8f);
 const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(1.0f);
 const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
 
@@ -29,8 +31,8 @@ const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
 
 const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
-const float GameLogic::ENERGY_MINIMUM_RADIUS{ 3.f };
-const float GameLogic::POWERUP_RADIUS{ 10.f };
+const float GameLogic::ENERGY_MINIMUM_RADIUS{ 10.f };
+const float GameLogic::POWERUP_RADIUS{ 29.f };
 const float GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER{ 3.0f };//0.9
 /*
 const float GameLogic::GAME_SHOT_ENERGY_LOSS_MULTIPLYER{ 0.90f };
@@ -65,6 +67,11 @@ void GameLogic::init() {
 	Player *p2{ new Player(this, map.getSpawnPoint(2)) };
 	Player *p3{ new Player(this, map.getSpawnPoint(3)) };
 	Player *p4{ new Player(this, map.getSpawnPoint(4)) };
+
+	p1->color = RGBA(128, 0, 128, 255);
+	p2->color = RGBA(240, 10, 10, 255);
+	p3->color = RGBA(10, 250, 250, 255);
+	p4->color = RGBA(255, 255, 0, 255);
 
 	_playerIDs.push_back(p1->getID());
 	__playerIDs[0] = p1->getID();
@@ -371,6 +378,7 @@ Player * GameLogic::getPlayer(int playerNumber){
 			}
 		}
 	}
+	return nullptr;
 }
 
 Player GameLogic::getPlayerCopy(int playerNumber){
@@ -392,15 +400,8 @@ void GameLogic::_spawnItems(){
 }
 
 void GameLogic::_spawnEnergy(){
-	/*
-	for (int i = 0; i < _spawnPoints.size(); i++) {
-		Vector2 v = _spawnPoints.at(i);
-		Energy *e{ new Energy(v, GAME_ENERGY_SPAWN_AURA) };
-		addEntity(e);
-	}
-	*/
-
-	for (int i = 0; i < GAME_ENERGY_SPAWN_AMOUNT; i++) {
+	int randValue = rand() % (RAND_MAX / GAME_ENERGY_SPAWN_AMOUNT);
+	for (int i = 0; i < randValue; i++) {
 		Vector2 v = map.getRandomSpawnPoint(ENERGY_MINIMUM_RADIUS, ENERGY_MINIMUM_RADIUS);
 		Energy *e{ new Energy(v, GAME_ENERGY_SPAWN_AURA) };
 		addEntity(e);
@@ -408,16 +409,29 @@ void GameLogic::_spawnEnergy(){
 }
 
 void GameLogic::_spawnPowerUps(){
-	for (int i = 0; i < GAME_POWERUP_SPAWN_AMOUNT; i++) {
+	int randValue = rand() % (RAND_MAX / GAME_POWERUP_SPAWN_AMOUNT);
+	for (int i = 0; i < randValue; i++) {
 		Vector2 v = map.getRandomSpawnPoint(ENERGY_MINIMUM_RADIUS, ENERGY_MINIMUM_RADIUS);
-		int whichPowerup = rand() % (RAND_MAX / 2);
+		int whichPowerup = rand() % (RAND_MAX / 3);
 		PowerUpItem* item(nullptr);
 		switch (whichPowerup) {
-			
-			default: {
-				item = new PowerUpItem(this, new BubblePowerUp(this), v.x, v.y);
-			}
+		
+		case 0:
+		{
+			item = new PowerUpItem(this, new BubblePowerUp(this), v.x, v.y);
+			break;
+		}
+		case 1:
+		{
+			item = new PowerUpItem(this, new FirePowerUp(this), v.x, v.y);
+
+			break;
+		}
+		case 2:
+		default: {
+				item = new PowerUpItem(this, new RapidFirePowerUp(this), v.x, v.y);
 				break;
+			}
 		}
 		
 		addEntity(item);

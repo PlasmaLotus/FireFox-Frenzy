@@ -25,7 +25,8 @@ Player::Player(GameLogic * g, float x, float y):
 	ammo(GameLogic::PLAYER_BASE_AMMO),
 	dashVelocity(GameLogic::PLAYER_DASH_VELOCITY),
 	state(PlayerState::Moving),
-	ability(new BubblePowerUp(g)){
+	ability(new NormalPowerUp(g)),
+	color(0,0,0,0){
 	velocityX = 0.f;
 	velocityY = 0.f;
 	orientation = 0.f;
@@ -569,14 +570,17 @@ void Player::_handleShootingAlt(int power) {
 
 void Player::handleAbility(int dt){
 	if (ability == nullptr) {
-		ability = new PowerUp(_game);
+		ability = new NormalPowerUp(_game);
 	}
-	if (!ability->isAlive()) {
-		delete ability;
-		//if (ability )
-		ability = new PowerUp(_game);
-		//StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPowerUpLoss, this));
+	if (dynamic_cast<NormalPowerUp*>(ability) == nullptr) {
+		if (!ability->isAlive()) {
+			delete ability;
+			//if (ability )
+			ability = new NormalPowerUp(_game);
+			StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPowerUpLoss, this));
+		}
 	}
+	
 	ability->update(dt);
 }
 

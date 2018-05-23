@@ -12,9 +12,10 @@ Updated 8 April, 2018
 #include <stdint.h>
 #include <vector>
 #include <cmath>
-#include "Powerup.h"
+#include "Powerup/Powerup.h"
 #include "PowerUpItem.h"
 #include "Powerup\BubblePowerup.h"
+#include "Powerup\NormalPowerup.h"
 class GameLogic;
 enum PlayerState{ ShootWindup, Shooting, ShootCooldown, Moving, Dashing, Shielding};
 class Player: public SquareEntity{
@@ -119,5 +120,7 @@ public:
 	/*Powerup*/
 	PowerUp* ability;
 	void handleAbility(int dt);
+	
+	RGBA color;
 };
 #endif // !__PLAYER__

@@ -45,16 +45,16 @@ public:
 	bool _gameEnd;
 	bool _init;
 
-	static const int GAME_MAXIMUM_GAME_TIME{ 120000 };//120000 = 2 mins
+	static const int GAME_MAXIMUM_GAME_TIME{ 1200000 };//120000 = 2 mins
 	//static const int GAME_TIME_LIMIT_MAXIMUM{ 120000 };
 
-	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 40 };
-	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 40 };
-	static const int PLAYER_DISPLAY_HITBOX_WIDTH{ 24 };
-	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 24 };
+	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 52 };
+	static const int PLAYER_COLLISION_HITBOX_HEIGHT{ 52 };
+	static const int PLAYER_DISPLAY_HITBOX_WIDTH{ 40 };
+	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 40 };
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
 	static int const PLAYER_MAX_AMMO{ 1000 };
-	static int const PLAYER_BASE_AMMO{ 500 };
+	static int const PLAYER_BASE_AMMO{ 700 };
 
 	static const int PLAYER_DASH_DURATION{ 150 };
 	static const int PLAYER_DASH_RECHARGE_COOLDOWN{ 250 };
@@ -73,7 +73,7 @@ public:
 	int _countdownIt;
 	int _totalDT;
 	static const int PROJECTILE_COLLISION_DELAY_GENERAL{ 3000 };
-	static const int PROJECTILE_COLLISION_DELAY_AOE{ 300 };
+	static const int PROJECTILE_COLLISION_DELAY_AOE{ 30 };
 	static const float PROJECTILE_HITBOX_RADIUS_MINIMUM;
 	static const float PROJECTILE_HITBOX_RADIUS_MAXIMUM;
 	static const float PROJECTILE_SPEED_MINIMUM;
@@ -111,12 +111,12 @@ public:
 	static const int ENERGY_ITEM_COOLDOWN{ 3000 };
 	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
 	static const int ITEM_MINIMUM_LIFETIME{ 10000 };
-	static const int GAME_ENERGY_SPAWN_TIMER{ 30000 };
-	static const int GAME_ENERGY_SPAWN_AMOUNT{ 8 };
+	static const int GAME_ENERGY_SPAWN_TIMER{ 2500 };
+	static const int GAME_ENERGY_SPAWN_AMOUNT{ 10 };
 	static const int GAME_ENERGY_SPAWN_AURA{ 100 };
 	static const int GAME_ENERGY_LIFETIME{ 5000 };
 
-	static const int GAME_POWERUP_SPAWN_TIMER{ 10000 };
+	static const int GAME_POWERUP_SPAWN_TIMER{ 5000 };
 	static const int GAME_POWERUP_SPAWN_AMOUNT{ 6 };
 	static const int GAME_POWERUP_LIFETIME{ 7500 };
 
@@ -129,7 +129,7 @@ public:
 
 
 	/*Special Projectiles*/
-	static const int PROJECTILE_FIRE_AOE_SPAWN_INTERVAL{ 50 };
+	static const int PROJECTILE_FIRE_AOE_SPAWN_INTERVAL{ 100 };
 
 	
 private:

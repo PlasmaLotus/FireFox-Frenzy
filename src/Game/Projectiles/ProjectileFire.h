@@ -1,20 +1,22 @@
 
-#include "Projectile.h"
+#ifndef _PROJECTILE_FIRE_
+#define _PROJECTILE_FIRE_
+
+#include "AOEProjectile.h"
 class ProjectileFire :
-	public Projectile
+	public AOEProjectile
 {
 public:
 	ProjectileFire();
 	ProjectileFire(int id, float x, float y);
 	ProjectileFire(int id);
-	virtual ~ProjectileFire();
+	 ~ProjectileFire();
 
-	virtual void update(int32_t dt);
-	virtual bool isAlive();
-	virtual void handleCollision();
-	virtual void handleCollision(Entity *e);
+	void update(int32_t dt);
+	bool isAlive();
+	void handleCollision();
+	void handleCollision(Entity *e);
 	void _spawnNewAOE();
-	std::vector<Projectile> m_projectiles;
-	int m_AOEProjectileSpawnTimer;
-	int m_AOEProjectileSpawnCounter;
 };
+
+#endif //Projectile fire

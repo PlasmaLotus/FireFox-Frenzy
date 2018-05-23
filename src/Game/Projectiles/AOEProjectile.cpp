@@ -16,7 +16,7 @@ AOEProjectile::AOEProjectile(int id, float x, float y) :
 {
 	//_spawnNewAOE();
 	//m_AOEProjectileSpawnTimer = 0;
-
+	power = 5;
 }
 
 AOEProjectile::~AOEProjectile()
@@ -26,11 +26,21 @@ AOEProjectile::~AOEProjectile()
 
 void AOEProjectile::update(int32_t dt)
 {
-	Projectile::update(dt);
+	if (m_mainProjectileActive) {
+		Projectile::update(dt);
+	}
+
 	m_AOEProjectileSpawnTimer += dt;
-	if (m_AOEProjectileSpawnTimer >= m_AOEProjectileSpawnCounter) {
-		m_AOEProjectileSpawnTimer -= m_AOEProjectileSpawnCounter;
-		_spawnNewAOE();
+	if (lifetime > 0) {
+		if (m_AOEProjectileSpawnTimer >= m_AOEProjectileSpawnCounter) {
+			m_AOEProjectileSpawnTimer -= m_AOEProjectileSpawnCounter;
+			_spawnNewAOE();
+		}
+	}
+	else {
+		m_mainProjectileActive = false;
+		velocityX = 0;
+		velocityY = 0;
 	}
 
 	for (int i = m_projectiles.size() - 1; i >= 0; --i) {
@@ -41,11 +51,12 @@ void AOEProjectile::update(int32_t dt)
 		}
 	}
 
+
 }
 
 bool AOEProjectile::isAlive(){
-	return true;
-	//return (m_projectiles.size() > 0 || durability > 0 || lifetime > 0);
+	//return true;
+	return (m_projectiles.size() > 0 || durability > 0 || lifetime > 0 || m_mainProjectileActive);
 }
 
 void AOEProjectile::handleCollision()
@@ -59,18 +70,20 @@ void AOEProjectile::handleCollision(Entity * e)
 
 bool AOEProjectile::testCollision(Entity * e)
 {
-	if (m_mainProjectileActive && e->testCollision(dynamic_cast<Projectile *>(this))) {
-		return true;
+	bool collision = false;
+	if (m_mainProjectileActive) {
+		if (CircleEntity::testCollision(e)) {
+			collision = true;
+		}
+		//return true;
 	}
-	else {
-		for (int i = m_projectiles.size() - 1; i >= 0; --i) {
-			Projectile &p{ m_projectiles.at(i) };
-			if (p.testCollision(e) ){
-				return true;
-			}
+	for (int i = m_projectiles.size() - 1; i >= 0; --i) {
+		Projectile &p{ m_projectiles.at(i) };
+		if (p.testCollision(e)) {
+			collision = true;
 		}
 	}
-	return false;
+	return collision;
 }
 
 void AOEProjectile::_spawnNewAOE() {

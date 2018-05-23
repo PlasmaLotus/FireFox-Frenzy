@@ -3,6 +3,7 @@
 #include "../Game/Shield.h"
 #include "../Game/GameLogic.h"
 #include <math.h>
+#include "GameRenderer.h"
 
 /*
 PlayerDrawable::PlayerDrawable():
@@ -10,8 +11,9 @@ PlayerDrawable::PlayerDrawable():
 	//rTexture = sf::Texture();
 }
 */
-PlayerDrawable::PlayerDrawable(Player *pl, sf::Texture& tx, sf::Font ft) :
+PlayerDrawable::PlayerDrawable(Player *pl, GameRenderer* renderer, sf::Texture& tx, sf::Font ft) :
 	player(pl),
+	renderer(renderer),
 	rTexture(tx)
 	//m_font(ft)
 	//m_shaderLoaded(false)
@@ -23,13 +25,14 @@ PlayerDrawable::PlayerDrawable(Player *pl, sf::Texture& tx, sf::Font ft) :
 	int height = GameLogic::PLAYER_COLLISION_HITBOX_HEIGHT;
 	playerShape.setSize(sf::Vector2f(width, height));
 
-	cursorShape.setFillColor(sf::Color::Cyan);
 	cursorShape.setRadius(2);
-	playerColor = sf::Color::Cyan;
+	//playerColor = sf::Color::Cyan;
 	if (player != nullptr) {
+		playerColor = sf::Color(player->color.r, player->color.g, player->color.b, player->color.a);
 		posX = player->posX;
 		posY = player->posY;
 	}
+	cursorShape.setFillColor(playerColor);
 	int dashOffsetNumber{ 5 };
 	for (int i = 0; i <= dashOffsetNumber; i++) {
 		sf::RectangleShape r(sf::Vector2f(player->width, player->height));
@@ -62,7 +65,7 @@ PlayerDrawable::PlayerDrawable(Player *pl, sf::Texture& tx, sf::Font ft) :
 	sprite.setTexture(rTexture);
 	sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width/2, 1.0f * sprite.getGlobalBounds().height / 2));
 	sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y ));
-	//sprite.setColor(sf::Color::Magenta);
+	sprite.setColor(playerColor);
 	// Load the shader
 	/*
 	if (m_shader.loadFromFile("Assets/Shaders/bloom.frag", sf::Shader::Fragment)) {
@@ -84,7 +87,12 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 	//states.blendMode = sf::BlendAdd;
 	//states.shader = &m_shader;
 	//states.texture = playerShape.getTexture();
-	target.draw(playerShape);
+	
+	if (renderer != nullptr) {
+		if (renderer->_displayHitboxes) {
+			target.draw(playerShape);
+		}
+	}
 	target.draw(sprite);
 	target.draw(cursorShape);
 
@@ -136,6 +144,7 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 
 		target.draw(shieldShape);
 	}
+	/*
 	target.draw(m_hpText);
 	target.draw(m_ammoText);
 	if (isChargingShot) {
@@ -144,6 +153,7 @@ void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) co
 	if (isChargingDash) {
 		target.draw(m_dashText);
 	}
+	*/
 	for (const PlayerDrawableAlert& alert : m_alerts)
 		target.draw(alert, states);
 }

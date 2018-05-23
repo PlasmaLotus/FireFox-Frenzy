@@ -18,7 +18,8 @@ Updated Dec 25, 2016
 #include "MapDrawable.h"
 #include "ParticleSystem.h"
 #include "ProjectileDrawable.h"
-
+#include "PlayerUIDrawable.h"
+#include "GameItemDrawable.h"
 class GameRenderer : public Renderer{
 public:
 
@@ -42,6 +43,7 @@ public:
 	void handleViews(sf::RenderTarget* target);
 	void drawParticleSystems(sf::RenderTarget* target);
 	void updateParticleSystems(int dt);
+	void drawUI(sf::RenderTarget* target);
 	sf::Sprite renderFrame();
 	sf::RenderTexture* getLastFrame();
 
@@ -63,6 +65,7 @@ public:
 	MapDrawable* mapDrawable;
 	PlayerDrawable * playerDrawable1;
 	PlayerDrawable * playerDrawable2;
+	PlayerUIDrawable* playerUIDrawable;
 	sf::View minimapView;
 	sf::View mainView;
 	std::vector<ParticleSystem*> _particleSystems;
@@ -83,6 +86,10 @@ public:
 
 	sf::Texture* playerTexture;
 	sf::Texture* projectileGeneralTexture;
+	sf::Texture* iconBubbleTexture;
+	sf::Texture* iconFireTexture;
+	sf::Texture* iconRapidTexture;
+	sf::Texture* iconDefaultTexture;
 	sf::Font* font;
 
 	//sf::Font& _font{ sf::Font() };

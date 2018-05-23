@@ -1,6 +1,6 @@
 #include "Powerup.h"
-#include "GameLogic.h"
-#include "Projectiles\ProjectileBubble.h"
+#include "../GameLogic.h"
+//#include "../Projectiles\ProjectileBubble.h"
 
 
 PowerUp::PowerUp(GameLogic* gc):
@@ -43,7 +43,7 @@ Projectile * PowerUp::getProjectile(int id, float x, float y, float orientation)
 	return p;
 }
 
-Projectile * PowerUp::spawnProjectile(int id, float x, float y, float orientation)
+void PowerUp::spawnProjectile(int id, float x, float y, float orientation)
 {
 	Projectile *p{ new Projectile(id, x, y) };
 	//p->durability = 1;
@@ -56,7 +56,7 @@ Projectile * PowerUp::spawnProjectile(int id, float x, float y, float orientatio
 	_projectilesToSpawnThisTick--;
 	_game->addEntity(p);
 	_projectileSpawned = true;
-	return nullptr;
+	//return nullptr;
 	//ga
 }
 
@@ -66,5 +66,5 @@ Projectile * PowerUp::getProjectileAlt(int id, float x, float y, float orientati
 }
 
 bool PowerUp::isAlive(){
-	return (lifetime >= 0);
+	return true;
 }

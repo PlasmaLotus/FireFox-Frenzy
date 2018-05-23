@@ -59,7 +59,7 @@ void MenuItemDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) 
 	target.draw(t);
 
 	sf::Text t2(itemOption, m_font, 18);
-	t2.setPosition(posX + 15, posY + 30);
+	t2.setPosition(posX + 15, posY + 40);
 	t2.setFillColor(sf::Color::Black);
 	//target.draw(m_menuItemText);
 	target.draw(t2);

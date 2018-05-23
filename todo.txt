@@ -1,6 +1,6 @@
-Ajust menu input sensibility
+
 Remove flashing effect from Pause Menu
 Center Pause in screen
-Complete Map generation
+Complete Map generation / is 2 maps enough
 
 PowerUps

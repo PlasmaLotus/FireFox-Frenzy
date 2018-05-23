@@ -1,7 +1,7 @@
 #ifndef __PowerUpItem__
 #define __PowerUpItem__
 #include "Item.h"
-#include "PowerUp.h"
+#include "Powerup/PowerUp.h"
 
 class GameLogic;
 class PowerUpItem :

@@ -4,9 +4,13 @@
 #include <span class="code-keyword"><XInput.h></span>
 */
 
+#ifndef _XINPUT_H_
+#define _XINPUT_H_
+
 /*Xinput Support*/
 #include <Windows.h>
 #include <Xinput.h>
+#include <math.h>
 class Gamepad
 {
 private:
@@ -107,3 +111,5 @@ bool Gamepad::IsPressed(WORD button)
 {
 	return (state.Gamepad.wButtons & button) != 0;
 }
+
+#endif

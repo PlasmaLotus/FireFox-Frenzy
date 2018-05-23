@@ -33,20 +33,20 @@ Projectile * BubblePowerUp::getProjectile(int id, float x, float y, float orient
 	return p;
 }
 
-Projectile * BubblePowerUp::spawnProjectile(int id, float x, float y, float orientation)
+void BubblePowerUp::spawnProjectile(int id, float x, float y, float orientation)
 {
 	Projectile *p{ new ProjectileBubble(id, x, y) };
 	//p->durability = 1;
 	p->velocityX = GameLogic::PROJECTILE_BUBBLE_SPEED_MINIMUM;
 	p->velocityY = GameLogic::PROJECTILE_BUBBLE_SPEED_MINIMUM;
 	p->setRadius(GameLogic::PROJECTILE_BUBBLE_HITBOX_RADIUS_MINIMUM);
-	p->power = 1;
+	p->power = 5;
 	//p->lifetime = 700;
 	p->orientation = orientation;
 	_projectilesToSpawnThisTick--;
 	_game->addEntity(p);
 	_projectileSpawned = true;
-	return nullptr;
+	//return nullptr;
 	//ga
 }
 

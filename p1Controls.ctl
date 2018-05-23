@@ -15,7 +15,7 @@ Command3 : Axis0 -
 Command1 : Axis1 +
 Command2 : Axis1 -
 Command18 : Axis2 +
-Command15 : Axis2 -
+Command18 : Axis2 -
 Command5 : Axis3 +
 Command6 : Axis3 -
 Command8 : Axis4 +

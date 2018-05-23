@@ -4,6 +4,13 @@ Updated May 13, 2017
 */
 #include "GameRenderer.h"
 #include "../States/StateManager.h"
+#include "AOEProjectileDrawable.h"
+#include "../Game/Projectiles/AOEProjectile.h"
+#include "../Game/Powerup/BubblePowerup.h"
+#include "../Game/Powerup/FirePowerup.h"
+#include "../Game/Powerup/NormalPowerup.h"
+#include "../Game/Powerup/RapidFirePowerup.h"
+#include "../Game/Powerup/Powerup.h"
 
 GameRenderer::GameRenderer(){
 }
@@ -61,9 +68,30 @@ bool GameRenderer::initRenderer() {
 		printf("Unable to load Player PNG\n");
 	}
 
-	playerDrawable1 = new PlayerDrawable(game->getPlayer(1), *playerTexture, *font);
-	playerDrawable2 = new PlayerDrawable(game->getPlayer(2), *playerTexture, *font);
-	playerDrawable2->playerColor = sf::Color::Magenta;
+	iconBubbleTexture = new sf::Texture();
+	if (!iconBubbleTexture->loadFromFile("./Assets/Images/Kirby/bubble.png")) {
+		printf("Unable to load Icon PNG\n");
+	}
+	
+	iconFireTexture = new sf::Texture();
+	if (!iconFireTexture->loadFromFile("./Assets/Images/Kirby/fire.png")) {
+		printf("Unable to load Icon PNG\n");
+	}
+	
+	iconDefaultTexture = new sf::Texture();
+	if (!iconDefaultTexture->loadFromFile("./Assets/Images/Kirby/mana.png")) {
+		printf("Unable to load Icon PNG\n");
+	}
+
+	iconRapidTexture = new sf::Texture();
+	if (!iconRapidTexture->loadFromFile("./Assets/Images/Kirby/rapid.png")) {
+		printf("Unable to load Icon PNG\n");
+	}
+	//iconRapidTexture
+
+	playerDrawable1 = new PlayerDrawable(game->getPlayer(1),this, *playerTexture, *font);
+	playerDrawable2 = new PlayerDrawable(game->getPlayer(2),this, *playerTexture, *font);
+	//playerDrawable2->playerColor = sf::Color::Magenta;
 	
 	/*
 	// player 1 (left side of the screen)
@@ -88,6 +116,7 @@ bool GameRenderer::initRenderer() {
 	mainView = sf::View(sf::Vector2f(1080 / 2, 720 / 2), sf::Vector2f(1080, 720));
 	window->setView(mainView);
 	//window->setView(minimapView);
+	playerUIDrawable = new PlayerUIDrawable(game, game->getPlayer(1), game->getPlayer(2), game->getPlayer(3), game->getPlayer(4), *playerTexture, *font, &mainView);
 	return success;
 }
 
@@ -121,6 +150,7 @@ void GameRenderer::draw(){
 	drawPlayers(window);
 	
 	handleViews(window);
+	drawUI(window);
 	__showFPS();
 	__showPlayerPositions();
 	//window->draw();
@@ -135,7 +165,7 @@ sf::RenderTexture* GameRenderer::getLastFrame() {
 	drawPlayers(_frame);
 
 	handleViews(_frame);
-	
+	drawUI(_frame);
 	return _frame;
 }
 /*
@@ -176,8 +206,14 @@ void GameRenderer::update(){
 }
 
 void GameRenderer::reset() {
-	playerDrawable1 = new PlayerDrawable(game->getPlayer(1), *playerTexture, *font);
-	playerDrawable2 = new PlayerDrawable(game->getPlayer(2), *playerTexture, *font);
+	playerDrawable1 = new PlayerDrawable(game->getPlayer(1),this, *playerTexture, *font);
+	playerDrawable2 = new PlayerDrawable(game->getPlayer(2),this, *playerTexture, *font);
+
+	if (playerUIDrawable != nullptr) {
+		delete playerUIDrawable;
+	}
+	playerUIDrawable = new PlayerUIDrawable(game, game->getPlayer(1), game->getPlayer(2), game->getPlayer(3), game->getPlayer(4), *playerTexture, *font, &mainView);
+
 }
 
 
@@ -211,6 +247,18 @@ void GameRenderer::drawProjectiles(sf::RenderTarget* target){
 		}
 		catch (const std::bad_cast& cast){
 		}
+		try {
+			AOEProjectile * p = dynamic_cast<AOEProjectile *> (vec.at(i));
+			if (p != nullptr) {
+				
+				AOEProjectileDrawable pro(p, *projectileGeneralTexture);
+				pro.update();
+				//window->draw(pro);
+				target->draw(pro);
+			}
+		}
+		catch (const std::bad_cast& cast) {
+		}
 	}
 }
 
@@ -236,39 +284,53 @@ void GameRenderer::drawItems(sf::RenderTarget* target) {
 	std::vector<Entity*> vec = game->_entities;
 	for (int i = 0; i < vec.size(); i++) {
 		
-		
 		try {
-			Item * p = dynamic_cast<Item *> (vec.at(i));
+			PowerUpItem * p = dynamic_cast<PowerUpItem *> (vec.at(i));
 			if (p != nullptr) {
+				FirePowerUp * fp = dynamic_cast<FirePowerUp *> (p->powerUp);
+				BubblePowerUp * bp = dynamic_cast<BubblePowerUp *> (p->powerUp);
+				RapidFirePowerUp * rp = dynamic_cast<RapidFirePowerUp *> (p->powerUp);
+				//NormalPowerUp * np = dynamic_cast<NormalPowerUp *> (p->powerUp);
+				if (fp != nullptr) {
+					GameItemDrawable id(p, *iconFireTexture);
+					id.update();
+					target->draw(id);
+				}
+				else if (bp != nullptr) {
+					GameItemDrawable id(p, *iconBubbleTexture);
+					id.update();
+					target->draw(id);
+				}
+				else if (rp != nullptr) {
+					GameItemDrawable id(p, *iconRapidTexture);
+					id.update();
+					target->draw(id);
+				}
+				
+				
+			}
+		}
+		catch (const std::bad_cast& cast) {
+		}
+
+		try {
+			Energy * p = dynamic_cast<Energy *> (vec.at(i));
+			if (p != nullptr) {
+				GameItemDrawable id(p, *iconDefaultTexture);
+				id.update();
+				target->draw(id);
+				/*
 				sf::CircleShape circle;
 				if (p->state == ItemState::ItemCooldown) {
 					circle.setFillColor(sf::Color(100, 100, 100, 150));
 				}
 				else {
-					circle.setFillColor(sf::Color(120, 120,120,255));
+					circle.setFillColor(sf::Color(120, 120, 120, 255));
 				}
 				circle.setPosition(p->posX - p->width / 2, p->posY - p->width / 2);
 				circle.setRadius(p->width);
 				target->draw(circle);
-				//window->draw(circle);
-			}
-		}
-		catch (const std::bad_cast& cast) {
-		}
-		try {
-			PowerUpItem * p = dynamic_cast<PowerUpItem *> (vec.at(i));
-			if (p != nullptr) {
-				sf::CircleShape circle;
-				if (p->state == ItemState::ItemCooldown) {
-					circle.setFillColor(sf::Color(255, 50, 50, 150));
-				}
-				else {
-					circle.setFillColor(sf::Color(255, 50, 50, 255));
-				}
-				circle.setPosition(p->posX - p->width / 2, p->posY - p->width / 2);
-				circle.setRadius(p->width);
-				target->draw(circle);
-				//window->draw(circle);
+				*/
 			}
 		}
 		catch (const std::bad_cast& cast) {
@@ -337,7 +399,7 @@ void GameRenderer::handleViews(sf::RenderTarget* target){
 					viewCenter.y = window->getSize().y / 2.f;
 				}
 			}
-		
+			
 			mainView.setCenter(viewCenter);
 			//window->setView(mainView);
 			target->setView(mainView);
@@ -355,6 +417,12 @@ void GameRenderer::updateParticleSystems(int dt)
 		}
 	}
 }
+
+void GameRenderer::drawUI(sf::RenderTarget * target){
+	playerUIDrawable->update();
+	target->draw(*playerUIDrawable);
+}
+
 sf::Sprite GameRenderer::renderFrame()
 {
 	_frame->clear();

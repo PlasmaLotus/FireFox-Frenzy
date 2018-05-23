@@ -1,7 +1,6 @@
 #ifndef _AOE_PROJECTILE_
 #define _AOE_PROJECTILE_
 
-
 #include "../Projectile.h"
 class AOEProjectile :
 	public Projectile

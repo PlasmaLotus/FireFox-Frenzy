@@ -15,11 +15,12 @@ Updated Feb 11, 2018
 #include <vector>
 class PlayerDrawableAlert;
 class PlayerDrawableDashPosition;
+class GameRenderer;
 class PlayerDrawable : public sf::Drawable {
 public:
 
 	//PlayerDrawable();
-	PlayerDrawable(Player *player, sf::Texture& tx, sf::Font ft);
+	PlayerDrawable(Player *pl, GameRenderer* renderer, sf::Texture& tx, sf::Font ft);
 	~PlayerDrawable();
 
 	// Hérité via Drawable
@@ -62,6 +63,7 @@ public:
 	void addAlert(std::string text);
 	void setDisplayHitboxes(bool display);
 	bool _displayHitboxes{ true };
+	GameRenderer* renderer;
 };
 
 

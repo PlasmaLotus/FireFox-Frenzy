@@ -18,4 +18,4 @@ public:
 	void handleCollision(Entity *e);
 };
 
-#endif
+#endif // Projectile Bubble
