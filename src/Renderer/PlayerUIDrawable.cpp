@@ -186,7 +186,7 @@ void PlayerUIDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) 
 		if (game != nullptr) {
 			std::string timerString = "";
 			if (game->gameState == GameCurrentState::COUNTDOWN) {
-				int seconds = game->countdownTimer / 1000;
+				int seconds = game->countdownTimer / 1000 + 1;
 				timerString += "Countdown: ";
 				timerString += std::to_string(seconds);
 				//timerString += std::to_string(game->_countdownIt);

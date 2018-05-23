@@ -122,7 +122,7 @@ void StateManager::quit() {
 
 void StateManager::startTransition(){
 	_stateTransition = true;
-	_stateTransitionTime = 500;//1 second
+	_stateTransitionTime = 1000;//1 second
 	_stateTransitionTimer.restart();
 }
 
@@ -242,7 +242,7 @@ void StateManager::run(){
 				_stateTransitionTime -= elapsedTime.asMicroseconds();
 				//_stateTransitionTimer += currentTime.getElapsedTime();
 				//if (_stateTransitionTime <= 0) {
-				if (_stateTransitionTimer.getElapsedTime() >= sf::milliseconds(750)){
+				if (_stateTransitionTimer.getElapsedTime() >= sf::milliseconds(200)){
 					_stateTransition = false;
 					_stateTransitionTime = 0;
 					_stateTransitionTimer.restart();
