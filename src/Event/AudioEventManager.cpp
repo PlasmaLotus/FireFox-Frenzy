@@ -103,7 +103,7 @@ bool AudioEventManager::_initSoundBuffers() {
 	_soundBufferMap[AudioEvent::PlayerPickupAudio] = buffer;
 
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/Pickup252.wav"))
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/pickup_weapon.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::PlayerPickupPowerupAudio] = buffer;
 

@@ -18,7 +18,7 @@ StateManager::StateManager() :
 	_states.push(_currentState);
 	eventManager.setAudioEventManager(&audioEventManager);
 	//m_alertManager = Alerts("Assets\fonts\Minecraft.ttf", 18, window.getSize());
-	//FreeConsole();
+	FreeConsole();
 }
 
 int StateManager::getWindowWidth()
@@ -122,7 +122,7 @@ void StateManager::quit() {
 
 void StateManager::startTransition(){
 	_stateTransition = true;
-	_stateTransitionTime = 3000;//1 second
+	_stateTransitionTime = 500;//1 second
 	_stateTransitionTimer.restart();
 }
 
