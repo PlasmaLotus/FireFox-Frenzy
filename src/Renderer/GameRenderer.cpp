@@ -53,8 +53,9 @@ bool GameRenderer::initRenderer() {
 	_displayHitboxes = true;
 	*/
 	font = new sf::Font();
-	if (!font->loadFromFile("Assets/Fonts/Minecraft.ttf")) {
-		printf("Unable to load Minecraft Font PNG\n");
+	//if (!font->loadFromFile("Assets/Fonts/Minecraft.ttf")) {
+	if (!font->loadFromFile("Assets/Fonts/arial.ttf")) {
+		printf("Unable to load Font\n");
 		success = false;
 	}
 	

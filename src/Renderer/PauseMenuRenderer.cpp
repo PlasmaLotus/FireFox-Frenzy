@@ -48,7 +48,8 @@ bool PauseMenuRenderer::initRenderer() {
 	foreground.setOrigin(foreground.getSize().x / 2, foreground.getSize().y / 2);
 	foreground.setPosition(_windowWidth / 2, _windowHeight / 2);
 	
-	if (!font.loadFromFile("Assets\fonts\Minecraft.ttf")) {
+	//if (!font.loadFromFile("Assets\fonts\Minecraft.ttf")) {
+	if (!font.loadFromFile("Assets\fonts\arial.ttf")) {
 		success = false;
 		fontLoaded = false;
 	}

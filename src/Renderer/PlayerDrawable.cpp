@@ -46,10 +46,10 @@ PlayerDrawable::PlayerDrawable(Player *pl, GameRenderer* renderer, sf::Texture& 
 	*/
 
 	//m__font = sf::Font(m_font);
-	if (!m_font.loadFromFile("Assets/Fonts/Minecraft.ttf")) {
-		printf("Unable to load Minecraft Font PNG\n");
+	//if (!m_font.loadFromFile("Assets/Fonts/Minecraft.ttf")) {
+	if (!m_font.loadFromFile("Assets/Fonts/arial.ttf")) {
+		printf("Unable to load Font \n");
 	}
-
 	/*
 	m_hpText = sf::Text("HP", m_font, 12);
 	m_dashText = sf::Text("Dash", m_font, 12);

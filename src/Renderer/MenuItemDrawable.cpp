@@ -18,8 +18,9 @@ MenuItemDrawable::MenuItemDrawable(MenuItem *menuItem, int px, int py):
 	shape.setPosition(posX, posY);
 	shape.setFillColor(sf::Color::Red);
 	
-	if (!m_font.loadFromFile("./Assets/fonts/Minecraft.ttf")) {
-		printf("Unable to load Minecraft Font\n");
+	//if (!m_font.loadFromFile("./Assets/fonts/Minecraft.ttf")) {
+	if (!m_font.loadFromFile("./Assets/fonts/arial.ttf")) {
+		printf("Unable to load Font\n");
 	}
 	
 	m_menuItemText = sf::Text("MenuItem", m_font, 12);

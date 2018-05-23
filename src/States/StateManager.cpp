@@ -9,7 +9,8 @@ StateManager::StateManager() :
 	_stateTransition(false),
 	_backToTitle(false),
 	_stateTransitionTime(0),
-	m_alertManager("Assets/Fonts/Minecraft.ttf", 18, window.getView().getSize())
+	//m_alertManager("Assets/Fonts/Minecraft.ttf", 18, window.getView().getSize())
+	m_alertManager("Assets/Fonts/arial.ttf", 18, window.getView().getSize())
 {
 	//window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Neon Galaxy");
 	window.create(sf::VideoMode::getFullscreenModes()[0], "Neon Galaxy", sf::Style::Fullscreen);

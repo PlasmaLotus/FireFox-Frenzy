@@ -43,7 +43,8 @@ bool MenuRenderer::initRenderer() {
 	*/
 	nbMenuItems = menu->getItemsSize();
 
-	if (!font.loadFromFile("Assets\fonts\Minecraft.ttf")) {
+	//if (!font.loadFromFile("Assets\fonts\Minecraft.ttf")) {
+	if (!font.loadFromFile("Assets\fonts\arial.ttf")) {
 		fontLoaded = false;
 	}
 

@@ -68,8 +68,9 @@ PlayerUIDrawable::PlayerUIDrawable(GameLogic* game, Player *pl,Player* pl2,Playe
 	}
 	*/
 	//m__font = sf::Font(m_font);
-	if (!m_font.loadFromFile("Assets/Fonts/Minecraft.ttf")) {
-		printf("Unable to load Minecraft Font PNG\n");
+	//if (!m_font.loadFromFile("Assets/Fonts/Minecraft.ttf")) {
+	if (!m_font.loadFromFile("Assets/Fonts/arial.ttf")) {
+		printf("Unable to load Font \n");
 	}
 
 	/*
