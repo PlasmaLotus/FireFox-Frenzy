@@ -8,7 +8,9 @@ Developped by PlasmaLotus
 #include <map>
 
 enum AudioEvent {NoEventAudio, DefaultEventAudio, TestEventAudio, MenuItemIncreaseAudio, MenuItemDecreaseAudio, MenuSelectionAudio, MenuSelectionErrorAudio, MenuItemChangeAudio, MenuReturnAudio, AudioCountdownStart, AudioCountdownTick, 
-	ProjectileSpawnAudio, AudioShotCharge, AudioShotChargeLow, AudioShotChargeMid, AudioShotChargeMax, PlayerHurtAudio, PlayerPickupAudio, PlayerPickupPowerupAudio, PlayerPickupEnergyAudio, PlayerPowerUpLossAudio, ShieldOnAudio, ShieldOffAudio, ShieldHitAudio} ;
+	ProjectileSpawnAudio, AudioShotCharge, AudioShotChargeLow, AudioShotChargeMid, AudioShotChargeMax, PlayerHurtAudio, PlayerPickupAudio, PlayerPickupPowerupAudio, PlayerPickupEnergyAudio, PlayerPowerUpLossAudio, ShieldOnAudio, ShieldOffAudio, ShieldHitAudio,
+	ProjectileSpawnRapidAudio, ProjectileSpawnFireAudio, ProjectileSpawnBubbleAudio, ProjectileBubbleBounceAudio
+} ;
 class Entity;
 
 class AudioEventSound : public sf::Sound {
@@ -37,6 +39,7 @@ public:
 	void handleEvents(int dt);
 	void setVolume(float vol);
 	float getVolume();
+	void restartMusic();
 private:
 	static const int SOUNDS_COUNT{ 16 };
 	std::map<AudioEvent, sf::SoundBuffer> _soundBufferMap;
@@ -45,6 +48,7 @@ private:
 	AudioEventSound __sounds[SOUNDS_COUNT];
 	bool _initSoundBuffers();
 	float _volume;
+	sf::Music music;
 };
 
 #endif // AUDIO EVENT MANAGER

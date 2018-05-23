@@ -91,6 +91,9 @@ bool GameRenderer::initRenderer() {
 
 	playerDrawable1 = new PlayerDrawable(game->getPlayer(1),this, *playerTexture, *font);
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2),this, *playerTexture, *font);
+	playerDrawable3 = new PlayerDrawable(game->getPlayer(3), this, *playerTexture, *font);
+	playerDrawable4 = new PlayerDrawable(game->getPlayer(4), this, *playerTexture, *font);
+
 	//playerDrawable2->playerColor = sf::Color::Magenta;
 	
 	/*
@@ -193,9 +196,13 @@ void GameRenderer::update(){
 	/*Update players*/
 	playerDrawable1->update();
 	playerDrawable2->update();
+	playerDrawable3->update();
+	playerDrawable4->update();
 
 	playerDrawable1->setDisplayHitboxes(_displayHitboxes);
 	playerDrawable2->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable3->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable4->setDisplayHitboxes(_displayHitboxes);
 
 
 	/*Update Map*/
@@ -208,6 +215,8 @@ void GameRenderer::update(){
 void GameRenderer::reset() {
 	playerDrawable1 = new PlayerDrawable(game->getPlayer(1),this, *playerTexture, *font);
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2),this, *playerTexture, *font);
+	playerDrawable3 = new PlayerDrawable(game->getPlayer(3), this, *playerTexture, *font);
+	playerDrawable4 = new PlayerDrawable(game->getPlayer(4), this, *playerTexture, *font);
 
 	if (playerUIDrawable != nullptr) {
 		delete playerUIDrawable;
@@ -224,6 +233,8 @@ void GameRenderer::drawPlayers(sf::RenderTarget* target){
 	*/
 	target->draw(*playerDrawable1);
 	target->draw(*playerDrawable2);
+	target->draw(*playerDrawable3);
+	target->draw(*playerDrawable4);
 }
 
 void GameRenderer::drawProjectiles(sf::RenderTarget* target){

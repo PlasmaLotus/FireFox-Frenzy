@@ -99,7 +99,7 @@ void PlayerUIDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) 
 	//sf::Vector2f targetCenter = target.getView().getCenter();
 	sf::Vector2f targetSize = view->getSize();
 	sf::Vector2f targetCenter = view->getCenter();
-	float fontSize = targetSize.x / 100;
+	float fontSize = targetSize.x / 75;
 	sf::Vector2f UIBackgroundSize( targetSize.x / 3.f, targetSize.y / 6.f );
 	//sf::Vector2f _tab[4]{ {targetCenter.x - targetCenter.x / 2} };
 	std::vector<sf::Vector2f> UIBackgroundPositions;
@@ -184,8 +184,33 @@ void PlayerUIDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) 
 
 		/*Timer*/
 		if (game != nullptr) {
-			int minutes = game->_totalDT % 60;
+			std::string timerString = "";
+			if (game->gameState == GameCurrentState::COUNTDOWN) {
+				int seconds = game->countdownTimer / 1000;
+				timerString += "Countdown: ";
+				timerString += std::to_string(seconds);
+				//timerString += std::to_string(game->_countdownIt);
+			}
+			else if (game->gameState == GameCurrentState::RUNNING) {
+				int timeLeft = game->GAME_MAXIMUM_GAME_TIME - game->_totalDT;
+				int totalSeconds = timeLeft / 1000;
+				int minutes = std::floor(totalSeconds / 60);
+				int seconds = (totalSeconds - minutes * 60);
+				timerString += "Time: ";
+				timerString += std::to_string(minutes);
+				timerString += ":";
+				timerString += std::to_string(seconds);
+			}
+			else if (game->gameState == GameCurrentState::ENDED) {
+				timerString += "Game Over!";
+			}
+			
+			sf::Text timerText(timerString, m_font, fontSize * 2);
+			timerText.setFillColor(sf::Color::Yellow);
+			//UIBackgroundPositions.push_back(sf::Vector2f(targetCenter.x - targetSize.x / 2, targetCenter.y - targetSize.y / 2));
 
+			timerText.setPosition(targetCenter.x - timerText.getGlobalBounds().width / 2, targetCenter.y - targetSize.y / 2 + targetSize.y / 16);//timerText.getGlobalBounds().width / 2
+			target.draw(timerText);
 		}
 
 

@@ -2,7 +2,7 @@
 #define __BubblePowerUp__
 
 #include "Powerup.h"
-#include "../Projectiles/ProjectileBubble.h"
+//#include "../Projectiles/ProjectileBubble.h"
 
 class BubblePowerUp: public PowerUp {
 public:

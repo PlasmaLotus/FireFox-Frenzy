@@ -1,7 +1,6 @@
 #ifndef __RapidFirePowerUp__
 #define __RapidFirePowerUp__
 
-#include "../Projectile.h"
 #include "Powerup.h"
 //enum PowerUpType { Normal, Fire, Ice, Plasma };
 //class GameLogic;

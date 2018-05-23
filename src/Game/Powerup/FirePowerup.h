@@ -2,7 +2,7 @@
 #define __FirePowerUp__
 
 #include "Powerup.h"
-#include "../Projectiles/ProjectileFire.h"
+//#include "../Projectiles/ProjectileFire.h"
 
 class FirePowerUp: public PowerUp {
 public:

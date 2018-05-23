@@ -13,7 +13,7 @@ ProjectileFire::ProjectileFire(int id, float x, float y) :
 	AOEProjectile(id, x, y)
 {
 	m_AOEProjectileSpawnTimer = 0;
-	lifetime = 500;
+	lifetime = 600;
 	power = 10;
 	m_AOEProjectileSpawnCounter = GameLogic::PROJECTILE_FIRE_AOE_SPAWN_INTERVAL;
 	_spawnNewAOE();

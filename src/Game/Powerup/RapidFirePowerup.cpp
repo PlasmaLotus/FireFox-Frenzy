@@ -1,13 +1,14 @@
 #include "RapidFirePowerUp.h"
 #include "../GameLogic.h"
-//#include "../Projectiles\ProjectileBubble.h"
+
+#include "../../States/StateManager.h"
 
 
 RapidFirePowerUp::RapidFirePowerUp(GameLogic* gc):
 	PowerUp(gc)
 {
 	altSpawn = true;
-	minimumChargeTime = GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME;
+	minimumChargeTime = GameLogic::PLAYER_RAPIDFIRE_PROJECTILE_MINIMUM_CHARGE_TIME;
 	maximumChargeTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
 	lifetime = 5000;
 }
@@ -70,8 +71,8 @@ void RapidFirePowerUp::spawnProjectile(int id, float x, float y, float orientati
 	altSpawn = !altSpawn;
 	_projectileSpawned = true;
 
-	//return nullptr;
-	//ga
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawnRapid));
+
 }
 
 Projectile * RapidFirePowerUp::getProjectileAlt(int id, float x, float y, float orientation)

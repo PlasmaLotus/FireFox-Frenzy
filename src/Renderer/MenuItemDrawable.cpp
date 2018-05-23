@@ -14,7 +14,7 @@ MenuItemDrawable::MenuItemDrawable(MenuItem *menuItem, int px, int py):
 	posX(px),
 	posY(py)
 {
-	shape = sf::RectangleShape(sf::Vector2f(100, 50));
+	shape = sf::RectangleShape(sf::Vector2f(75, 50));
 	shape.setPosition(posX, posY);
 	shape.setFillColor(sf::Color::Red);
 	

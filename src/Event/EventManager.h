@@ -5,9 +5,10 @@
 #include "../Renderer/GameRenderer.h"
 #include "../Game/GameLogic.h"
 #include "AudioEventManager.h"
-enum EventType{NoEvent, GameEnd, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, 
+enum EventType{NoEvent, GameStart, GameEnd, ProjectileSpawn, CollisionGeneral, Countdown3, Countdown2, Countdown1, CountdownStart, 
 	GainAmmo, LoseAmmo, ShieldHit, OutOfAmmo, TimeLimit, LastManStanding, ShieldOn, ShieldOff,
 MenuItemIncrease, MenuItemDecrease, MenuSelection, MenuSelectionError, MenuItemChange, MenuReturn, PauseMenuEnter,
+ProjectileSpawnFire, ProjectileSpawnBubble, ProjectileSpawnRapid, ProjectileBubbleBounce,
 PlayerLowHP, PlayerShotChargeStart, PlayerShotChargeStartMid, PlayerShotChargeStartMax, PlayerShotChargeEnd,
 PlayerHit, PlayerPickup, PlayerPickupEnergy, PlayerPickupPowerUp, PlayerPowerUpLoss
 };

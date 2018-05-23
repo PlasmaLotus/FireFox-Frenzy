@@ -11,11 +11,14 @@ StateManager::StateManager() :
 	_stateTransitionTime(0),
 	m_alertManager("Assets/Fonts/Minecraft.ttf", 18, window.getView().getSize())
 {
-	window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Neon Galaxy");
+	//window.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Neon Galaxy");
+	window.create(sf::VideoMode::getFullscreenModes()[0], "Neon Galaxy", sf::Style::Fullscreen);
+
 	_currentState = new TitleScreen(&window);
 	_states.push(_currentState);
 	eventManager.setAudioEventManager(&audioEventManager);
 	//m_alertManager = Alerts("Assets\fonts\Minecraft.ttf", 18, window.getSize());
+	//FreeConsole();
 }
 
 int StateManager::getWindowWidth()
@@ -88,6 +91,7 @@ void StateManager::goBackTo(State *state) {
 }
 
 void StateManager::goBackToTitle(){
+	window.setView(window.getDefaultView());
 	if (_states.size() > 1) {
 		//_removeFromStack();
 		_deletedState = true;

@@ -1,6 +1,7 @@
 #include "ProjectileBubble.h"
 #include "../SquareEntity.h"
 #include "../Map.h"
+#include "../../States/StateManager.h"
 #include <math.h>
 
 ProjectileBubble::ProjectileBubble():
@@ -14,7 +15,7 @@ ProjectileBubble::ProjectileBubble(int id) :
 ProjectileBubble::ProjectileBubble(int id, float x, float y) :
 	Projectile(id, x, y)
 {
-	lifetime = 7500;
+	lifetime = 5000;
 	durability = 7;
 }
 
@@ -162,5 +163,6 @@ void ProjectileBubble::handleCollision(Entity * e)
 	// Vector perpendicular to (x, y) is (-y, x)
 	//tangentVector.y = -(circle2.X - circle1.X);
 	//tangentVector.x = circle2.Y - circle1.Y;
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileBubbleBounce));
 
 }

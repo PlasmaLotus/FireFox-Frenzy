@@ -2,12 +2,13 @@
 #include "../GameLogic.h"
 #include "../Projectiles\ProjectileFire.h"
 
+#include "../../States/StateManager.h"
 
 FirePowerUp::FirePowerUp(GameLogic* gc):
 	PowerUp(gc)
 {
 	lifetime = 5000;
-	minimumChargeTime = GameLogic::PLAYER_PROJECTILE_BUBBLE_MINIMUM_CHARGE_TIME;
+	minimumChargeTime = GameLogic::PLAYER_PROJECTILE_FIRE_MINIMUM_CHARGE_TIME;
 	maximumChargeTime = GameLogic::PLAYER_PROJECTILE_BUBBLE_MAXIMUM_CHARGE_TIME;
 }
 
@@ -46,8 +47,8 @@ void FirePowerUp::spawnProjectile(int id, float x, float y, float orientation)
 	_projectilesToSpawnThisTick--;
 	_game->addEntity(p);
 	_projectileSpawned = true;
-	//return nullptr;
-	//ga
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawnFire, p));
+
 }
 
 Projectile * FirePowerUp::getProjectileAlt(int id, float x, float y, float orientation)

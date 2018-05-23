@@ -34,6 +34,14 @@ bool AudioEventManager::_initSoundBuffers() {
 	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
 	*/
 
+	if (!music.openFromFile("./Assets/Sounds/Geometry Wars Galaxies - Coop _by audioantics [soundtake.net].ogg")) {
+		success = false;
+	}
+	music.setVolume(70.f);
+	music.setLoop(true);
+	music.play();
+	
+
 	/*Game Audio*/
 
 	buffer = sf::SoundBuffer();
@@ -60,9 +68,32 @@ bool AudioEventManager::_initSoundBuffers() {
 	if (!buffer.loadFromFile("./Assets/Sounds/Laser3.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::ProjectileSpawnAudio] = buffer;
+	// __
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Laser3.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ProjectileSpawnRapidAudio] = buffer;
 
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/freesound/170141__timgormly__8-bit-bump.aiff"))
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/SFX31_impact.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ProjectileSpawnFireAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/SFX04_ineffective.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ProjectileSpawnBubbleAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Bounce-SoundBible.com-12678623.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::ProjectileBubbleBounceAudio] = buffer;
+
+	//	ProjectileSpawnRapidAudio, ProjectileSpawnFireAudio, ProjectileSpawnBubbleAudio, ProjectileBubbleBounceAudio
+
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/Enemy_red_hit.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::PlayerHurtAudio] = buffer;
 
@@ -70,6 +101,17 @@ bool AudioEventManager::_initSoundBuffers() {
 	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/pickup_weapon.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::PlayerPickupAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Pickup252.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::PlayerPickupPowerupAudio] = buffer;
+
+	buffer = sf::SoundBuffer();
+	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/pickup_weapon.wav"))
+		success = false;
+	_soundBufferMap[AudioEvent::PlayerPickupEnergyAudio] = buffer;
+
 
 	buffer = sf::SoundBuffer();
 	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/Shield_on.wav"))
@@ -90,6 +132,7 @@ bool AudioEventManager::_initSoundBuffers() {
 	if (!buffer.loadFromFile("./Assets/Sounds/Geometry Wars SFX/multiplier.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::PlayerPowerUpLossAudio] = buffer;
+	
 
 	/*Menu Sounds*/
 	buffer = sf::SoundBuffer();
@@ -124,12 +167,12 @@ bool AudioEventManager::_initSoundBuffers() {
 
 	/*Other Sounds*/
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/countdown.wav"))
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/SFX18_explosiony.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::AudioCountdownTick] = buffer;
 
 	buffer = sf::SoundBuffer();
-	if (!buffer.loadFromFile("./Assets/Sounds/go.wav"))
+	if (!buffer.loadFromFile("./Assets/Sounds/TFH/SFX06_apple_eat.wav"))
 		success = false;
 	_soundBufferMap[AudioEvent::AudioCountdownStart] = buffer;
 
@@ -321,6 +364,12 @@ float AudioEventManager::getVolume()
 	return _volume;
 }
 
+void AudioEventManager::restartMusic()
+{
+	music.stop();
+	music.setPlayingOffset(sf::Time());
+	music.play();
+}
 
 AudioEventSound::AudioEventSound():
 	AudioEventSound(nullptr){

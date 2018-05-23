@@ -1,6 +1,7 @@
 #include "NormalPowerup.h"
 #include "../GameLogic.h"
-//#include "../Projectiles\ProjectileBubble.h"
+
+#include "../../States/StateManager.h"
 
 
 NormalPowerUp::NormalPowerUp(GameLogic* gc):
@@ -9,7 +10,7 @@ NormalPowerUp::NormalPowerUp(GameLogic* gc):
 	//_game = gc;
 	minimumChargeTime = GameLogic::PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME;
 	maximumChargeTime = GameLogic::PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME;
-	lifetime = 100000;
+	lifetime = 1000000;
 }
 
 NormalPowerUp::~NormalPowerUp() {
@@ -18,7 +19,7 @@ NormalPowerUp::~NormalPowerUp() {
 void NormalPowerUp::update(int dt){
 	PowerUp::update(dt);
 	if (lifetime <= 0) {
-		lifetime = 100000;
+		lifetime = 1000000;
 	}
 }
 
@@ -46,8 +47,8 @@ void NormalPowerUp::spawnProjectile(int id, float x, float y, float orientation)
 	_projectilesToSpawnThisTick--;
 	_game->addEntity(p);
 	_projectileSpawned = true;
-	//return nullptr;
-	//ga
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn));
+
 }
 
 Projectile * NormalPowerUp::getProjectileAlt(int id, float x, float y, float orientation)

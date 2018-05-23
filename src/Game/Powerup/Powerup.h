@@ -2,7 +2,7 @@
 #define __PowerUp__
 
 #include "../Projectile.h"
-//enum PowerUpType { Normal, Fire, Ice, Plasma };
+
 class GameLogic;
 class PowerUp {
 public:

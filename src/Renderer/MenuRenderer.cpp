@@ -65,12 +65,19 @@ bool MenuRenderer::initRenderer() {
 	debugText.setStyle(sf::Text::Bold | sf::Text::Underlined);
 	debugText.setPosition(50, 50);
 	*/
+	/*
+	float x = window->getView().getCenter().x;
+	float y = window->getView().getCenter().y;
+	//sf::Vector2f targetSize(window->getViewport(window->getView()).width, window->getViewport(window->getView()).height);
+	*/
+	sf::Vector2f targetSize = window->getView().getSize();
+	sf::Vector2f targetCenter = window->getView().getCenter();// ->getView()->getCenter();
 
 	for (int i = 0; i < menu->getItemsSize(); i++) {
 		//menuItems[i] = sf::RectangleShape(sf::Vector2f(100, 50));
 		//menuItems[i].setPosition(50, i * 100);
 		//menuItems[i].setFillColor(sf::Color::Magenta);
-		_menuItems.push_back(MenuItemDrawable(&menu->getItems().at(i), 50, i*100));
+		_menuItems.push_back(MenuItemDrawable(&menu->getItems().at(i), targetCenter.x, targetCenter.y - (75 * nbMenuItems) +  i*75));
 		//_menuItems[i].setFont(font);
 	}
 	bool success = false;
@@ -105,17 +112,6 @@ void MenuRenderer::draw()
 	*/
 	int y = 100;
 
-	for (unsigned i = 0; i < menu->getItemsSize(); ++i) {
-		y += 18;
-		/*
-		std::string text = "XDXDXDXD";
-		sf::Text textDrawable;
-		textDrawable.setString("XDXDXDXD");
-		textDrawable.setFillColor(sf::Color::Magenta);
-		textDrawable.setPosition(sf::Vector2f(20, y));
-		window->draw(textDrawable);
-		*/
-	}
 
 	//window->draw(debugText);
 	for (int i = 0; i < menu->getItemsSize(); i++) {

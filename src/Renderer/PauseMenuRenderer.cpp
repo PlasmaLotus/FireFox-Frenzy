@@ -27,12 +27,17 @@ void PauseMenuRenderer::render()
 }
 
 bool PauseMenuRenderer::initRenderer() {
-	bool success = true;
+	
+	//window->setView(window->getDefaultView());
+	MenuRenderer::initRenderer();
+	
+	bool success = false;
+	/*
 	nbMenuItems = menu->getItemsSize();
 	int menuItemTabulation = 25;
 
-	_windowHeight = window->getDefaultView().getSize().y;
-	_windowWidth = window->getDefaultView().getSize().x;
+	_windowHeight = window->getView().getSize().y;
+	_windowWidth = window->getView().getSize().x;
 
 	background = sf::RectangleShape(sf::Vector2f(_windowWidth, _windowHeight));
 	background.setFillColor(sf::Color(255, 255, 255, 100));
@@ -57,7 +62,8 @@ bool PauseMenuRenderer::initRenderer() {
 		menuItems[i].setPosition(menuItemPosX, i * menuItemHeight + (i + 1) * menuItemTabulation);
 		_menuItems.push_back(MenuItemDrawable(&menu->getItems().at(i), menuItemPosX, i * menuItemHeight + (i + 1) * menuItemTabulation));
 	}
-
+	*/
+	
 	return success;
 }
 
@@ -78,16 +84,9 @@ void PauseMenuRenderer::update() {
 	}
 }
 void PauseMenuRenderer::draw(){
-	window->setView(window->getDefaultView());
+	//window->setView(window->getDefaultView());
 	for (int i = 0; i < menu->getItemsSize(); i++) {
-		/*
-		if (menu->getSelection() == i){
-			menuItems[i].setFillColor(sf::Color::Cyan);
-		}
-		else {
-			menuItems[i].setFillColor(sf::Color::Magenta);
-		}
-		*/
+
 		window->draw(_menuItems.at(i));
 	}
 }

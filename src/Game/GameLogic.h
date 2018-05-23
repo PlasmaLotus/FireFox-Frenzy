@@ -23,6 +23,7 @@ public:
 	int32_t dt;
 	GameCurrentState gameState;
 	GameLogic();
+	GameLogic(int nbPlayers);
 	~GameLogic();
 	void reset();
 	void tick(int dt);
@@ -32,6 +33,7 @@ public:
 	Player &findPlayer(int id);
 	Entity &findEntityCopy(int id);
 	static const int NB_PLAYERS{ 2 };
+	int _nbPlayers;
 	Player *getPlayer(int playerNumber);
 	Player getPlayerCopy(int playerNumber);
 	Map map;
@@ -45,7 +47,7 @@ public:
 	bool _gameEnd;
 	bool _init;
 
-	static const int GAME_MAXIMUM_GAME_TIME{ 1200000 };//120000 = 2 mins
+	static const int GAME_MAXIMUM_GAME_TIME{ 300000 };//120000 = 2 mins
 	//static const int GAME_TIME_LIMIT_MAXIMUM{ 120000 };
 
 	static const int PLAYER_COLLISION_HITBOX_WIDTH{ 52 };
@@ -54,7 +56,7 @@ public:
 	static const int PLAYER_DISPLAY_HITBOX_HEIGHT{ 40 };
 	static int const PLAYER_AMMO_RECHARGE_COOLDOWN{ 500 }; //as miliseconds
 	static int const PLAYER_MAX_AMMO{ 1000 };
-	static int const PLAYER_BASE_AMMO{ 700 };
+	static int const PLAYER_BASE_AMMO{ 500 };
 
 	static const int PLAYER_DASH_DURATION{ 150 };
 	static const int PLAYER_DASH_RECHARGE_COOLDOWN{ 250 };
@@ -86,17 +88,20 @@ public:
 	static const float PLAYER_SHIELD_RADIUS;
 
 	static const int PLAYER_PROJECTILE_MAXIMUM_ENERGY_COST{ 100 };
-	static const int PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME{ 10 };
+	static const int PLAYER_PROJECTILE_MINIMUM_CHARGE_TIME{ 35 };
 	static const int PLAYER_PROJECTILE_MAXIMUM_CHARGE_TIME{ 2000 };
 
 	static const int PLAYER_PROJECTILE_BUBBLE_MINIMUM_CHARGE_TIME{ 100 };
 	static const int PLAYER_PROJECTILE_BUBBLE_MAXIMUM_CHARGE_TIME{ 2000 };
+	static const int PLAYER_RAPIDFIRE_PROJECTILE_MINIMUM_CHARGE_TIME{ 10 };
+	static const int PLAYER_PROJECTILE_FIRE_MINIMUM_CHARGE_TIME{ 175 };
+
 
 	static const int PROJECTILE_MINIMUM_LIFETIME{ 1000 };
 
 	static const int PLAYER_BASE_HP{100};
 	static const int PLAYER_SHOOT_COOLDOWN{ 75 };
-	static const int PLAYER_DASH_MAXIMUM_ENERGY_COST{ 100 };
+	static const int PLAYER_DASH_MAXIMUM_ENERGY_COST{ 50 };
 	static const int PLAYER_DASH_MAXIMUM_CHARGE_TIME{ 1000 };
 	static const int PLAYER_DASH_MINIMUM_CHARGE_TIME{ 10 };
 
@@ -104,20 +109,20 @@ public:
 	static const float ENTITY_MINIMUM_WIDTH;
 	static const float ENTITY_MINIMUM_HEIGHT;
 
-	static const int ENERGY_MAX_AURA{ 200 };
-	static const int ENERGY_MINIMUM_AURA{ 7 };
+	static const int ENERGY_MAX_AURA{ 100 };
+	static const int ENERGY_MINIMUM_AURA{ 10 };
 	static const float ENERGY_MAX_RADIUS;
 	static const float ENERGY_MINIMUM_RADIUS;
 	static const int ENERGY_ITEM_COOLDOWN{ 3000 };
 	static const int ITEM_MINIMUM_COOLDOWN_TIME{ 1000 };
 	static const int ITEM_MINIMUM_LIFETIME{ 10000 };
-	static const int GAME_ENERGY_SPAWN_TIMER{ 2500 };
-	static const int GAME_ENERGY_SPAWN_AMOUNT{ 10 };
+	static const int GAME_ENERGY_SPAWN_TIMER{ 4000 };
+	static const int GAME_ENERGY_SPAWN_AMOUNT{ 8 };
 	static const int GAME_ENERGY_SPAWN_AURA{ 100 };
-	static const int GAME_ENERGY_LIFETIME{ 5000 };
+	static const int GAME_ENERGY_LIFETIME{ 7500 };
 
-	static const int GAME_POWERUP_SPAWN_TIMER{ 5000 };
-	static const int GAME_POWERUP_SPAWN_AMOUNT{ 6 };
+	static const int GAME_POWERUP_SPAWN_TIMER{ 6000 };
+	static const int GAME_POWERUP_SPAWN_AMOUNT{ 5 };
 	static const int GAME_POWERUP_LIFETIME{ 7500 };
 
 	static const int GAME_COLLISION_HITLAG{ 8 };
@@ -129,7 +134,7 @@ public:
 
 
 	/*Special Projectiles*/
-	static const int PROJECTILE_FIRE_AOE_SPAWN_INTERVAL{ 100 };
+	static const int PROJECTILE_FIRE_AOE_SPAWN_INTERVAL{ 90 };
 
 	
 private:
@@ -145,6 +150,7 @@ private:
 	void _spawnPowerUps();
 	int _spawnTimerEnergy;
 	int _spawnTimerPowerup;
+
 };
 
 #endif // !_Game_

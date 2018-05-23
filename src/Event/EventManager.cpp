@@ -82,14 +82,38 @@ bool EventManager::__handleEvent(Event event){
 		break;
 	}
 	/*Game Events*/
+	case EventType::GameStart: {
+		audio->restartMusic();
+		break;
+	}
+	case EventType::GameEnd: {
+		break;
+	}
 	case EventType::ProjectileSpawn: {
 		//Entity *e = game->findEntity(id);
 
 		Projectile* p = dynamic_cast<Projectile*>(event.entity);
 		__handleEventProjectileSpawn(p);
-		printf("Event, PROJECTILE SPAWN -- PROJECTILE SPAWN -- PROJECTILE SPAWN!!!\n : ID: %d", event._id);
+		//printf("Event, PROJECTILE SPAWN -- PROJECTILE SPAWN -- PROJECTILE SPAWN!!!\n : ID: %d", event._id);
 		break;
-		}
+	}
+	case EventType::ProjectileSpawnRapid: {
+		audio->queueAudioEvent(AudioEvent::ProjectileSpawnRapidAudio, event.entity, false);
+		break;
+	}
+	case EventType::ProjectileSpawnFire: {
+		audio->queueAudioEvent(AudioEvent::ProjectileSpawnFireAudio, event.entity, false);
+		break;
+	}
+	case EventType::ProjectileSpawnBubble: {
+		audio->queueAudioEvent(AudioEvent::ProjectileSpawnBubbleAudio, event.entity, false);
+		break;
+	}
+	case EventType::ProjectileBubbleBounce: {
+		audio->queueAudioEvent(AudioEvent::ProjectileBubbleBounceAudio, event.entity, false);
+		break;
+	}
+	/*Countdown*/
 	case EventType::Countdown1:
 	case EventType::Countdown2:
 	case EventType::Countdown3: {
@@ -137,7 +161,25 @@ bool EventManager::__handleEvent(Event event){
 	}
 
 	case EventType::PlayerPickupEnergy:
+	{
+		GameRenderer* gr{ dynamic_cast<GameRenderer*>(renderer) };
+		if (gr != nullptr) {
+			gr->playerHitDisplay(event.entity->posX, event.entity->posY);
+		}
+		audio->queueAudioEvent(AudioEvent::PlayerPickupEnergyAudio, event.entity, false);
+
+		break;
+	}
 	case EventType::PlayerPickupPowerUp:
+	{
+		GameRenderer* gr{ dynamic_cast<GameRenderer*>(renderer) };
+		if (gr != nullptr) {
+			gr->playerHitDisplay(event.entity->posX, event.entity->posY);
+		}
+		audio->queueAudioEvent(AudioEvent::PlayerPickupPowerupAudio, event.entity, false);
+
+		break;
+	}
 	case EventType::PlayerPickup: {
 		GameRenderer* gr{ dynamic_cast<GameRenderer*>(renderer) };
 		if (gr != nullptr) {

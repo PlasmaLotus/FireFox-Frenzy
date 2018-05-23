@@ -38,7 +38,7 @@ public:
 	sf::Color playerColor;
 	sf::RectangleShape playerShape;
 	sf::CircleShape cursorShape;
-	std::vector<sf::RectangleShape>dashOffsetShapes;
+	//std::vector<sf::RectangleShape>dashOffsetShapes;
 
 	void setPlayer(Player *p);
 
@@ -59,7 +59,7 @@ public:
 	//sf::Shader m_shader;
 	//bool m_shaderLoaded;
 	std::vector<PlayerDrawableAlert> m_alerts;
-	std::vector<PlayerDrawableDashPosition> m_dashPositions;
+	//std::vector<PlayerDrawableDashPosition> m_dashPositions;
 	void addAlert(std::string text);
 	void setDisplayHitboxes(bool display);
 	bool _displayHitboxes{ true };

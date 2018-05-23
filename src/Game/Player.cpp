@@ -533,7 +533,7 @@ void Player::_handleShooting(int power) {
 	}
 	*/
 	ability->spawnProjectile(getID(), posX, posY, cursorOrientation);
-	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn));
+	//StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawn));
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerShotChargeEnd, this));
 
 	shootHeld = false;
@@ -588,11 +588,17 @@ void Player::handleShield(int dt)
 {
 	//shieldActive = _shieldActive;
 	if (!_shieldActive) {
+		if (shieldActive) {
+			StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldOff, this));
+		}
 		shieldActive = false;
 		_shieldActiveDuration = 0;
 		state = Moving;
 	}
 	else {
+		if (!shieldActive) {
+			StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldOn, this));
+		}
 		_shieldActiveDuration++;
 		shieldActive = true;
 	}

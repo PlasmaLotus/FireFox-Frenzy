@@ -65,6 +65,8 @@ public:
 	MapDrawable* mapDrawable;
 	PlayerDrawable * playerDrawable1;
 	PlayerDrawable * playerDrawable2;
+	PlayerDrawable * playerDrawable3;
+	PlayerDrawable * playerDrawable4;
 	PlayerUIDrawable* playerUIDrawable;
 	sf::View minimapView;
 	sf::View mainView;

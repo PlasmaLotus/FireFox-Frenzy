@@ -15,8 +15,8 @@ const float GameLogic::PLAYER_SHIELD_FRICTION{ 0.91f };
 const float GameLogic::PLAYER_VELOCITY_DEAD_ZONE(0.00001f);
 const float GameLogic::PLAYER_ACCELERATION_RATE(0.029f);
 const float GameLogic::PLAYER_DASH_VELOCITY(1.8f);
-const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(1.0f);
-const float GameLogic::PLAYER_SHIELD_RADIUS(25.0f);
+const float GameLogic::PLAYER_MINIMUM_DASH_VELOCITY(1.8f);
+const float GameLogic::PLAYER_SHIELD_RADIUS(45.0f);
 
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MINIMUM( 3.f );
 const float GameLogic::PROJECTILE_HITBOX_RADIUS_MAXIMUM( 20.f );
@@ -30,9 +30,9 @@ const float GameLogic::ENTITY_MINIMUM_RADIUS{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_WIDTH{ 3.0f };
 const float GameLogic::ENTITY_MINIMUM_HEIGHT{ 3.0f };
 
-const float GameLogic::ENERGY_MAX_RADIUS{ 20.f };
-const float GameLogic::ENERGY_MINIMUM_RADIUS{ 10.f };
-const float GameLogic::POWERUP_RADIUS{ 29.f };
+const float GameLogic::ENERGY_MAX_RADIUS{ 15.0f };
+const float GameLogic::ENERGY_MINIMUM_RADIUS{ 6.f };
+const float GameLogic::POWERUP_RADIUS{ 30.f };
 const float GameLogic::GAME_SHIELD_ENERGY_LOSS_MULTIPLYER{ 3.0f };//0.9
 /*
 const float GameLogic::GAME_SHOT_ENERGY_LOSS_MULTIPLYER{ 0.90f };
@@ -40,8 +40,13 @@ const float GameLogic::GAME_DASH_ENERGY_LOSS_MULTIPLYER{ 0.90f };
 */
 
 GameLogic::GameLogic() :
-	gameState(GameCurrentState::RUNNING),
-	_init(false){
+	GameLogic(2){
+}
+
+GameLogic::GameLogic(int nbPlayers) :
+	_nbPlayers(nbPlayers),
+	gameState(GameCurrentState::COUNTDOWN),
+	_init(false) {
 	init();
 }
 
@@ -54,6 +59,7 @@ GameLogic::~GameLogic(){
 
 void GameLogic::init() {
 	countdownTimer = GAME_COUNTDOWN_TIME;
+	_countdownIt = 0;
 	_playerIDs.clear();
 	_init = false;
 	_gameEnd = false;
@@ -69,7 +75,7 @@ void GameLogic::init() {
 	Player *p4{ new Player(this, map.getSpawnPoint(4)) };
 
 	p1->color = RGBA(128, 0, 128, 255);
-	p2->color = RGBA(240, 10, 10, 255);
+	p2->color = RGBA(240, 30, 30, 255);
 	p3->color = RGBA(10, 250, 250, 255);
 	p4->color = RGBA(255, 255, 0, 255);
 
@@ -82,13 +88,30 @@ void GameLogic::init() {
 	_playerIDs.push_back(p4->getID());
 	__playerIDs[3] = p4->getID();
 
+	switch (_nbPlayers) {
+	case 4:
+		_entities.push_back(p4);
+	case 3:
+		_entities.push_back(p3);
+	case 2:
+		_entities.push_back(p2);
+	case 1:
+		_entities.push_back(p1);
+	default: break;
+
+	}
+
+	/*
 	_entities.push_back(p1);
 	_entities.push_back(p2);
 	//_entities.push_back(p3);
 	//_entities.push_back(p4);
+	*/
 	
 	frame = 0;
-	StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown3));
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::GameStart));
+	//	StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown3));
+
 	_init = true;
 }
 
@@ -114,6 +137,9 @@ void GameLogic::tick(int dt) {
 				it = 1;
 			}
 			if (it != _countdownIt) {
+				if (it == 3) {
+					StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown3));
+				}
 				if (it == 2) {
 					StateManager::getInstance().eventManager.queueEvent(Event(EventType::Countdown2));
 				}
@@ -400,7 +426,7 @@ void GameLogic::_spawnItems(){
 }
 
 void GameLogic::_spawnEnergy(){
-	int randValue = rand() % (RAND_MAX / GAME_ENERGY_SPAWN_AMOUNT);
+	int randValue = 1 + rand() % GAME_ENERGY_SPAWN_AMOUNT;
 	for (int i = 0; i < randValue; i++) {
 		Vector2 v = map.getRandomSpawnPoint(ENERGY_MINIMUM_RADIUS, ENERGY_MINIMUM_RADIUS);
 		Energy *e{ new Energy(v, GAME_ENERGY_SPAWN_AURA) };
@@ -409,10 +435,10 @@ void GameLogic::_spawnEnergy(){
 }
 
 void GameLogic::_spawnPowerUps(){
-	int randValue = rand() % (RAND_MAX / GAME_POWERUP_SPAWN_AMOUNT);
+	int randValue = 1 + rand() % GAME_POWERUP_SPAWN_AMOUNT ;
 	for (int i = 0; i < randValue; i++) {
 		Vector2 v = map.getRandomSpawnPoint(ENERGY_MINIMUM_RADIUS, ENERGY_MINIMUM_RADIUS);
-		int whichPowerup = rand() % (RAND_MAX / 3);
+		int whichPowerup = rand() % 3;
 		PowerUpItem* item(nullptr);
 		switch (whichPowerup) {
 		

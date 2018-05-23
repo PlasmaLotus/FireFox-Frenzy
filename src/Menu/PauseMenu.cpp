@@ -11,6 +11,7 @@ PauseMenu::PauseMenu():
 		StateManager::getInstance().goBack();
 	}));
 
+
 	addItem(
 		MenuItem("Back to Title",
 			[&]() {
@@ -33,6 +34,14 @@ PauseMenu::PauseMenu(GameState* gs):
 			[&]() {
 		if (gameState != nullptr) {
 			gameState->pause();
+		}
+	}));
+
+	addItem(
+		MenuItem("Reset Game",
+			[&]() {
+		if (gameState != nullptr) {
+			gameState->reset();
 		}
 	}));
 

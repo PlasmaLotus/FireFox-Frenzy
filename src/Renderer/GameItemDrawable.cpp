@@ -62,7 +62,11 @@ void GameItemDrawable::update()
 	/*Withouth set Origin*/
 	//sprite.setPosition(sf::Vector2f(posX - sprite.getGlobalBounds().width / 2, posY - sprite.getGlobalBounds().height / 2));
 	m_sprite.setPosition(sf::Vector2f(posX, posY));
-
+	if (item->state != ItemState::ItemActive) {
+		sf::Color c = m_sprite.getColor();
+		c.a = 50;
+		m_sprite.setColor(c);
+	}
 
 	//m_sprite.setColor(projectileColor);
 

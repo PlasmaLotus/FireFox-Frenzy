@@ -2,6 +2,7 @@
 #include "../GameLogic.h"
 #include "../Projectiles\ProjectileBubble.h"
 
+#include "../../States/StateManager.h"
 
 BubblePowerUp::BubblePowerUp(GameLogic* gc):
 	PowerUp(gc)
@@ -46,8 +47,9 @@ void BubblePowerUp::spawnProjectile(int id, float x, float y, float orientation)
 	_projectilesToSpawnThisTick--;
 	_game->addEntity(p);
 	_projectileSpawned = true;
-	//return nullptr;
-	//ga
+	//StateMan
+	StateManager::getInstance().eventManager.queueEvent(Event(EventType::ProjectileSpawnBubble, p));
+
 }
 
 Projectile * BubblePowerUp::getProjectileAlt(int id, float x, float y, float orientation)

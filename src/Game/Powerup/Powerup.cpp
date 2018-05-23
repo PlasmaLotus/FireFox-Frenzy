@@ -1,7 +1,5 @@
 #include "Powerup.h"
 #include "../GameLogic.h"
-//#include "../Projectiles\ProjectileBubble.h"
-
 
 PowerUp::PowerUp(GameLogic* gc):
 lifetime(100000),

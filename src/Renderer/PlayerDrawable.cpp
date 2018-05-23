@@ -26,13 +26,14 @@ PlayerDrawable::PlayerDrawable(Player *pl, GameRenderer* renderer, sf::Texture& 
 	playerShape.setSize(sf::Vector2f(width, height));
 
 	cursorShape.setRadius(2);
-	//playerColor = sf::Color::Cyan;
+	playerColor = sf::Color::Cyan;
 	if (player != nullptr) {
 		playerColor = sf::Color(player->color.r, player->color.g, player->color.b, player->color.a);
 		posX = player->posX;
 		posY = player->posY;
 	}
 	cursorShape.setFillColor(playerColor);
+	/*
 	int dashOffsetNumber{ 5 };
 	for (int i = 0; i <= dashOffsetNumber; i++) {
 		sf::RectangleShape r(sf::Vector2f(player->width, player->height));
@@ -42,17 +43,14 @@ PlayerDrawable::PlayerDrawable(Player *pl, GameRenderer* renderer, sf::Texture& 
 
 		dashOffsetShapes.push_back(r);
 	}
-	
-	/*
-	if (!rTexture.loadFromFile("./Assets/Images/player2.png")) {
-		printf("Unable to load Player PNG\n");
-	}
 	*/
+
 	//m__font = sf::Font(m_font);
 	if (!m_font.loadFromFile("Assets/Fonts/Minecraft.ttf")) {
 		printf("Unable to load Minecraft Font PNG\n");
 	}
 
+	/*
 	m_hpText = sf::Text("HP", m_font, 12);
 	m_dashText = sf::Text("Dash", m_font, 12);
 	m_ammoText = sf::Text("Ammo", m_font, 12);
@@ -61,21 +59,11 @@ PlayerDrawable::PlayerDrawable(Player *pl, GameRenderer* renderer, sf::Texture& 
 	m_dashText.setFillColor(sf::Color::Cyan);
 	m_shotText.setFillColor(sf::Color::Green);
 	m_ammoText.setFillColor(sf::Color::Cyan);
-
+	*/
 	sprite.setTexture(rTexture);
 	sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width/2, 1.0f * sprite.getGlobalBounds().height / 2));
 	sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x , 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y ));
 	sprite.setColor(playerColor);
-	// Load the shader
-	/*
-	if (m_shader.loadFromFile("Assets/Shaders/bloom.frag", sf::Shader::Fragment)) {
-		m_shader.setUniform("frag_ScreenResolution", sf::Vector2i(StateManager::getWindowWidth(), StateManager::getWindowHeight()));
-		m_shaderLoaded = true;
-	}
-	*/
-		//return false;
-	//m_shader.setUniform("texture", sf::Shader::CurrentTexture);
-
 }
 PlayerDrawable::~PlayerDrawable() {
 
@@ -83,79 +71,39 @@ PlayerDrawable::~PlayerDrawable() {
 
 void PlayerDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) const
 {
-	//sf::RenderStates state;
-	//states.blendMode = sf::BlendAdd;
-	//states.shader = &m_shader;
-	//states.texture = playerShape.getTexture();
-	
-	if (renderer != nullptr) {
-		if (renderer->_displayHitboxes) {
-			target.draw(playerShape);
-		}
-	}
-	target.draw(sprite);
-	target.draw(cursorShape);
 
-	if (player->state == PlayerState::Dashing) {
-		for (const PlayerDrawableDashPosition& dashPos : m_dashPositions) {
-			sf::RectangleShape rect;
-			rect.setPosition(dashPos.posX, dashPos.posY);
-			rect.setPosition(player->width, player->height);
-			rect.setFillColor(sf::Color::Cyan);
-			target.draw(rect);
-		}
-			//target.draw(alert, states);
-		/*
-		for (int i = dashOffsetShapes.size() - 1; i >= 0; i--) {
-			sf::RectangleShape r = dashOffsetShapes.at(i);
-			if (i == dashOffsetShapes.size() - 1){
-				r.setPosition(posX, posY);
+	if (player != nullptr){
+		if (renderer != nullptr) {
+			if (renderer->_displayHitboxes) {
+				target.draw(playerShape);
 			}
-			if (i > 0) {
-				sf::RectangleShape r2 = dashOffsetShapes.at(i - 1);
-				sf::Vector2f v = r2.getPosition();
-				r.setPosition(v.x, v.y);
-			}
-			target.draw(r);
 		}
-		*/
+		target.draw(sprite);
+		target.draw(cursorShape);
 
-	} 
-	else{
-		sf::RectangleShape r = dashOffsetShapes.at(0);
-		r.setPosition(posX, posY);
 
+
+		//Shield Display
+		//if (player->shieldActive) {
+		if (player->state == PlayerState::Shielding) {
+			printf(" --- Player Shield Active ---\n");
+			int shieldHitboxExtension = 10;
+			sf::CircleShape shieldShape;
+			//Projectile &sh{ player->_shield };
+			shieldShape.setFillColor(sf::Color(100, 200, 100, 100));
+			shieldShape.setRadius(player->_shield.width);
+			//shieldShape.setPosition(sf::Vector2f(sh.posX - ((sh.width + shieldHitboxExtension) / 2), sh.posY - ((sh.width + shieldHitboxExtension) / 2)));
+			//shieldShape.setPosition(sf::Vector2f(sh.posX - sh.width - player->width/2, sh.posY  - sh.height- player->height/2));
+			shieldShape.setPosition(sf::Vector2f(player->_shield.posX - (player->_shield.width),
+				player->_shield.posY - (player->_shield.width)));
+
+			target.draw(shieldShape);
+		}
+
+		for (const PlayerDrawableAlert& alert : m_alerts)
+			target.draw(alert, states);
 	}
 
-	//Shield Display
-	//if (player->shieldActive) {
-	if (player->state == PlayerState::Shielding){
-		printf(" --- Player Shield Active ---\n");
-		int shieldHitboxExtension = 10;
-		sf::CircleShape shieldShape;
-		//Projectile &sh{ player->_shield };
-		shieldShape.setFillColor(sf::Color(100,200,100,100));
-		shieldShape.setRadius(player->_shield.width);
-		//shieldShape.setPo
-		//shieldShape.setPosition(sf::Vector2f(sh.posX - ((sh.width + shieldHitboxExtension) / 2), sh.posY - ((sh.width + shieldHitboxExtension) / 2)));
-		//shieldShape.setPosition(sf::Vector2f(sh.posX - sh.width - player->width/2, sh.posY  - sh.height- player->height/2));
-		shieldShape.setPosition(sf::Vector2f(player->_shield.posX - (player->_shield.width ) , 
-			player->_shield.posY - (player->_shield.width ) ));
-
-		target.draw(shieldShape);
-	}
-	/*
-	target.draw(m_hpText);
-	target.draw(m_ammoText);
-	if (isChargingShot) {
-		target.draw(m_shotText);
-	}
-	if (isChargingDash) {
-		target.draw(m_dashText);
-	}
-	*/
-	for (const PlayerDrawableAlert& alert : m_alerts)
-		target.draw(alert, states);
 }
 
 bool PlayerDrawable::onLoad()
@@ -188,6 +136,7 @@ void PlayerDrawable::update()
 		}
 
 		/*Updating Dash*/
+		/*
 		if (player->state == PlayerState::Dashing) {
 			m_dashPositions.push_back(PlayerDrawableDashPosition(posX, posY));
 		}
@@ -198,6 +147,7 @@ void PlayerDrawable::update()
 				m_dashPositions.erase(m_dashPositions.begin() + i);
 			}
 		}
+		*/
 
 		//sprite.setRotation(std::asin(player->orientationX / player->orientationY));
 		//PI = atan(1)*4
@@ -211,16 +161,8 @@ void PlayerDrawable::update()
 		//sprite.setScale(sf::Vector2f(1.0f* GameLogic::PLAYER_DISPLAY_HITBOX_WIDTH / rTexture.getSize().x, 1.0 * GameLogic::PLAYER_DISPLAY_HITBOX_HEIGHT / rTexture.getSize().y));
 		//sprite.setOrigin(sf::Vector2f(1.0f *sprite.getGlobalBounds().width / 2, 1.0f * sprite.getGlobalBounds().height / 2));
 		sprite.setRotation(angleDeg);
-		/*Shader initialisatidwaon*/
-		/*
-		sf::Glsl::Ivec3 color{ playerShape.getFillColor().r, playerShape.getFillColor().g, playerShape.getFillColor().b };
-		//m_shader.setUniform();
-		//sf::Shader::se
-		//m_shader.setParameter("wave_phase", 10);
-		m_shader.setUniform("frag_LightOrigin", playerShape.getPosition());
-		m_shader.setUniform("frag_LightColor", color);
-		m_shader.setUniform("frag_LightAttenuation", 50);
-		*/
+
+		
 		if (player != nullptr) {
 			/*Ammo*/
 			std::string ammoS = "Ammo: ";

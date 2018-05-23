@@ -69,7 +69,7 @@ void MapDrawable::draw(sf::RenderTarget & target, sf::RenderStates states) const
 
 bool MapDrawable::onLoad()
 {
-	return false;
+	return true;
 }
 
 void MapDrawable::update()
