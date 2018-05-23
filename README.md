@@ -7,8 +7,8 @@
 
 ---
 
-Head Over to [Repo Link](https://github.com/PlasmaLotus/FireFox-Frenzy/) to find all the source code.
-Head Over to [SFML SETUP](https://www.sfml-dev.org/tutorials/2.5/start-vc.php) to learn how to setup a project with the SFML Library.
+- Head Over to [Repo Link](https://github.com/PlasmaLotus/FireFox-Frenzy/) to find all the source code.
+- Head Over to [SFML SETUP](https://www.sfml-dev.org/tutorials/2.5/start-vc.php) to learn how to setup a project with the SFML Library.
 
 ---
 
@@ -25,8 +25,6 @@ Collects Energy Packs to keep on shooting, dashing and shielding, and grab Power
 - Right Joystick: Shoot Projectile (AutoFire Enabled)
 - Left and Right Bumpers: Dash (Hold and release to dash further)
 - Left and Right Triggers: Shield (Hold to keep shielding)
-- A: Les scripts de création de base de données SQL
-- xml : Les diagrams sous format XML
 
 *Keyboard support is also Enabled, thought for better experience, I would highly reccoment joysticks*
 - Player1: WASD / UP,Down,Left,Right / SpaceBar, Shift, Ctrl
@@ -38,6 +36,6 @@ Collects Energy Packs to keep on shooting, dashing and shielding, and grab Power
 
 Double click on the "Neon Galaxy.exe" file.
 This file should be at the root of the directory of your choice, along with all of the 'sfml' .dll files
-The folder "Assets" should also be in the same directory
+The folder "Assets" should also be in the same directory.
 
 ---
