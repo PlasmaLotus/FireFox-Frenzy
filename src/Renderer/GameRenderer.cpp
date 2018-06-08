@@ -4,7 +4,7 @@ Updated May 13, 2017
 */
 #include "GameRenderer.h"
 #include "../States/StateManager.h"
-#include "AOEProjectileDrawable.h"
+#include "GameDrawable\AOEProjectileDrawable.h"
 #include "../Game/Projectiles/AOEProjectile.h"
 #include "../Game/Powerup/BubblePowerup.h"
 #include "../Game/Powerup/FirePowerup.h"
@@ -25,12 +25,9 @@ GameRenderer::~GameRenderer(){
 }
 
 void GameRenderer::render(){
-	//Renderer::render();
-	//clear();
 	update();
 	draw();
 	display();
-	
 }
 
 bool GameRenderer::initRenderer() {
@@ -95,6 +92,10 @@ bool GameRenderer::initRenderer() {
 	playerDrawable3 = new PlayerDrawable(game->getPlayer(3), this, *playerTexture, *font);
 	playerDrawable4 = new PlayerDrawable(game->getPlayer(4), this, *playerTexture, *font);
 
+	playerDrawable1->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable2->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable3->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable4->setDisplayHitboxes(_displayHitboxes);
 	//playerDrawable2->playerColor = sf::Color::Magenta;
 	
 	/*
@@ -139,7 +140,6 @@ void GameRenderer::addPlayerAlert(int playerID, std::string text){
 	addPlayerAlert(&p, text);
 }
 
-
 void GameRenderer::clear() {
 	window->clear();
 }
@@ -172,6 +172,7 @@ sf::RenderTexture* GameRenderer::getLastFrame() {
 	drawUI(_frame);
 	return _frame;
 }
+
 /*
 void GameRenderer::_draw(sf::RenderTarget* target) {
 	
@@ -188,6 +189,7 @@ void GameRenderer::_draw(sf::RenderTarget* target) {
 	//window->draw();
 }
 */
+
 void GameRenderer::display() {
 	window->display();
 }
@@ -195,22 +197,31 @@ void GameRenderer::display() {
 void GameRenderer::update(){
 
 	/*Update players*/
+
+	playerDrawable1->setViewSettings(mainView.getCenter(), mainView.getSize());
+	playerDrawable2->setViewSettings(mainView.getCenter(), mainView.getSize());
+	playerDrawable3->setViewSettings(mainView.getCenter(), mainView.getSize());
+	playerDrawable4->setViewSettings(mainView.getCenter(), mainView.getSize());
+
 	playerDrawable1->update();
 	playerDrawable2->update();
 	playerDrawable3->update();
 	playerDrawable4->update();
 
+	/*
 	playerDrawable1->setDisplayHitboxes(_displayHitboxes);
 	playerDrawable2->setDisplayHitboxes(_displayHitboxes);
 	playerDrawable3->setDisplayHitboxes(_displayHitboxes);
 	playerDrawable4->setDisplayHitboxes(_displayHitboxes);
-
+	*/
 
 	/*Update Map*/
+	mapDrawable->setViewSettings(mainView.getCenter(), mainView.getSize());
 	mapDrawable->update();
 
 	/*Update Particles*/
 	updateParticleSystems(StateManager::getInstance().getElapsedTime());
+
 }
 
 void GameRenderer::reset() {
@@ -218,6 +229,11 @@ void GameRenderer::reset() {
 	playerDrawable2 = new PlayerDrawable(game->getPlayer(2),this, *playerTexture, *font);
 	playerDrawable3 = new PlayerDrawable(game->getPlayer(3), this, *playerTexture, *font);
 	playerDrawable4 = new PlayerDrawable(game->getPlayer(4), this, *playerTexture, *font);
+
+	playerDrawable1->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable2->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable3->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable4->setDisplayHitboxes(_displayHitboxes);
 
 	if (playerUIDrawable != nullptr) {
 		delete playerUIDrawable;
@@ -244,16 +260,11 @@ void GameRenderer::drawProjectiles(sf::RenderTarget* target){
 		try {
 			Projectile * p = dynamic_cast<Projectile *> (vec.at(i));
 			if (p != nullptr) {
-				/*
-				sf::CircleShape circle;
-				circle.setFillColor(sf::Color::Green);
-				circle.setPosition(p->posX - p->width /2, p->posY - p->width / 2);
-				circle.setRadius(p->width);
-				window->draw(circle);
-				*/
+
 				ProjectileDrawable pro(p, *projectileGeneralTexture);
+				pro.setDisplayHitboxes(_displayHitboxes);
+				pro.setViewSettings(mainView.getCenter(), mainView.getSize());
 				pro.update();
-				//window->draw(pro);
 				target->draw(pro);
 			}
 		}
@@ -264,8 +275,9 @@ void GameRenderer::drawProjectiles(sf::RenderTarget* target){
 			if (p != nullptr) {
 				
 				AOEProjectileDrawable pro(p, *projectileGeneralTexture);
+				pro.setDisplayHitboxes(_displayHitboxes);
+				pro.setViewSettings(mainView.getCenter(), mainView.getSize());
 				pro.update();
-				//window->draw(pro);
 				target->draw(pro);
 			}
 		}
@@ -274,20 +286,7 @@ void GameRenderer::drawProjectiles(sf::RenderTarget* target){
 	}
 }
 
-void GameRenderer::drawMap(sf::RenderTarget* target)
-{
-	/*
-	Map map = game->map;
-	sf::RectangleShape mapOutline;
-	mapOutline.setSize(sf::Vector2f(map.width, map.height));
-	mapOutline.setPosition(0, 0);
-	mapOutline.setOutlineColor(sf::Color::White);
-	//mapOutline.setFillColor(sf::Color(200, 200, 200, 150));
-	mapOutline.setFillColor(sf::Color(0, 0, 0, 0));
-	mapOutline.setOutlineThickness(5.0f);
-	window->draw(mapOutline);
-	*/
-
+void GameRenderer::drawMap(sf::RenderTarget* target){
 	target->draw(*mapDrawable);
 	//window->draw(*mapDrawable);
 }
@@ -305,16 +304,22 @@ void GameRenderer::drawItems(sf::RenderTarget* target) {
 				//NormalPowerUp * np = dynamic_cast<NormalPowerUp *> (p->powerUp);
 				if (fp != nullptr) {
 					GameItemDrawable id(p, *iconFireTexture);
+					id.setDisplayHitboxes(_displayHitboxes);
+					id.setViewSettings(mainView.getCenter(), mainView.getSize());
 					id.update();
 					target->draw(id);
 				}
 				else if (bp != nullptr) {
 					GameItemDrawable id(p, *iconBubbleTexture);
+					id.setDisplayHitboxes(_displayHitboxes);
+					id.setViewSettings(mainView.getCenter(), mainView.getSize());
 					id.update();
 					target->draw(id);
 				}
 				else if (rp != nullptr) {
 					GameItemDrawable id(p, *iconRapidTexture);
+					id.setDisplayHitboxes(_displayHitboxes);
+					id.setViewSettings(mainView.getCenter(), mainView.getSize());
 					id.update();
 					target->draw(id);
 				}
@@ -329,6 +334,8 @@ void GameRenderer::drawItems(sf::RenderTarget* target) {
 			Energy * p = dynamic_cast<Energy *> (vec.at(i));
 			if (p != nullptr) {
 				GameItemDrawable id(p, *iconDefaultTexture);
+				id.setDisplayHitboxes(_displayHitboxes);
+				id.setViewSettings(mainView.getCenter(), mainView.getSize());
 				id.update();
 				target->draw(id);
 				/*
@@ -452,10 +459,13 @@ void GameRenderer::drawParticleSystems(sf::RenderTarget* target)
 	}
 }
 
-
-
 void GameRenderer::setDisplayHitboxes(bool value) {
 	_displayHitboxes = value;
+
+	playerDrawable1->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable2->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable3->setDisplayHitboxes(_displayHitboxes);
+	playerDrawable4->setDisplayHitboxes(_displayHitboxes);
 }
 
 void GameRenderer::setDisplayPositions(bool value) {

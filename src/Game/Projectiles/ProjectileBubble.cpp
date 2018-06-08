@@ -65,8 +65,8 @@ void ProjectileBubble::handleCollision(Entity * e)
 				tangentVector = tangentVector.getNormal();
 
 				Vector2 relativeVelocity;
-				//relativeVelocity.x = sin(orientation)* velocityX;
-				//relativeVelocity.y = cos(orientation)* velocityY;
+				//relativeVelocity.x = sin(velocity - e->velocity);
+				//relativeVelocity.y = cos(velocity - e->velocity);
 				relativeVelocity.x = (velocityX - e->velocityX);
 				relativeVelocity.y = (velocityY - e->velocityY);
 				relativeVelocity = relativeVelocity.getNormal();
@@ -90,12 +90,14 @@ void ProjectileBubble::handleCollision(Entity * e)
 				//posX -= relativeVelocity.x;
 				//posY -= relativeVelocity.y;
 
+				
 				if (e->velocityX != 0) {
 					e->velocityX += velocityComponentPerpendicularToTangent.x;
 				}
 				if (e->velocityY != 0) {
 					e->velocityY += velocityComponentPerpendicularToTangent.y;
 				}
+				
 			}
 			else if (mp != nullptr) {
 				if (posX - width * 4 < 0) {

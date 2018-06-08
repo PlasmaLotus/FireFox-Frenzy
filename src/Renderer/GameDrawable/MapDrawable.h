@@ -11,23 +11,19 @@ Updated Feb 11, 2018
 #include <SFML\Window.hpp>
 #include <string.h>
 #include <string>
-#include "../Game/Map.h"
+#include "../../Game/Map.h"
 #include <vector>
+#include "GameDrawable.h"
 
-class MapDrawable : public sf::Drawable {
+class MapDrawable : public GameDrawable {
 public:
 
 	MapDrawable();
 	MapDrawable(Map * map);
 	~MapDrawable();
 
-	// Hérité via Drawable
 	virtual void draw(sf::RenderTarget & target, sf::RenderStates states) const override;
-	// Virtual functions to be implemented in derived effects
-	bool onLoad();
-	//void onUpdate(float time) ;
 	void update();
-	//void onDraw(sf::RenderTarget& target, sf::RenderStates states) const;
 	Map *m_map;
 	int width;
 	int height;

@@ -1,8 +1,6 @@
 #include "NormalPowerup.h"
 #include "../GameLogic.h"
-
 #include "../../States/StateManager.h"
-
 
 NormalPowerUp::NormalPowerUp(GameLogic* gc):
 	PowerUp(gc)
@@ -51,8 +49,7 @@ void NormalPowerUp::spawnProjectile(int id, float x, float y, float orientation)
 
 }
 
-Projectile * NormalPowerUp::getProjectileAlt(int id, float x, float y, float orientation)
-{
+Projectile * NormalPowerUp::getProjectileAlt(int id, float x, float y, float orientation){
 	return getProjectile(id,  x,  y,  orientation);
 }
 

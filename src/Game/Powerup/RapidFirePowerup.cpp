@@ -1,8 +1,6 @@
 #include "RapidFirePowerUp.h"
 #include "../GameLogic.h"
-
 #include "../../States/StateManager.h"
-
 
 RapidFirePowerUp::RapidFirePowerUp(GameLogic* gc):
 	PowerUp(gc)
@@ -18,11 +16,9 @@ RapidFirePowerUp::~RapidFirePowerUp() {
 
 void RapidFirePowerUp::update(int dt){
 	PowerUp::update(dt);
-
 }
 
-Projectile * RapidFirePowerUp::getProjectile(int id, float x, float y, float orientation)
-{
+Projectile * RapidFirePowerUp::getProjectile(int id, float x, float y, float orientation){
 	Projectile *p{ new Projectile(id, x, y) };
 	p->durability = 1;
 	//p->lifetime = 700;
@@ -32,8 +28,7 @@ Projectile * RapidFirePowerUp::getProjectile(int id, float x, float y, float ori
 	return p;
 }
 
-void RapidFirePowerUp::spawnProjectile(int id, float x, float y, float orientation)
-{
+void RapidFirePowerUp::spawnProjectile(int id, float x, float y, float orientation){
 	if (altSpawn) {
 		Projectile *p1{ new Projectile(id, x, y) };
 		Projectile *p2{ new Projectile(id, x, y) };
@@ -75,8 +70,7 @@ void RapidFirePowerUp::spawnProjectile(int id, float x, float y, float orientati
 
 }
 
-Projectile * RapidFirePowerUp::getProjectileAlt(int id, float x, float y, float orientation)
-{
+Projectile * RapidFirePowerUp::getProjectileAlt(int id, float x, float y, float orientation){
 	return getProjectile(id,  x,  y,  orientation);
 }
 

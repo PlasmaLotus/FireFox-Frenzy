@@ -1,7 +1,6 @@
 #include "BubblePowerup.h"
 #include "../GameLogic.h"
 #include "../Projectiles\ProjectileBubble.h"
-
 #include "../../States/StateManager.h"
 
 BubblePowerUp::BubblePowerUp(GameLogic* gc):
@@ -23,8 +22,7 @@ void BubblePowerUp::update(int dt){
 	*/
 }
 
-Projectile * BubblePowerUp::getProjectile(int id, float x, float y, float orientation)
-{
+Projectile * BubblePowerUp::getProjectile(int id, float x, float y, float orientation){
 	Projectile *p{ new ProjectileBubble(id, x, y) };
 	p->durability = 1;
 	//p->lifetime = 700;
@@ -52,8 +50,7 @@ void BubblePowerUp::spawnProjectile(int id, float x, float y, float orientation)
 
 }
 
-Projectile * BubblePowerUp::getProjectileAlt(int id, float x, float y, float orientation)
-{
+Projectile * BubblePowerUp::getProjectileAlt(int id, float x, float y, float orientation){
 	return getProjectile(id,  x,  y,  orientation);
 }
 

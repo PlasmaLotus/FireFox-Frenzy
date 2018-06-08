@@ -44,6 +44,8 @@ public:
 	float prevPosY;
 	float velocityX;
 	float velocityY;
+	//float velocity;
+
 	Entity();
 	virtual ~Entity();
 	virtual void update(int32_t dt);
@@ -65,10 +67,6 @@ public:
 	int _collisionDelay;
 	int _hitlagFrames;
 	bool _inHitlag;
-	/*
-	int _gridPosX;
-	int _gridPosY;
-	*/
 
 protected:
 	virtual bool testCollision(Entity e);

@@ -14,12 +14,12 @@ Updated Dec 25, 2016
 #include <iostream>
 #include "../Game/GameLogic.h"
 #include "Renderer.h"
-#include "PlayerDrawable.h"
-#include "MapDrawable.h"
+#include "GameDrawable/PlayerDrawable.h"
+#include "GameDrawable/MapDrawable.h"
 #include "ParticleSystem.h"
-#include "ProjectileDrawable.h"
+#include "GameDrawable/ProjectileDrawable.h"
 #include "PlayerUIDrawable.h"
-#include "GameItemDrawable.h"
+#include "GameDrawable/GameItemDrawable.h"
 class GameRenderer : public Renderer{
 public:
 
@@ -94,6 +94,10 @@ public:
 	sf::Texture* iconDefaultTexture;
 	sf::Font* font;
 
+	sf::Vector2f mViewSize;
+	sf::Vector2f mViewCenter;
+
+	std::vector <sf::Drawable> mDrawableList;
 	//sf::Font& _font{ sf::Font() };
 };
 

@@ -41,6 +41,7 @@ void AOEProjectile::update(int32_t dt)
 		m_mainProjectileActive = false;
 		velocityX = 0;
 		velocityY = 0;
+		//velocity = 0;
 	}
 
 	for (int i = m_projectiles.size() - 1; i >= 0; --i) {
@@ -51,7 +52,6 @@ void AOEProjectile::update(int32_t dt)
 		}
 	}
 
-
 }
 
 bool AOEProjectile::isAlive(){
@@ -59,17 +59,13 @@ bool AOEProjectile::isAlive(){
 	return (m_projectiles.size() > 0 || durability > 0 || lifetime > 0 || m_mainProjectileActive);
 }
 
-void AOEProjectile::handleCollision()
-{
+void AOEProjectile::handleCollision(){
 }
 
-void AOEProjectile::handleCollision(Entity * e)
-{
-	//if()
+void AOEProjectile::handleCollision(Entity * e){
 }
 
-bool AOEProjectile::testCollision(Entity * e)
-{
+bool AOEProjectile::testCollision(Entity * e){
 	bool collision = false;
 	if (m_mainProjectileActive) {
 		if (CircleEntity::testCollision(e)) {
@@ -87,5 +83,4 @@ bool AOEProjectile::testCollision(Entity * e)
 }
 
 void AOEProjectile::_spawnNewAOE() {
-
 }

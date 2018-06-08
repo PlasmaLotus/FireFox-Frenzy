@@ -35,8 +35,10 @@ public:
 	int getUniqueID();
 	static const int FPS = 144;//144
 	static const int renderFPS = 60;
-	int SCREEN_WIDTH{ 1280 };
-	int SCREEN_HEIGHT{ 720 };
+	int SCREEN_WIDTH{ 640 };
+	int SCREEN_HEIGHT{ 480 };
+	//int SCREEN_WIDTH{ 1280 };
+	//int SCREEN_HEIGHT{ 720 };
 	ControllerConfig *getControllerConfig(int playerNumber);
 	static std::string getControllerConfigPath(int playerNumber);
 	static int getWindowWidth();

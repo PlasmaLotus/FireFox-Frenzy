@@ -74,9 +74,9 @@ void GameLogic::init() {
 	Player *p3{ new Player(this, map.getSpawnPoint(3)) };
 	Player *p4{ new Player(this, map.getSpawnPoint(4)) };
 
-	p1->color = RGBA(128, 0, 128, 255);
+	p3->color = RGBA(128, 0, 128, 255);
 	p2->color = RGBA(240, 30, 30, 255);
-	p3->color = RGBA(10, 250, 250, 255);
+	p1->color = RGBA(10, 250, 250, 255);
 	p4->color = RGBA(255, 255, 0, 255);
 
 	_playerIDs.push_back(p1->getID());

@@ -51,10 +51,10 @@ public:
 	bool testCollision(Entity *e);
 
 	void handleCollision();
-	void _handleCollision(Projectile p);
-	void _handleCollision(Energy e);
+	void _handleCollision(Projectile& p);
+	void _handleCollision(Energy& e);
 	//void _handleCollision(Enemy e);
-	void _handleCollision(PowerUpItem p);
+	void _handleCollision(PowerUpItem& p);
 	void handleCollision(Entity *e);
 	bool collidableWith(Entity* e);
 	bool collidableWith(Projectile* e);

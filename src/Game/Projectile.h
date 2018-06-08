@@ -15,6 +15,8 @@ public:
 	int durability;
 	int lifetime;
 	int power;
+
+
 	Projectile(int pID);
 	Projectile();
 	Projectile(int pID, float x, float y);
@@ -27,6 +29,7 @@ public:
 	virtual bool testCollision(Entity * e);
 	int getPlayerID();
 	int _playerID;
+
 protected:
 	bool collidableWith(Player* e);
 	bool collidableWith(Projectile* e);

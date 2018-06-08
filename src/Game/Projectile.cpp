@@ -29,19 +29,14 @@ Projectile::Projectile(int pID, float x, float y) :
 Projectile::~Projectile(){
 }
 
-void Projectile::update(int32_t dt)
-{
+void Projectile::update(int32_t dt){
 	CircleEntity::update(dt);
 	prevPosX = posX;
 	prevPosY = posY;
 	posX += std::sin(orientation) * velocityX * dt;
 	posY += std::cos(orientation) * velocityY * dt;
 	lifetime-= dt;
-	/*
-	static float total_time = 0.00001;
-	total_time += dt * 100;
-	//p->velocityX = p->velocityX * sin(total_time);
-	*/
+
 }
 
 bool Projectile::isAlive() {
@@ -64,16 +59,13 @@ bool Projectile::collidableWith(Player* e){
 	return (e->getID() != getPlayerID());
 }
 
-void Projectile::handleCollision()
-{
+void Projectile::handleCollision(){
 	--durability;
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, getID()));
 }
 
-void Projectile::handleCollisionMap()
-{
+void Projectile::handleCollisionMap(){
 	--durability;
-	//StateManager::getInstance().eventManager.queueEvent(Event(EventType::CollisionGeneral, getID()));
 }
 
 void Projectile::handleCollision(Entity *e)

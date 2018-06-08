@@ -162,7 +162,7 @@ bool Player::testCollision(Entity * e)
 void Player::handleCollision(){
 }
 
-void Player::_handleCollision(PowerUpItem p) {
+void Player::_handleCollision(PowerUpItem& p) {
 	/*PowerUpÎtem*/
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPickupPowerUp, this));
 
@@ -170,7 +170,7 @@ void Player::_handleCollision(PowerUpItem p) {
 	//p.handleCollision();
 }
 
-void Player::_handleCollision(Projectile p){
+void Player::_handleCollision(Projectile& p){
 	/*Projectile hits the player*/
 	if (shieldActive) {
 		StateManager::getInstance().eventManager.queueEvent(Event(EventType::ShieldHit, this));
@@ -183,7 +183,7 @@ void Player::_handleCollision(Projectile p){
 	}
 }
 
-void Player::_handleCollision(Energy e){
+void Player::_handleCollision(Energy& e){
 
 	/*Energy Pack hits the player*/
 	StateManager::getInstance().eventManager.queueEvent(Event(EventType::PlayerPickupEnergy, this));

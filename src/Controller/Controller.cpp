@@ -11,7 +11,7 @@ _nextMode(ControlMode::Keyboard),
 _swapConfig(false),
 config(c)
 {
-	if (config != NULL) {
+	if (config != nullptr) {
 		//config->loadConfig("controllerConfig.ini");
 	}
 	ZeroMemory(&xInputState, sizeof(XINPUT_STATE));
@@ -132,7 +132,7 @@ void Controller::handleInputMouse() {
 /*Main input check call -- Checks if any input is pressed and acts accordingly*/
 bool Controller::handleInput() {
 	commandPressed = false;
-	if (config != NULL) {
+	if (config != nullptr) {
 		if (_swapConfig) {
 			mode = _nextMode;
 			_swapConfig = false;
