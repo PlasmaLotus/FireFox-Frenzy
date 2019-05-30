@@ -9,6 +9,7 @@ Updated Feb 11, 2018
 #define __MAP_Drawable__
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
+
 #include <string.h>
 #include <string>
 #include "../../Game/Map.h"

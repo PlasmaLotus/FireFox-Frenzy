@@ -5,7 +5,8 @@ Updated May 13, 2017
 
 #ifndef __Main__
 #define __Main__
-
+#include <SFML/Graphics.hpp>
+#include <algorithm>
 #include <iostream>
 #include <iomanip>
 //#include <conio.h>

@@ -8,6 +8,7 @@ Updated Mai 7, 2018
 
 #include <SFML\Graphics.hpp>
 #include <SFML\Window.hpp>
+
 #include <string.h>
 #include <string>
 #include "../../Game/Item.h"
